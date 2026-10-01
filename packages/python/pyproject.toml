@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "likho-contracts"
-version = "0.4.1"
+version = "0.5.0"
 description = "Likho gRPC messages and service stubs for Python, generated from the protos in this repository"
 requires-python = ">=3.12"
 dependencies = [

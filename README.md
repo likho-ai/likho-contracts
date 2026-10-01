@@ -15,7 +15,7 @@ themselves; they generate code from here.
 ```bash
 npm install
 npm run check        # lint + build the protos, validate the events
-npm run generate     # writes packages/python/src and packages/go/gen (committed), gen/ts (not committed yet)
+npm run generate     # writes packages/python/src, packages/go/gen and packages/ts/gen (all committed)
 ```
 
 ## Use from a Python service
@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src and packages/go/gen (committed
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.4.1", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.5.0", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.4.1
+go get github.com/likho-ai/likho-contracts/packages/go@v0.5.0
 ```
 
 ```go
@@ -47,9 +47,21 @@ import (
 The Go code is for [Connect](https://connectrpc.com): a Connect server also answers plain gRPC,
 so the Python services call it with their normal gRPC clients.
 
-The generated Python and Go code is committed, and CI fails if it does not match the protos.
-A release has two tags: `vX.Y.Z` (Python) and `packages/go/vX.Y.Z` (the Go module).
-The TypeScript package follows when the first service in that language needs it.
+## Use from a TypeScript service or web app
+
+With pnpm, which can install a package from a folder of a git repository:
+
+```json
+"@likho-ai/contracts": "github:likho-ai/likho-contracts#v0.5.0&path:/packages/ts"
+```
+
+```ts
+import { MediaService } from "@likho-ai/contracts/media/v1/media_pb";
+```
+
+The generated Python, Go and TypeScript code is committed, and CI fails if it does not match
+the protos. A release has two tags: `vX.Y.Z` (Python and TypeScript) and `packages/go/vX.Y.Z`
+(the Go module).
 
 ## gRPC services (version 1)
 

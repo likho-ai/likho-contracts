@@ -1,0 +1,24 @@
+{
+  "name": "@likho-ai/contracts",
+  "version": "0.5.0",
+  "description": "Likho gRPC messages and service descriptors for TypeScript, generated from the protos in likho-contracts",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./*": {
+      "types": "./gen/likho/*.d.ts",
+      "default": "./gen/likho/*.js"
+    }
+  },
+  "files": [
+    "gen"
+  ],
+  "peerDependencies": {
+    "@bufbuild/protobuf": "^2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/likho-ai/likho-contracts.git",
+    "directory": "packages/ts"
+  }
+}

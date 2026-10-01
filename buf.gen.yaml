@@ -6,10 +6,11 @@ managed:
     - file_option: go_package_prefix
       value: github.com/likho-ai/likho-contracts/packages/go/gen
 plugins:
-  # TypeScript (likho-api, connectors): messages and service descriptors for Connect / gRPC
+  # TypeScript (likho-api, connectors, web): messages and service descriptors for Connect / gRPC.
+  # JavaScript with type declarations, so the package is used as it is, without a build step.
   - remote: buf.build/bufbuild/es
-    out: gen/ts
-    opt: [target=ts]
+    out: packages/ts/gen
+    opt: [target=js+dts, import_extension=js]
   # Python (likho-transcription, likho-language)
   - remote: buf.build/protocolbuffers/python
     out: packages/python/src
