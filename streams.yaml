@@ -73,5 +73,7 @@ consumer_overrides:
   likho-transcription-requested:
     ack_wait: 60s
     max_deliver: 3
-    max_ack_pending: 1        # per worker: one transcription at a time
+    # A pull consumer shared by all workers. Each worker fetches one job, and the next only when it
+    # is done, so every worker runs one transcription at a time. (max_ack_pending is not used for
+    # this: it counts for the whole consumer and would make all workers take turns.)
     on_exhausted: publish likho.dead and likho.transcription.failed

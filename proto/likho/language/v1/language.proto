@@ -88,7 +88,8 @@ message ListGlossaryTermsResponse {
 
 message UpsertGlossaryTermRequest {
   string workspace_id = 1;
-  // Empty id creates a new term.
+  // Empty id creates a new term, or updates the one with the same text. A term saved without an id
+  // is always enabled; "enabled" is only taken from the request when an id is given.
   GlossaryTerm term = 2;
 }
 
@@ -123,7 +124,8 @@ message ListSpellingsResponse {
 
 message UpsertSpellingRequest {
   string workspace_id = 1;
-  // Empty id creates a new spelling.
+  // Empty id creates a new spelling, or updates the one with the same source. Same rule for
+  // "enabled" as for glossary terms. "is_phrase" is decided by the service (a source with spaces).
   Spelling spelling = 2;
 }
 

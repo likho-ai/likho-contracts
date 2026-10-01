@@ -8,7 +8,7 @@ Install in a service:
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.1.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.2.0", subdirectory = "packages/python" }
 ```
 
 ```python

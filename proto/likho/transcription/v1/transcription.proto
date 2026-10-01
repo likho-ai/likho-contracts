@@ -71,6 +71,10 @@ message TranscribeRequest {
   string model_registry_id = 2;
   // "auto", or a language code to force.
   string language_policy = 3;
+  // The audio to read, as known to likho-media.
+  string media_id = 4;
+  // Whose glossary, spellings and language policy apply.
+  string workspace_id = 5;
 }
 
 message TranscribeStarted {
