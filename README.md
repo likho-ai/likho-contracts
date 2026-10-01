@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src and packages/go/gen (committed
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.3.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.4.0", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.3.0
+go get github.com/likho-ai/likho-contracts/packages/go@v0.4.0
 ```
 
 ```go
@@ -68,6 +68,7 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | --- | --- | --- | --- | --- |
 | `likho.media.uploaded.v1` | `likho.media.uploaded` | LIKHO | likho-media | — |
 | `likho.media.ready.v1` | `likho.media.ready` | LIKHO | likho-media | likho-api |
+| `likho.media.failed.v1` | `likho.media.failed` | LIKHO | likho-media | likho-api |
 | `likho.transcription.requested.v1` | `likho.transcription.requested` | LIKHO | likho-api | likho-transcription (the job queue) |
 | `likho.transcription.segment.v1` | `likho.live.segment` | LIKHO_LIVE | likho-transcription | likho-api |
 | `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search |

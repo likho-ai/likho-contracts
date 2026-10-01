@@ -30,6 +30,11 @@ events:
     stream: LIKHO
     producer: likho-media
     consumers: [likho-api]
+  likho.media.failed.v1:
+    subject: likho.media.failed
+    stream: LIKHO
+    producer: likho-media
+    consumers: [likho-api]
   likho.transcription.requested.v1:
     subject: likho.transcription.requested
     stream: LIKHO
