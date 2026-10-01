@@ -15,7 +15,7 @@ themselves; they generate code from here.
 ```bash
 npm install
 npm run check        # lint + build the protos, validate the events
-npm run generate     # writes packages/python/src (committed), gen/ts and gen/go (not committed yet)
+npm run generate     # writes packages/python/src and packages/go/gen (committed), gen/ts (not committed yet)
 ```
 
 ## Use from a Python service
@@ -24,15 +24,32 @@ npm run generate     # writes packages/python/src (committed), gen/ts and gen/go
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.2.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.3.0", subdirectory = "packages/python" }
 ```
 
 ```python
 from likho.language.v1 import language_pb2, language_pb2_grpc
 ```
 
-The generated Python code is committed, and CI fails if it does not match the protos.
-TypeScript and Go packages follow when the first service in those languages needs them.
+## Use from a Go service
+
+```bash
+go get github.com/likho-ai/likho-contracts/packages/go@v0.3.0
+```
+
+```go
+import (
+	mediav1 "github.com/likho-ai/likho-contracts/packages/go/gen/likho/media/v1"
+	"github.com/likho-ai/likho-contracts/packages/go/gen/likho/media/v1/mediav1connect"
+)
+```
+
+The Go code is for [Connect](https://connectrpc.com): a Connect server also answers plain gRPC,
+so the Python services call it with their normal gRPC clients.
+
+The generated Python and Go code is committed, and CI fails if it does not match the protos.
+A release has two tags: `vX.Y.Z` (Python) and `packages/go/vX.Y.Z` (the Go module).
+The TypeScript package follows when the first service in that language needs it.
 
 ## gRPC services (version 1)
 

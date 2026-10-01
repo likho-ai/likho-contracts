@@ -4,7 +4,7 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/likho-ai/likho-contracts/gen/go
+      value: github.com/likho-ai/likho-contracts/packages/go/gen
 plugins:
   # TypeScript (likho-api, connectors): messages and service descriptors for Connect / gRPC
   - remote: buf.build/bufbuild/es
@@ -17,10 +17,10 @@ plugins:
     out: packages/python/src
   - remote: buf.build/grpc/python
     out: packages/python/src
-  # Go (likho-media, likho-search)
+  # Go (likho-media, likho-search): module github.com/likho-ai/likho-contracts/packages/go
   - remote: buf.build/protocolbuffers/go
-    out: gen/go
+    out: packages/go/gen
     opt: [paths=source_relative]
   - remote: buf.build/connectrpc/go
-    out: gen/go
+    out: packages/go/gen
     opt: [paths=source_relative]

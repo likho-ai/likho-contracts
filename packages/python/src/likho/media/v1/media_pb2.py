@@ -25,36 +25,36 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1alikho/media/v1/media.proto\x12\x0elikho.media.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x95\x03\n\x05Media\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12#\n\roriginal_name\x18\x02 \x01(\tR\x0coriginalName\x12\x16\n\x06sha256\x18\x03 \x01(\tR\x06sha256\x12!\n\x0c\x63ontent_type\x18\x04 \x01(\tR\x0b\x63ontentType\x12\x1d\n\nsize_bytes\x18\x05 \x01(\x04R\tsizeBytes\x12)\n\x10\x64uration_seconds\x18\x06 \x01(\x01R\x0f\x64urationSeconds\x12\x1a\n\x08\x63hannels\x18\x07 \x01(\rR\x08\x63hannels\x12\x1f\n\x0bsample_rate\x18\x08 \x01(\rR\nsampleRate\x12\x33\n\x06status\x18\t \x01(\x0e\x32\x1b.likho.media.v1.MediaStatusR\x06status\x12%\n\x0e\x66\x61ilure_reason\x18\n \x01(\tR\rfailureReason\x12\x39\n\ncreated_at\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcreatedAt\"!\n\x0fGetMediaRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"?\n\x10GetMediaResponse\x12+\n\x05media\x18\x01 \x01(\x0b\x32\x15.likho.media.v1.MediaR\x05media\"\x94\x01\n\x13\x43reateUploadRequest\x12#\n\roriginal_name\x18\x01 \x01(\tR\x0coriginalName\x12\x1d\n\nsize_bytes\x18\x02 \x01(\x04R\tsizeBytes\x12!\n\x0c\x63ontent_type\x18\x03 \x01(\tR\x0b\x63ontentType\x12\x16\n\x06sha256\x18\x04 \x01(\tR\x06sha256\"\xc9\x01\n\x14\x43reateUploadResponse\x12\x19\n\x08media_id\x18\x01 \x01(\tR\x07mediaId\x12\x1d\n\nupload_url\x18\x02 \x01(\tR\tuploadUrl\x12\x39\n\nexpires_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\texpiresAt\x12<\n\x0e\x65xisting_media\x18\x04 \x01(\x0b\x32\x15.likho.media.v1.MediaR\rexistingMedia\"V\n\x15GetDownloadUrlRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12-\n\x04kind\x18\x02 \x01(\x0e\x32\x19.likho.media.v1.MediaKindR\x04kind\"e\n\x16GetDownloadUrlResponse\x12\x10\n\x03url\x18\x01 \x01(\tR\x03url\x12\x39\n\nexpires_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\texpiresAt\"$\n\x12\x44\x65leteMediaRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\x15\n\x13\x44\x65leteMediaResponse*w\n\x0bMediaStatus\x12\x1c\n\x18MEDIA_STATUS_UNSPECIFIED\x10\x00\x12\x19\n\x15MEDIA_STATUS_UPLOADED\x10\x01\x12\x16\n\x12MEDIA_STATUS_READY\x10\x02\x12\x17\n\x13MEDIA_STATUS_FAILED\x10\x03*q\n\tMediaKind\x12\x1a\n\x16MEDIA_KIND_UNSPECIFIED\x10\x00\x12\x17\n\x13MEDIA_KIND_ORIGINAL\x10\x01\x12\x19\n\x15MEDIA_KIND_NORMALIZED\x10\x02\x12\x14\n\x10MEDIA_KIND_PEAKS\x10\x03\x32\xf1\x02\n\x0cMediaService\x12M\n\x08GetMedia\x12\x1f.likho.media.v1.GetMediaRequest\x1a .likho.media.v1.GetMediaResponse\x12Y\n\x0c\x43reateUpload\x12#.likho.media.v1.CreateUploadRequest\x1a$.likho.media.v1.CreateUploadResponse\x12_\n\x0eGetDownloadUrl\x12%.likho.media.v1.GetDownloadUrlRequest\x1a&.likho.media.v1.GetDownloadUrlResponse\x12V\n\x0b\x44\x65leteMedia\x12\".likho.media.v1.DeleteMediaRequest\x1a#.likho.media.v1.DeleteMediaResponseB\xbd\x01\n\x12\x63om.likho.media.v1B\nMediaProtoP\x01ZAgithub.com/likho-ai/likho-contracts/gen/go/likho/media/v1;mediav1\xa2\x02\x03LMX\xaa\x02\x0eLikho.Media.V1\xca\x02\x0eLikho\\Media\\V1\xe2\x02\x1aLikho\\Media\\V1\\GPBMetadata\xea\x02\x10Likho::Media::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1alikho/media/v1/media.proto\x12\x0elikho.media.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdb\x03\n\x05Media\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12#\n\roriginal_name\x18\x02 \x01(\tR\x0coriginalName\x12\x16\n\x06sha256\x18\x03 \x01(\tR\x06sha256\x12!\n\x0c\x63ontent_type\x18\x04 \x01(\tR\x0b\x63ontentType\x12\x1d\n\nsize_bytes\x18\x05 \x01(\x04R\tsizeBytes\x12)\n\x10\x64uration_seconds\x18\x06 \x01(\x01R\x0f\x64urationSeconds\x12\x1a\n\x08\x63hannels\x18\x07 \x01(\rR\x08\x63hannels\x12\x1f\n\x0bsample_rate\x18\x08 \x01(\rR\nsampleRate\x12\x33\n\x06status\x18\t \x01(\x0e\x32\x1b.likho.media.v1.MediaStatusR\x06status\x12%\n\x0e\x66\x61ilure_reason\x18\n \x01(\tR\rfailureReason\x12\x39\n\ncreated_at\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcreatedAt\x12!\n\x0cworkspace_id\x18\x0c \x01(\tR\x0bworkspaceId\x12!\n\x0crecording_id\x18\r \x01(\tR\x0brecordingId\"!\n\x0fGetMediaRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"?\n\x10GetMediaResponse\x12+\n\x05media\x18\x01 \x01(\x0b\x32\x15.likho.media.v1.MediaR\x05media\"\xda\x01\n\x13\x43reateUploadRequest\x12#\n\roriginal_name\x18\x01 \x01(\tR\x0coriginalName\x12\x1d\n\nsize_bytes\x18\x02 \x01(\x04R\tsizeBytes\x12!\n\x0c\x63ontent_type\x18\x03 \x01(\tR\x0b\x63ontentType\x12\x16\n\x06sha256\x18\x04 \x01(\tR\x06sha256\x12!\n\x0cworkspace_id\x18\x05 \x01(\tR\x0bworkspaceId\x12!\n\x0crecording_id\x18\x06 \x01(\tR\x0brecordingId\"\xc9\x01\n\x14\x43reateUploadResponse\x12\x19\n\x08media_id\x18\x01 \x01(\tR\x07mediaId\x12\x1d\n\nupload_url\x18\x02 \x01(\tR\tuploadUrl\x12\x39\n\nexpires_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\texpiresAt\x12<\n\x0e\x65xisting_media\x18\x04 \x01(\x0b\x32\x15.likho.media.v1.MediaR\rexistingMedia\"V\n\x15GetDownloadUrlRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12-\n\x04kind\x18\x02 \x01(\x0e\x32\x19.likho.media.v1.MediaKindR\x04kind\"e\n\x16GetDownloadUrlResponse\x12\x10\n\x03url\x18\x01 \x01(\tR\x03url\x12\x39\n\nexpires_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\texpiresAt\"$\n\x12\x44\x65leteMediaRequest\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\"\x15\n\x13\x44\x65leteMediaResponse*w\n\x0bMediaStatus\x12\x1c\n\x18MEDIA_STATUS_UNSPECIFIED\x10\x00\x12\x19\n\x15MEDIA_STATUS_UPLOADED\x10\x01\x12\x16\n\x12MEDIA_STATUS_READY\x10\x02\x12\x17\n\x13MEDIA_STATUS_FAILED\x10\x03*q\n\tMediaKind\x12\x1a\n\x16MEDIA_KIND_UNSPECIFIED\x10\x00\x12\x17\n\x13MEDIA_KIND_ORIGINAL\x10\x01\x12\x19\n\x15MEDIA_KIND_NORMALIZED\x10\x02\x12\x14\n\x10MEDIA_KIND_PEAKS\x10\x03\x32\xf1\x02\n\x0cMediaService\x12M\n\x08GetMedia\x12\x1f.likho.media.v1.GetMediaRequest\x1a .likho.media.v1.GetMediaResponse\x12Y\n\x0c\x43reateUpload\x12#.likho.media.v1.CreateUploadRequest\x1a$.likho.media.v1.CreateUploadResponse\x12_\n\x0eGetDownloadUrl\x12%.likho.media.v1.GetDownloadUrlRequest\x1a&.likho.media.v1.GetDownloadUrlResponse\x12V\n\x0b\x44\x65leteMedia\x12\".likho.media.v1.DeleteMediaRequest\x1a#.likho.media.v1.DeleteMediaResponseB\xc6\x01\n\x12\x63om.likho.media.v1B\nMediaProtoP\x01ZJgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/media/v1;mediav1\xa2\x02\x03LMX\xaa\x02\x0eLikho.Media.V1\xca\x02\x0eLikho\\Media\\V1\xe2\x02\x1aLikho\\Media\\V1\\GPBMetadata\xea\x02\x10Likho::Media::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'likho.media.v1.media_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\022com.likho.media.v1B\nMediaProtoP\001ZAgithub.com/likho-ai/likho-contracts/gen/go/likho/media/v1;mediav1\242\002\003LMX\252\002\016Likho.Media.V1\312\002\016Likho\\Media\\V1\342\002\032Likho\\Media\\V1\\GPBMetadata\352\002\020Likho::Media::V1'
-  _globals['_MEDIASTATUS']._serialized_start=1194
-  _globals['_MEDIASTATUS']._serialized_end=1313
-  _globals['_MEDIAKIND']._serialized_start=1315
-  _globals['_MEDIAKIND']._serialized_end=1428
+  _globals['DESCRIPTOR']._serialized_options = b'\n\022com.likho.media.v1B\nMediaProtoP\001ZJgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/media/v1;mediav1\242\002\003LMX\252\002\016Likho.Media.V1\312\002\016Likho\\Media\\V1\342\002\032Likho\\Media\\V1\\GPBMetadata\352\002\020Likho::Media::V1'
+  _globals['_MEDIASTATUS']._serialized_start=1334
+  _globals['_MEDIASTATUS']._serialized_end=1453
+  _globals['_MEDIAKIND']._serialized_start=1455
+  _globals['_MEDIAKIND']._serialized_end=1568
   _globals['_MEDIA']._serialized_start=80
-  _globals['_MEDIA']._serialized_end=485
-  _globals['_GETMEDIAREQUEST']._serialized_start=487
-  _globals['_GETMEDIAREQUEST']._serialized_end=520
-  _globals['_GETMEDIARESPONSE']._serialized_start=522
-  _globals['_GETMEDIARESPONSE']._serialized_end=585
-  _globals['_CREATEUPLOADREQUEST']._serialized_start=588
-  _globals['_CREATEUPLOADREQUEST']._serialized_end=736
-  _globals['_CREATEUPLOADRESPONSE']._serialized_start=739
-  _globals['_CREATEUPLOADRESPONSE']._serialized_end=940
-  _globals['_GETDOWNLOADURLREQUEST']._serialized_start=942
-  _globals['_GETDOWNLOADURLREQUEST']._serialized_end=1028
-  _globals['_GETDOWNLOADURLRESPONSE']._serialized_start=1030
-  _globals['_GETDOWNLOADURLRESPONSE']._serialized_end=1131
-  _globals['_DELETEMEDIAREQUEST']._serialized_start=1133
-  _globals['_DELETEMEDIAREQUEST']._serialized_end=1169
-  _globals['_DELETEMEDIARESPONSE']._serialized_start=1171
-  _globals['_DELETEMEDIARESPONSE']._serialized_end=1192
-  _globals['_MEDIASERVICE']._serialized_start=1431
-  _globals['_MEDIASERVICE']._serialized_end=1800
+  _globals['_MEDIA']._serialized_end=555
+  _globals['_GETMEDIAREQUEST']._serialized_start=557
+  _globals['_GETMEDIAREQUEST']._serialized_end=590
+  _globals['_GETMEDIARESPONSE']._serialized_start=592
+  _globals['_GETMEDIARESPONSE']._serialized_end=655
+  _globals['_CREATEUPLOADREQUEST']._serialized_start=658
+  _globals['_CREATEUPLOADREQUEST']._serialized_end=876
+  _globals['_CREATEUPLOADRESPONSE']._serialized_start=879
+  _globals['_CREATEUPLOADRESPONSE']._serialized_end=1080
+  _globals['_GETDOWNLOADURLREQUEST']._serialized_start=1082
+  _globals['_GETDOWNLOADURLREQUEST']._serialized_end=1168
+  _globals['_GETDOWNLOADURLRESPONSE']._serialized_start=1170
+  _globals['_GETDOWNLOADURLRESPONSE']._serialized_end=1271
+  _globals['_DELETEMEDIAREQUEST']._serialized_start=1273
+  _globals['_DELETEMEDIAREQUEST']._serialized_end=1309
+  _globals['_DELETEMEDIARESPONSE']._serialized_start=1311
+  _globals['_DELETEMEDIARESPONSE']._serialized_end=1332
+  _globals['_MEDIASERVICE']._serialized_start=1571
+  _globals['_MEDIASERVICE']._serialized_end=1940
 # @@protoc_insertion_point(module_scope)

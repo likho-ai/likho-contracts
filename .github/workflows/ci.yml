@@ -26,10 +26,16 @@ jobs:
         run: npm run validate
       - name: Generate code (TypeScript, Python, Go)
         run: npm run generate
-      - name: The committed Python package matches the protos
+      - name: The committed Python and Go packages match the protos
         run: |
-          git add -N packages/python/src
-          git diff --exit-code -- packages/python/src
+          git add -N packages/python/src packages/go/gen
+          git diff --exit-code -- packages/python/src packages/go/gen
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: packages/go/go.mod
+      - name: The Go package builds
+        working-directory: packages/go
+        run: go vet ./... && go build ./...
       - name: The Python package installs and imports
         run: |
           pipx run uv run --no-project --python 3.12 --with ./packages/python python -c "from likho.language.v1 import language_pb2_grpc; from likho.media.v1 import media_pb2; from likho.transcription.v1 import transcription_pb2"
