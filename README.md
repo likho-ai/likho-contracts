@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src and packages/go/gen (committed
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.4.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.4.1", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.4.0
+go get github.com/likho-ai/likho-contracts/packages/go@v0.4.1
 ```
 
 ```go

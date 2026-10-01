@@ -6,7 +6,7 @@ from likho.media.v1 import media_pb2 as likho_dot_media_dot_v1_dot_media__pb2
 
 
 class MediaServiceStub:
-    """Owned by likho-media: uploads, duplicate check, conversion to 16 kHz, waveform, playback links.
+    """Owned by likho-media: uploads, duplicate check, waveform, a playable copy where needed, download links.
     """
 
     def __init__(self, channel):
@@ -38,7 +38,7 @@ class MediaServiceStub:
 
 
 class MediaServiceServicer:
-    """Owned by likho-media: uploads, duplicate check, conversion to 16 kHz, waveform, playback links.
+    """Owned by likho-media: uploads, duplicate check, waveform, a playable copy where needed, download links.
     """
 
     def GetMedia(self, request, context):
@@ -99,7 +99,7 @@ def add_MediaServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class MediaService:
-    """Owned by likho-media: uploads, duplicate check, conversion to 16 kHz, waveform, playback links.
+    """Owned by likho-media: uploads, duplicate check, waveform, a playable copy where needed, download links.
     """
 
     @staticmethod

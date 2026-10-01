@@ -78,9 +78,10 @@ type MediaKind int32
 
 const (
 	MediaKind_MEDIA_KIND_UNSPECIFIED MediaKind = 0
-	// The file as it was uploaded.
+	// The file as it was uploaded. This is what the speech model reads.
 	MediaKind_MEDIA_KIND_ORIGINAL MediaKind = 1
-	// 16 kHz mono copy (FLAC) the speech model reads and the browser plays.
+	// Audio a browser can play: the original when browsers play it as it is, otherwise an MP3
+	// copy made for them (telephone codecs such as A-law, mu-law and GSM).
 	MediaKind_MEDIA_KIND_NORMALIZED MediaKind = 2
 	// Waveform peaks as JSON, for the player.
 	MediaKind_MEDIA_KIND_PEAKS MediaKind = 3

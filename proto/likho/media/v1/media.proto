@@ -4,7 +4,7 @@ package likho.media.v1;
 
 import "google/protobuf/timestamp.proto";
 
-// Owned by likho-media: uploads, duplicate check, conversion to 16 kHz, waveform, playback links.
+// Owned by likho-media: uploads, duplicate check, waveform, a playable copy where needed, download links.
 service MediaService {
   rpc GetMedia(GetMediaRequest) returns (GetMediaResponse);
   // Returns a link the browser (or a connector) uploads the file to.
@@ -23,9 +23,10 @@ enum MediaStatus {
 
 enum MediaKind {
   MEDIA_KIND_UNSPECIFIED = 0;
-  // The file as it was uploaded.
+  // The file as it was uploaded. This is what the speech model reads.
   MEDIA_KIND_ORIGINAL = 1;
-  // 16 kHz mono copy (FLAC) the speech model reads and the browser plays.
+  // Audio a browser can play: the original when browsers play it as it is, otherwise an MP3
+  // copy made for them (telephone codecs such as A-law, mu-law and GSM).
   MEDIA_KIND_NORMALIZED = 2;
   // Waveform peaks as JSON, for the player.
   MEDIA_KIND_PEAKS = 3;

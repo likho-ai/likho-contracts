@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://likho-ai.github.io/likho-contracts/events/likho.media.ready.v1.schema.json",
-  "title": "The 16 kHz copy and the waveform exist; the recording can be transcribed",
+  "title": "The file is audio, its waveform exists and a browser can play it; the recording can be transcribed",
   "description": "data of likho.media.ready.v1; published by likho-media on NATS subject likho.media.ready",
   "type": "object",
   "required": [
