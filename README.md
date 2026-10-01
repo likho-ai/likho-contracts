@@ -15,8 +15,24 @@ themselves; they generate code from here.
 ```bash
 npm install
 npm run check        # lint + build the protos, validate the events
-npm run generate     # writes gen/ts, gen/python, gen/go (not committed)
+npm run generate     # writes packages/python/src (committed), gen/ts and gen/go (not committed yet)
 ```
+
+## Use from a Python service
+
+```toml
+dependencies = ["likho-contracts"]
+
+[tool.uv.sources]
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.1.0", subdirectory = "packages/python" }
+```
+
+```python
+from likho.language.v1 import language_pb2, language_pb2_grpc
+```
+
+The generated Python code is committed, and CI fails if it does not match the protos.
+TypeScript and Go packages follow when the first service in those languages needs them.
 
 ## gRPC services (version 1)
 

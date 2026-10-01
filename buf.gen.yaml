@@ -12,11 +12,11 @@ plugins:
     opt: [target=ts]
   # Python (likho-transcription, likho-language)
   - remote: buf.build/protocolbuffers/python
-    out: gen/python
+    out: packages/python/src
   - remote: buf.build/protocolbuffers/pyi
-    out: gen/python
+    out: packages/python/src
   - remote: buf.build/grpc/python
-    out: gen/python
+    out: packages/python/src
   # Go (likho-media, likho-search)
   - remote: buf.build/protocolbuffers/go
     out: gen/go

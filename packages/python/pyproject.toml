@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "likho-contracts"
+version = "0.1.0"
+description = "Likho gRPC messages and service stubs for Python, generated from the protos in this repository"
+requires-python = ">=3.12"
+dependencies = [
+    "protobuf>=7.36.2,<8",
+    "grpcio>=1.70.0",
+]
+
+[tool.hatch.build.targets.wheel]
+# Generated code has no __init__.py files: "likho" is a namespace package.
+packages = ["src/likho"]
