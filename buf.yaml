@@ -1,0 +1,10 @@
+version: v2
+modules:
+  - path: proto
+    name: buf.build/likho-ai/contracts
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - FILE

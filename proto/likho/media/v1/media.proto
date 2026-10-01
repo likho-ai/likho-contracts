@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package likho.media.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by likho-media: uploads, duplicate check, conversion to 16 kHz, waveform, playback links.
+service MediaService {
+  rpc GetMedia(GetMediaRequest) returns (GetMediaResponse);
+  // Returns a link the browser (or a connector) uploads the file to.
+  rpc CreateUpload(CreateUploadRequest) returns (CreateUploadResponse);
+  // Returns a short-lived link for playback or for a worker to download.
+  rpc GetDownloadUrl(GetDownloadUrlRequest) returns (GetDownloadUrlResponse);
+  rpc DeleteMedia(DeleteMediaRequest) returns (DeleteMediaResponse);
+}
+
+enum MediaStatus {
+  MEDIA_STATUS_UNSPECIFIED = 0;
+  MEDIA_STATUS_UPLOADED = 1;
+  MEDIA_STATUS_READY = 2;
+  MEDIA_STATUS_FAILED = 3;
+}
+
+enum MediaKind {
+  MEDIA_KIND_UNSPECIFIED = 0;
+  // The file as it was uploaded.
+  MEDIA_KIND_ORIGINAL = 1;
+  // 16 kHz mono copy the speech model reads.
+  MEDIA_KIND_NORMALIZED = 2;
+  // Waveform peaks as JSON, for the player.
+  MEDIA_KIND_PEAKS = 3;
+}
+
+message Media {
+  string id = 1;
+  string original_name = 2;
+  string sha256 = 3;
+  string content_type = 4;
+  uint64 size_bytes = 5;
+  double duration_seconds = 6;
+  uint32 channels = 7;
+  uint32 sample_rate = 8;
+  MediaStatus status = 9;
+  // Why processing failed, in plain words. Empty unless status is FAILED.
+  string failure_reason = 10;
+  google.protobuf.Timestamp created_at = 11;
+}
+
+message GetMediaRequest {
+  string id = 1;
+}
+
+message GetMediaResponse {
+  Media media = 1;
+}
+
+message CreateUploadRequest {
+  string original_name = 1;
+  uint64 size_bytes = 2;
+  string content_type = 3;
+  // When given and already stored, no upload is needed and existing_media is returned.
+  string sha256 = 4;
+}
+
+message CreateUploadResponse {
+  string media_id = 1;
+  string upload_url = 2;
+  google.protobuf.Timestamp expires_at = 3;
+  // Set when the same content was uploaded before.
+  Media existing_media = 4;
+}
+
+message GetDownloadUrlRequest {
+  string id = 1;
+  MediaKind kind = 2;
+}
+
+message GetDownloadUrlResponse {
+  string url = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message DeleteMediaRequest {
+  string id = 1;
+}
+
+message DeleteMediaResponse {}

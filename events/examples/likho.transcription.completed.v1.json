@@ -1,0 +1,39 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E05",
+  "source": "likho-transcription",
+  "type": "likho.transcription.completed.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "job_id": "job_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "recording_id": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "transcript_id": "trn_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "version": 1,
+    "language": {
+      "detected": "hi",
+      "probability": 0.91,
+      "candidates": [
+        {
+          "language": "ur",
+          "probability": 0.07
+        },
+        {
+          "language": "en",
+          "probability": 0.02
+        }
+      ],
+      "decoded_as": "hi",
+      "policy": "auto"
+    },
+    "stats": {
+      "audio_seconds": 191.2,
+      "elapsed_seconds": 136.4,
+      "segments": 21,
+      "chunks": 19,
+      "silence_skipped_seconds": 4
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E02",
+  "source": "likho-media",
+  "type": "likho.media.ready.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "recording_id": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "media_id": "med_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "duration_seconds": 191.2,
+    "channels": 1,
+    "sample_rate": 8000
+  }
+}

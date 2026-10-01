@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package likho.common.v1;
+
+// Script a text layer is written in.
+enum Script {
+  SCRIPT_UNSPECIFIED = 0;
+  SCRIPT_DEVANAGARI = 1;
+  SCRIPT_LATIN = 2;
+  SCRIPT_ARABIC = 3;
+}
+
+// One language guess for a recording, with its probability (0 to 1).
+message LanguageCandidate {
+  // ISO 639-1 code, for example "hi", "ur", "en".
+  string language = 1;
+  double probability = 2;
+}
+
+// What the model heard and what Likho decided to decode as.
+message LanguageDetection {
+  string detected = 1;
+  double probability = 2;
+  repeated LanguageCandidate candidates = 3;
+  // Language actually used for decoding, after the language policy.
+  string decoded_as = 4;
+  // "auto" or a forced language code.
+  string policy = 5;
+}
+
+// One line of a transcript. Both layers are always kept.
+message Segment {
+  uint32 index = 1;
+  double start_seconds = 2;
+  double end_seconds = 3;
+  // Layer 1: the words in the script that was spoken.
+  string text_script = 4;
+  // Layer 2: the same words in Hinglish (Roman letters).
+  string text_roman = 5;
+  // "agent" or "customer" once speaker labels exist.
+  optional string speaker = 6;
+  // Dialer call id of the leg this line belongs to, when known.
+  optional string leg_call_id = 7;
+  double avg_logprob = 8;
+  double no_speech_prob = 9;
+}
+
+// Where a recording came from in the dialer. All legs of one interaction share crt_object_id.
+message DialerCall {
+  string crt_object_id = 1;
+  // Call ids of the legs, in time order.
+  repeated string leg_call_ids = 2;
+  string campaign = 3;
+  string agent_user_id = 4;
+  // India time exactly as the dialer stores it: "YYYY-MM-DD HH:MM:SS". Never converted through UTC.
+  string call_time_ist = 5;
+}
+
+// Cursor paging used by list calls.
+message Page {
+  uint32 limit = 1;
+  string cursor = 2;
+}
+
+message PageInfo {
+  // Empty when there are no more results.
+  string next_cursor = 1;
+}

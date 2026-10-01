@@ -1,0 +1,26 @@
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/likho-ai/likho-contracts/gen/go
+plugins:
+  # TypeScript (likho-api, connectors): messages and service descriptors for Connect / gRPC
+  - remote: buf.build/bufbuild/es
+    out: gen/ts
+    opt: [target=ts]
+  # Python (likho-transcription, likho-language)
+  - remote: buf.build/protocolbuffers/python
+    out: gen/python
+  - remote: buf.build/protocolbuffers/pyi
+    out: gen/python
+  - remote: buf.build/grpc/python
+    out: gen/python
+  # Go (likho-media, likho-search)
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt: [paths=source_relative]
+  - remote: buf.build/connectrpc/go
+    out: gen/go
+    opt: [paths=source_relative]

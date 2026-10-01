@@ -1,0 +1,18 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E01",
+  "source": "likho-media",
+  "type": "likho.media.uploaded.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "recording_id": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "media_id": "med_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "original_name": "call-0001.mp3",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "size_bytes": 707544,
+    "dialer_crt_object_id": "d000-0a1b2c3d-vce-0001"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E04",
+  "source": "likho-transcription",
+  "type": "likho.transcription.segment.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "job_id": "job_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "recording_id": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "total_seconds": 191.2,
+    "segment": {
+      "index": 5,
+      "start_seconds": 48.1,
+      "end_seconds": 58,
+      "text_script": "नमस्ते, आपका ऑर्डर कल तक पहुँच जाएगा",
+      "text_roman": "namaste, aapka order kal tak pahunch jayega"
+    }
+  }
+}

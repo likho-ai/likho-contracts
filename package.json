@@ -1,0 +1,21 @@
+{
+  "name": "@likho-ai/contracts",
+  "version": "0.1.0",
+  "description": "Likho interface definitions: gRPC services (Protobuf), event schemas (JSON Schema, CloudEvents) and NATS stream layout",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "buf lint",
+    "build": "buf build",
+    "breaking": "buf breaking --against \".git#branch=main\"",
+    "generate": "buf generate",
+    "validate": "node scripts/validate-events.mjs",
+    "check": "npm run lint && npm run build && npm run validate"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.50.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.6.0"
+  }
+}

@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Lint and build the protos
+        run: npm run lint && npm run build
+      - name: Breaking changes against main
+        if: github.event_name == 'pull_request'
+        run: npx buf breaking --against "https://github.com/${{ github.repository }}.git#branch=main"
+      - name: Validate events and streams
+        run: npm run validate
+      - name: Generate code (TypeScript, Python, Go)
+        run: npm run generate

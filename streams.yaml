@@ -1,0 +1,77 @@
+# NATS JetStream layout. Streams are created by likho-infra (nats/streams.sh);
+# each service creates its own durable consumers at start-up, as listed here.
+#
+# Rules
+#   * The NATS subject is fixed per event type (below); the CloudEvent "type" carries the version.
+#   * Publishers set the Nats-Msg-Id header to the CloudEvent id (duplicate window: 2 minutes).
+#   * Consumers acknowledge explicitly and must be idempotent on the event id.
+
+streams:
+  LIKHO:
+    description: Business events, kept 30 days
+    subjects: ["likho.media.*", "likho.transcription.*", "likho.vocabulary.*", "likho.insights.*", "likho.dead"]
+    max_age: 30d
+  LIKHO_LIVE:
+    description: Live transcript lines, only useful while a job runs
+    subjects: ["likho.live.*"]
+    max_age: 1d
+  LIKHO_KEEP:
+    description: Corrections made by people (training data), never expired
+    subjects: ["likho.transcript.*"]
+
+events:
+  likho.media.uploaded.v1:
+    subject: likho.media.uploaded
+    stream: LIKHO
+    producer: likho-media
+    consumers: []
+  likho.media.ready.v1:
+    subject: likho.media.ready
+    stream: LIKHO
+    producer: likho-media
+    consumers: [likho-api]
+  likho.transcription.requested.v1:
+    subject: likho.transcription.requested
+    stream: LIKHO
+    producer: likho-api
+    consumers: [likho-transcription]
+  likho.transcription.segment.v1:
+    subject: likho.live.segment
+    stream: LIKHO_LIVE
+    producer: likho-transcription
+    consumers: [likho-api]
+  likho.transcription.completed.v1:
+    subject: likho.transcription.completed
+    stream: LIKHO
+    producer: likho-transcription
+    consumers: [likho-api, likho-search]
+  likho.transcription.failed.v1:
+    subject: likho.transcription.failed
+    stream: LIKHO
+    producer: likho-transcription
+    consumers: [likho-api]
+  likho.vocabulary.updated.v1:
+    subject: likho.vocabulary.updated
+    stream: LIKHO
+    producer: likho-language
+    consumers: [likho-transcription]
+  likho.transcript.corrected.v1:
+    subject: likho.transcript.corrected
+    stream: LIKHO_KEEP
+    producer: likho-api
+    consumers: [likho-search]
+
+# Durable consumer settings. Name = <service>-<last part of the subject>.
+consumer_defaults:
+  ack_policy: explicit
+  ack_wait: 30s
+  max_deliver: 5
+
+consumer_overrides:
+  # The job queue: one worker gets each job and acknowledges only when the transcript is stored.
+  # While it works it sends "in progress" every 30 s, so a long call is not handed to someone else.
+  likho-transcription-requested:
+    ack_wait: 60s
+    max_deliver: 3
+    max_ack_pending: 1        # per worker: one transcription at a time
+    on_exhausted: publish likho.dead and likho.transcription.failed

@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package likho.transcription.v1;
+
+import "google/protobuf/timestamp.proto";
+import "likho/common/v1/common.proto";
+
+// Owned by likho-transcription: runs the speech model and stores both text layers.
+service TranscriptionService {
+  rpc GetTranscript(GetTranscriptRequest) returns (GetTranscriptResponse);
+  // All versions for one recording, newest first.
+  rpc ListTranscripts(ListTranscriptsRequest) returns (ListTranscriptsResponse);
+  // Transcribes directly and streams lines as they are written (used by the CLI and tests;
+  // normal jobs arrive as likho.transcription.requested events).
+  rpc Transcribe(TranscribeRequest) returns (stream TranscribeResponse);
+  // Rebuilds the Hinglish layer from the saved script layer. The speech model does not run.
+  rpc Retransliterate(RetransliterateRequest) returns (RetransliterateResponse);
+  rpc ListEngines(ListEnginesRequest) returns (ListEnginesResponse);
+  rpc CancelJob(CancelJobRequest) returns (CancelJobResponse);
+}
+
+message ModelRef {
+  // Registry id, for example "faster-whisper/turbo".
+  string registry_id = 1;
+  string engine = 2;
+  string compute = 3;
+}
+
+message TranscriptStats {
+  double audio_seconds = 1;
+  double elapsed_seconds = 2;
+  // Audio seconds written per second of processing.
+  double realtime_factor = 3;
+  uint32 chunks = 4;
+  double silence_skipped_seconds = 5;
+}
+
+message Transcript {
+  string id = 1;
+  string recording_id = 2;
+  string job_id = 3;
+  uint32 version = 4;
+  ModelRef model = 5;
+  likho.common.v1.LanguageDetection language = 6;
+  likho.common.v1.Script script = 7;
+  repeated likho.common.v1.Segment segments = 8;
+  TranscriptStats stats = 9;
+  google.protobuf.Timestamp created_at = 10;
+}
+
+message GetTranscriptRequest {
+  string id = 1;
+}
+
+message GetTranscriptResponse {
+  Transcript transcript = 1;
+}
+
+message ListTranscriptsRequest {
+  string recording_id = 1;
+}
+
+message ListTranscriptsResponse {
+  // Without segments; fetch one transcript for its lines.
+  repeated Transcript transcripts = 1;
+}
+
+message TranscribeRequest {
+  string recording_id = 1;
+  // Empty means the default model.
+  string model_registry_id = 2;
+  // "auto", or a language code to force.
+  string language_policy = 3;
+}
+
+message TranscribeStarted {
+  double audio_seconds = 1;
+  likho.common.v1.LanguageDetection language = 2;
+}
+
+message TranscribeResponse {
+  oneof event {
+    TranscribeStarted started = 1;
+    likho.common.v1.Segment segment = 2;
+    Transcript completed = 3;
+  }
+}
+
+message RetransliterateRequest {
+  string transcript_id = 1;
+}
+
+message RetransliterateResponse {
+  Transcript transcript = 1;
+}
+
+message Engine {
+  string registry_id = 1;
+  string engine = 2;
+  // Which layer the engine writes itself: Devanagari engines need transliteration, Hinglish engines do not.
+  likho.common.v1.Script output_script = 3;
+  bool available = 4;
+  bool is_default = 5;
+}
+
+message ListEnginesRequest {}
+
+message ListEnginesResponse {
+  repeated Engine engines = 1;
+}
+
+message CancelJobRequest {
+  string job_id = 1;
+}
+
+message CancelJobResponse {
+  // False when the job had already finished.
+  bool cancelled = 1;
+}

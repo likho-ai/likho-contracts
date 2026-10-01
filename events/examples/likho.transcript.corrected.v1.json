@@ -1,0 +1,19 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E08",
+  "source": "likho-api",
+  "type": "likho.transcript.corrected.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "transcript_id": "trn_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "recording_id": "rec_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "user_id": "usr_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "segment_index": 5,
+    "layer": "roman",
+    "before": "kal tak pahunch jayga",
+    "after": "kal tak pahunch jayega"
+  }
+}

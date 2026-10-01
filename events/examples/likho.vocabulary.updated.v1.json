@@ -1,0 +1,14 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E07",
+  "source": "likho-language",
+  "type": "likho.vocabulary.updated.v1",
+  "time": "2026-10-01T07:00:00Z",
+  "subject": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "kind": "spellings",
+    "version": 12
+  }
+}

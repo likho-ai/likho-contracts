@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package likho.language.v1;
+
+import "likho/common/v1/common.proto";
+
+// Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+service LanguageService {
+  // Writes one line in Hinglish using the rules and the workspace's spelling table.
+  rpc Transliterate(TransliterateRequest) returns (TransliterateResponse);
+  rpc TransliterateBatch(TransliterateBatchRequest) returns (TransliterateBatchResponse);
+  // Names the speech model should listen for.
+  rpc GetHotwords(GetHotwordsRequest) returns (GetHotwordsResponse);
+  // Decides which language to decode as, from what was detected.
+  rpc ResolveDecodePolicy(ResolveDecodePolicyRequest) returns (ResolveDecodePolicyResponse);
+
+  rpc ListGlossaryTerms(ListGlossaryTermsRequest) returns (ListGlossaryTermsResponse);
+  rpc UpsertGlossaryTerm(UpsertGlossaryTermRequest) returns (UpsertGlossaryTermResponse);
+  rpc DeleteGlossaryTerm(DeleteGlossaryTermRequest) returns (DeleteGlossaryTermResponse);
+
+  rpc ListSpellings(ListSpellingsRequest) returns (ListSpellingsResponse);
+  rpc UpsertSpelling(UpsertSpellingRequest) returns (UpsertSpellingResponse);
+  rpc DeleteSpelling(DeleteSpellingRequest) returns (DeleteSpellingResponse);
+}
+
+message TransliterateRequest {
+  string workspace_id = 1;
+  string text = 2;
+  likho.common.v1.Script source_script = 3;
+}
+
+message TransliterateResponse {
+  string text_roman = 1;
+  // Version of the spelling table that was applied.
+  uint64 vocabulary_version = 2;
+}
+
+message TransliterateBatchRequest {
+  string workspace_id = 1;
+  repeated string texts = 2;
+  likho.common.v1.Script source_script = 3;
+}
+
+message TransliterateBatchResponse {
+  // Same order and length as the request.
+  repeated string texts_roman = 1;
+  uint64 vocabulary_version = 2;
+}
+
+message GetHotwordsRequest {
+  string workspace_id = 1;
+  string language = 2;
+}
+
+message GetHotwordsResponse {
+  repeated string terms = 1;
+  uint64 vocabulary_version = 2;
+}
+
+message ResolveDecodePolicyRequest {
+  string workspace_id = 1;
+  string detected = 2;
+  double probability = 3;
+  repeated likho.common.v1.LanguageCandidate candidates = 4;
+}
+
+message ResolveDecodePolicyResponse {
+  string decode_as = 1;
+  // False for English calls, which stay as they are.
+  bool transliterate = 2;
+}
+
+message GlossaryTerm {
+  string id = 1;
+  string term = 2;
+  string language = 3;
+  bool enabled = 4;
+  string note = 5;
+}
+
+message ListGlossaryTermsRequest {
+  string workspace_id = 1;
+}
+
+message ListGlossaryTermsResponse {
+  repeated GlossaryTerm terms = 1;
+}
+
+message UpsertGlossaryTermRequest {
+  string workspace_id = 1;
+  // Empty id creates a new term.
+  GlossaryTerm term = 2;
+}
+
+message UpsertGlossaryTermResponse {
+  GlossaryTerm term = 1;
+}
+
+message DeleteGlossaryTermRequest {
+  string workspace_id = 1;
+  string id = 2;
+}
+
+message DeleteGlossaryTermResponse {}
+
+message Spelling {
+  string id = 1;
+  // What the model writes, in the source script. Several words make a phrase.
+  string source = 2;
+  // How it must appear in Hinglish.
+  string target = 3;
+  bool is_phrase = 4;
+  bool enabled = 5;
+}
+
+message ListSpellingsRequest {
+  string workspace_id = 1;
+}
+
+message ListSpellingsResponse {
+  repeated Spelling spellings = 1;
+}
+
+message UpsertSpellingRequest {
+  string workspace_id = 1;
+  // Empty id creates a new spelling.
+  Spelling spelling = 2;
+}
+
+message UpsertSpellingResponse {
+  Spelling spelling = 1;
+}
+
+message DeleteSpellingRequest {
+  string workspace_id = 1;
+  string id = 2;
+}
+
+message DeleteSpellingResponse {}
