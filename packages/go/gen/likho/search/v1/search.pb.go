@@ -337,8 +337,10 @@ func (x *SearchResponse) GetProcessingMs() uint32 {
 }
 
 type ReindexRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TranscriptId  string                 `protobuf:"bytes,1,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	TranscriptId string                 `protobuf:"bytes,1,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
+	// The transcript's workspace (a transcript does not carry it; the events and likho-api do).
+	WorkspaceId   string `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -376,6 +378,13 @@ func (*ReindexRequest) Descriptor() ([]byte, []int) {
 func (x *ReindexRequest) GetTranscriptId() string {
 	if x != nil {
 		return x.TranscriptId
+	}
+	return ""
+}
+
+func (x *ReindexRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
 	}
 	return ""
 }
@@ -541,9 +550,10 @@ const file_likho_search_v1_search_proto_rawDesc = "" +
 	"\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n" +
 	"\tpage_size\x18\x03 \x01(\rR\bpageSize\x12\x14\n" +
 	"\x05total\x18\x04 \x01(\rR\x05total\x12#\n" +
-	"\rprocessing_ms\x18\x05 \x01(\rR\fprocessingMs\"5\n" +
+	"\rprocessing_ms\x18\x05 \x01(\rR\fprocessingMs\"X\n" +
 	"\x0eReindexRequest\x12#\n" +
-	"\rtranscript_id\x18\x01 \x01(\tR\ftranscriptId\"'\n" +
+	"\rtranscript_id\x18\x01 \x01(\tR\ftranscriptId\x12!\n" +
+	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\"'\n" +
 	"\x0fReindexResponse\x12\x14\n" +
 	"\x05lines\x18\x01 \x01(\rR\x05lines\";\n" +
 	"\x16DeleteRecordingRequest\x12!\n" +

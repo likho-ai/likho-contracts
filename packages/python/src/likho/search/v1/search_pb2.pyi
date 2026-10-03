@@ -72,10 +72,12 @@ class SearchResponse(_message.Message):
     def __init__(self, hits: _Optional[_Iterable[_Union[Hit, _Mapping]]] = ..., page: _Optional[int] = ..., page_size: _Optional[int] = ..., total: _Optional[int] = ..., processing_ms: _Optional[int] = ...) -> None: ...
 
 class ReindexRequest(_message.Message):
-    __slots__ = ("transcript_id",)
+    __slots__ = ("transcript_id", "workspace_id")
     TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
     transcript_id: str
-    def __init__(self, transcript_id: _Optional[str] = ...) -> None: ...
+    workspace_id: str
+    def __init__(self, transcript_id: _Optional[str] = ..., workspace_id: _Optional[str] = ...) -> None: ...
 
 class ReindexResponse(_message.Message):
     __slots__ = ("lines",)

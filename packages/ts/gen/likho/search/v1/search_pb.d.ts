@@ -193,6 +193,13 @@ export declare type ReindexRequest = Message<"likho.search.v1.ReindexRequest"> &
    * @generated from field: string transcript_id = 1;
    */
   transcriptId: string;
+
+  /**
+   * The transcript's workspace (a transcript does not carry it; the events and likho-api do).
+   *
+   * @generated from field: string workspace_id = 2;
+   */
+  workspaceId: string;
 };
 
 /**

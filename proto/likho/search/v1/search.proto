@@ -57,6 +57,8 @@ message SearchResponse {
 
 message ReindexRequest {
   string transcript_id = 1;
+  // The transcript's workspace (a transcript does not carry it; the events and likho-api do).
+  string workspace_id = 2;
 }
 
 message ReindexResponse {
