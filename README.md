@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src, packages/go/gen and packages/
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.6.1", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.7.0", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.6.1
+go get github.com/likho-ai/likho-contracts/packages/go@v0.7.0
 ```
 
 ```go
@@ -53,7 +53,7 @@ Every version tag has a GitHub release with the package attached; npm and pnpm i
 tarball by URL, no registry account needed:
 
 ```json
-"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.6.1/likho-ai-contracts-0.6.1.tgz"
+"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.7.0/likho-ai-contracts-0.7.0.tgz"
 ```
 
 ```ts
@@ -69,7 +69,7 @@ release by CI) and `packages/go/vX.Y.Z` (the Go module).
 | Service | Owner | Calls |
 | --- | --- | --- |
 | `likho.media.v1.MediaService` | likho-media | `GetMedia`, `CreateUpload`, `GetDownloadUrl`, `DeleteMedia` |
-| `likho.transcription.v1.TranscriptionService` | likho-transcription | `GetTranscript`, `ListTranscripts`, `Transcribe` (streams lines), `Retransliterate`, `ListEngines`, `CancelJob` |
+| `likho.transcription.v1.TranscriptionService` | likho-transcription | `GetTranscript`, `ListTranscripts`, `Transcribe` (streams lines), `Retransliterate`, `CorrectSegment` (a new version, the correction kept), `ListCorrections`, `ListEngines`, `CancelJob` |
 | `likho.language.v1.LanguageService` | likho-language | `Transliterate`, `TransliterateBatch`, `GetHotwords`, `ResolveDecodePolicy`, glossary and spelling calls |
 | `likho.search.v1.SearchService` | likho-search | `Search` (lines matching a query, with the matches marked), `Reindex`, `DeleteRecording` |
 

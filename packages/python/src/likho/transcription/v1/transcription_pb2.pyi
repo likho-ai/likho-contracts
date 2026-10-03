@@ -3,12 +3,22 @@ import datetime
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from likho.common.v1 import common_pb2 as _common_pb2
 from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from collections.abc import Iterable as _Iterable, Mapping as _Mapping
 from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
+
+class Layer(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    LAYER_UNSPECIFIED: _ClassVar[Layer]
+    LAYER_SCRIPT: _ClassVar[Layer]
+    LAYER_ROMAN: _ClassVar[Layer]
+LAYER_UNSPECIFIED: Layer
+LAYER_SCRIPT: Layer
+LAYER_ROMAN: Layer
 
 class ModelRef(_message.Message):
     __slots__ = ("registry_id", "engine", "compute")
@@ -113,6 +123,66 @@ class TranscribeResponse(_message.Message):
     segment: _common_pb2.Segment
     completed: Transcript
     def __init__(self, started: _Optional[_Union[TranscribeStarted, _Mapping]] = ..., segment: _Optional[_Union[_common_pb2.Segment, _Mapping]] = ..., completed: _Optional[_Union[Transcript, _Mapping]] = ...) -> None: ...
+
+class Correction(_message.Message):
+    __slots__ = ("id", "recording_id", "transcript_id", "corrected_transcript_id", "segment_index", "layer", "before", "after", "user_id", "created_at")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
+    TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
+    CORRECTED_TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
+    SEGMENT_INDEX_FIELD_NUMBER: _ClassVar[int]
+    LAYER_FIELD_NUMBER: _ClassVar[int]
+    BEFORE_FIELD_NUMBER: _ClassVar[int]
+    AFTER_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    CREATED_AT_FIELD_NUMBER: _ClassVar[int]
+    id: str
+    recording_id: str
+    transcript_id: str
+    corrected_transcript_id: str
+    segment_index: int
+    layer: Layer
+    before: str
+    after: str
+    user_id: str
+    created_at: _timestamp_pb2.Timestamp
+    def __init__(self, id: _Optional[str] = ..., recording_id: _Optional[str] = ..., transcript_id: _Optional[str] = ..., corrected_transcript_id: _Optional[str] = ..., segment_index: _Optional[int] = ..., layer: _Optional[_Union[Layer, str]] = ..., before: _Optional[str] = ..., after: _Optional[str] = ..., user_id: _Optional[str] = ..., created_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+
+class CorrectSegmentRequest(_message.Message):
+    __slots__ = ("transcript_id", "segment_index", "layer", "text", "user_id", "workspace_id")
+    TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
+    SEGMENT_INDEX_FIELD_NUMBER: _ClassVar[int]
+    LAYER_FIELD_NUMBER: _ClassVar[int]
+    TEXT_FIELD_NUMBER: _ClassVar[int]
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    transcript_id: str
+    segment_index: int
+    layer: Layer
+    text: str
+    user_id: str
+    workspace_id: str
+    def __init__(self, transcript_id: _Optional[str] = ..., segment_index: _Optional[int] = ..., layer: _Optional[_Union[Layer, str]] = ..., text: _Optional[str] = ..., user_id: _Optional[str] = ..., workspace_id: _Optional[str] = ...) -> None: ...
+
+class CorrectSegmentResponse(_message.Message):
+    __slots__ = ("transcript", "correction")
+    TRANSCRIPT_FIELD_NUMBER: _ClassVar[int]
+    CORRECTION_FIELD_NUMBER: _ClassVar[int]
+    transcript: Transcript
+    correction: Correction
+    def __init__(self, transcript: _Optional[_Union[Transcript, _Mapping]] = ..., correction: _Optional[_Union[Correction, _Mapping]] = ...) -> None: ...
+
+class ListCorrectionsRequest(_message.Message):
+    __slots__ = ("recording_id",)
+    RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
+    recording_id: str
+    def __init__(self, recording_id: _Optional[str] = ...) -> None: ...
+
+class ListCorrectionsResponse(_message.Message):
+    __slots__ = ("corrections",)
+    CORRECTIONS_FIELD_NUMBER: _ClassVar[int]
+    corrections: _containers.RepeatedCompositeFieldContainer[Correction]
+    def __init__(self, corrections: _Optional[_Iterable[_Union[Correction, _Mapping]]] = ...) -> None: ...
 
 class RetransliterateRequest(_message.Message):
     __slots__ = ("transcript_id",)

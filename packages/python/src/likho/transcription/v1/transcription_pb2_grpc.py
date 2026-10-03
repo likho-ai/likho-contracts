@@ -35,6 +35,16 @@ class TranscriptionServiceStub:
                 request_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateRequest.SerializeToString,
                 response_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateResponse.FromString,
                 _registered_method=True)
+        self.CorrectSegment = channel.unary_unary(
+                '/likho.transcription.v1.TranscriptionService/CorrectSegment',
+                request_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentRequest.SerializeToString,
+                response_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentResponse.FromString,
+                _registered_method=True)
+        self.ListCorrections = channel.unary_unary(
+                '/likho.transcription.v1.TranscriptionService/ListCorrections',
+                request_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsRequest.SerializeToString,
+                response_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsResponse.FromString,
+                _registered_method=True)
         self.ListEngines = channel.unary_unary(
                 '/likho.transcription.v1.TranscriptionService/ListEngines',
                 request_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.ListEnginesRequest.SerializeToString,
@@ -79,6 +89,22 @@ class TranscriptionServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CorrectSegment(self, request, context):
+        """Replaces one line's text in one layer with what a person wrote: a new version of the
+        transcript, the correction kept, likho.transcript.corrected published. When the script
+        layer was corrected the line's Hinglish is derived again; a corrected Hinglish stands as written.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListCorrections(self, request, context):
+        """Every correction made to a recording's transcripts, newest first.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def ListEngines(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -113,6 +139,16 @@ def add_TranscriptionServiceServicer_to_server(servicer, server):
                     servicer.Retransliterate,
                     request_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateRequest.FromString,
                     response_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateResponse.SerializeToString,
+            ),
+            'CorrectSegment': grpc.unary_unary_rpc_method_handler(
+                    servicer.CorrectSegment,
+                    request_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentRequest.FromString,
+                    response_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentResponse.SerializeToString,
+            ),
+            'ListCorrections': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListCorrections,
+                    request_deserializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsRequest.FromString,
+                    response_serializer=likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsResponse.SerializeToString,
             ),
             'ListEngines': grpc.unary_unary_rpc_method_handler(
                     servicer.ListEngines,
@@ -234,6 +270,60 @@ class TranscriptionService:
             '/likho.transcription.v1.TranscriptionService/Retransliterate',
             likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateRequest.SerializeToString,
             likho_dot_transcription_dot_v1_dot_transcription__pb2.RetransliterateResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CorrectSegment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/likho.transcription.v1.TranscriptionService/CorrectSegment',
+            likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentRequest.SerializeToString,
+            likho_dot_transcription_dot_v1_dot_transcription__pb2.CorrectSegmentResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListCorrections(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/likho.transcription.v1.TranscriptionService/ListCorrections',
+            likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsRequest.SerializeToString,
+            likho_dot_transcription_dot_v1_dot_transcription__pb2.ListCorrectionsResponse.FromString,
             options,
             channel_credentials,
             insecure,

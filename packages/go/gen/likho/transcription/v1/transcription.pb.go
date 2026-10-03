@@ -23,6 +23,58 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// The layer of a line a person corrected.
+type Layer int32
+
+const (
+	Layer_LAYER_UNSPECIFIED Layer = 0
+	// The text as spoken, in its script (Devanagari).
+	Layer_LAYER_SCRIPT Layer = 1
+	// The Hinglish (Latin letters).
+	Layer_LAYER_ROMAN Layer = 2
+)
+
+// Enum value maps for Layer.
+var (
+	Layer_name = map[int32]string{
+		0: "LAYER_UNSPECIFIED",
+		1: "LAYER_SCRIPT",
+		2: "LAYER_ROMAN",
+	}
+	Layer_value = map[string]int32{
+		"LAYER_UNSPECIFIED": 0,
+		"LAYER_SCRIPT":      1,
+		"LAYER_ROMAN":       2,
+	}
+)
+
+func (x Layer) Enum() *Layer {
+	p := new(Layer)
+	*p = x
+	return p
+}
+
+func (x Layer) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Layer) Descriptor() protoreflect.EnumDescriptor {
+	return file_likho_transcription_v1_transcription_proto_enumTypes[0].Descriptor()
+}
+
+func (Layer) Type() protoreflect.EnumType {
+	return &file_likho_transcription_v1_transcription_proto_enumTypes[0]
+}
+
+func (x Layer) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Layer.Descriptor instead.
+func (Layer) EnumDescriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{0}
+}
+
 type ModelRef struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Registry id, for example "faster-whisper/turbo".
@@ -684,6 +736,354 @@ func (*TranscribeResponse_Segment) isTranscribeResponse_Event() {}
 
 func (*TranscribeResponse_Completed) isTranscribeResponse_Event() {}
 
+// One change a person made to one line. A correction never edits a transcript in place: it
+// makes the next version, and the correction itself is kept as training data.
+type Correction struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	RecordingId string                 `protobuf:"bytes,2,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
+	// The version the person was looking at, and the version the correction made.
+	TranscriptId          string                 `protobuf:"bytes,3,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
+	CorrectedTranscriptId string                 `protobuf:"bytes,4,opt,name=corrected_transcript_id,json=correctedTranscriptId,proto3" json:"corrected_transcript_id,omitempty"`
+	SegmentIndex          uint32                 `protobuf:"varint,5,opt,name=segment_index,json=segmentIndex,proto3" json:"segment_index,omitempty"`
+	Layer                 Layer                  `protobuf:"varint,6,opt,name=layer,proto3,enum=likho.transcription.v1.Layer" json:"layer,omitempty"`
+	Before                string                 `protobuf:"bytes,7,opt,name=before,proto3" json:"before,omitempty"`
+	After                 string                 `protobuf:"bytes,8,opt,name=after,proto3" json:"after,omitempty"`
+	UserId                string                 `protobuf:"bytes,9,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	CreatedAt             *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *Correction) Reset() {
+	*x = Correction{}
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Correction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Correction) ProtoMessage() {}
+
+func (x *Correction) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Correction.ProtoReflect.Descriptor instead.
+func (*Correction) Descriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *Correction) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Correction) GetRecordingId() string {
+	if x != nil {
+		return x.RecordingId
+	}
+	return ""
+}
+
+func (x *Correction) GetTranscriptId() string {
+	if x != nil {
+		return x.TranscriptId
+	}
+	return ""
+}
+
+func (x *Correction) GetCorrectedTranscriptId() string {
+	if x != nil {
+		return x.CorrectedTranscriptId
+	}
+	return ""
+}
+
+func (x *Correction) GetSegmentIndex() uint32 {
+	if x != nil {
+		return x.SegmentIndex
+	}
+	return 0
+}
+
+func (x *Correction) GetLayer() Layer {
+	if x != nil {
+		return x.Layer
+	}
+	return Layer_LAYER_UNSPECIFIED
+}
+
+func (x *Correction) GetBefore() string {
+	if x != nil {
+		return x.Before
+	}
+	return ""
+}
+
+func (x *Correction) GetAfter() string {
+	if x != nil {
+		return x.After
+	}
+	return ""
+}
+
+func (x *Correction) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *Correction) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+type CorrectSegmentRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The version being looked at; it must be the recording's latest.
+	TranscriptId string `protobuf:"bytes,1,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
+	SegmentIndex uint32 `protobuf:"varint,2,opt,name=segment_index,json=segmentIndex,proto3" json:"segment_index,omitempty"`
+	Layer        Layer  `protobuf:"varint,3,opt,name=layer,proto3,enum=likho.transcription.v1.Layer" json:"layer,omitempty"`
+	// What the line should read.
+	Text   string `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`
+	UserId string `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Whose spellings apply when the Hinglish is re-derived.
+	WorkspaceId   string `protobuf:"bytes,6,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CorrectSegmentRequest) Reset() {
+	*x = CorrectSegmentRequest{}
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CorrectSegmentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CorrectSegmentRequest) ProtoMessage() {}
+
+func (x *CorrectSegmentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CorrectSegmentRequest.ProtoReflect.Descriptor instead.
+func (*CorrectSegmentRequest) Descriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CorrectSegmentRequest) GetTranscriptId() string {
+	if x != nil {
+		return x.TranscriptId
+	}
+	return ""
+}
+
+func (x *CorrectSegmentRequest) GetSegmentIndex() uint32 {
+	if x != nil {
+		return x.SegmentIndex
+	}
+	return 0
+}
+
+func (x *CorrectSegmentRequest) GetLayer() Layer {
+	if x != nil {
+		return x.Layer
+	}
+	return Layer_LAYER_UNSPECIFIED
+}
+
+func (x *CorrectSegmentRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+func (x *CorrectSegmentRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *CorrectSegmentRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+type CorrectSegmentResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The new version, with every line.
+	Transcript    *Transcript `protobuf:"bytes,1,opt,name=transcript,proto3" json:"transcript,omitempty"`
+	Correction    *Correction `protobuf:"bytes,2,opt,name=correction,proto3" json:"correction,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CorrectSegmentResponse) Reset() {
+	*x = CorrectSegmentResponse{}
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CorrectSegmentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CorrectSegmentResponse) ProtoMessage() {}
+
+func (x *CorrectSegmentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CorrectSegmentResponse.ProtoReflect.Descriptor instead.
+func (*CorrectSegmentResponse) Descriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CorrectSegmentResponse) GetTranscript() *Transcript {
+	if x != nil {
+		return x.Transcript
+	}
+	return nil
+}
+
+func (x *CorrectSegmentResponse) GetCorrection() *Correction {
+	if x != nil {
+		return x.Correction
+	}
+	return nil
+}
+
+type ListCorrectionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RecordingId   string                 `protobuf:"bytes,1,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCorrectionsRequest) Reset() {
+	*x = ListCorrectionsRequest{}
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCorrectionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCorrectionsRequest) ProtoMessage() {}
+
+func (x *ListCorrectionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCorrectionsRequest.ProtoReflect.Descriptor instead.
+func (*ListCorrectionsRequest) Descriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ListCorrectionsRequest) GetRecordingId() string {
+	if x != nil {
+		return x.RecordingId
+	}
+	return ""
+}
+
+type ListCorrectionsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Newest first.
+	Corrections   []*Correction `protobuf:"bytes,1,rep,name=corrections,proto3" json:"corrections,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCorrectionsResponse) Reset() {
+	*x = ListCorrectionsResponse{}
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCorrectionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCorrectionsResponse) ProtoMessage() {}
+
+func (x *ListCorrectionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCorrectionsResponse.ProtoReflect.Descriptor instead.
+func (*ListCorrectionsResponse) Descriptor() ([]byte, []int) {
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ListCorrectionsResponse) GetCorrections() []*Correction {
+	if x != nil {
+		return x.Corrections
+	}
+	return nil
+}
+
 type RetransliterateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TranscriptId  string                 `protobuf:"bytes,1,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
@@ -693,7 +1093,7 @@ type RetransliterateRequest struct {
 
 func (x *RetransliterateRequest) Reset() {
 	*x = RetransliterateRequest{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[10]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -705,7 +1105,7 @@ func (x *RetransliterateRequest) String() string {
 func (*RetransliterateRequest) ProtoMessage() {}
 
 func (x *RetransliterateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[10]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -718,7 +1118,7 @@ func (x *RetransliterateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetransliterateRequest.ProtoReflect.Descriptor instead.
 func (*RetransliterateRequest) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{10}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *RetransliterateRequest) GetTranscriptId() string {
@@ -737,7 +1137,7 @@ type RetransliterateResponse struct {
 
 func (x *RetransliterateResponse) Reset() {
 	*x = RetransliterateResponse{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[11]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -749,7 +1149,7 @@ func (x *RetransliterateResponse) String() string {
 func (*RetransliterateResponse) ProtoMessage() {}
 
 func (x *RetransliterateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[11]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -762,7 +1162,7 @@ func (x *RetransliterateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RetransliterateResponse.ProtoReflect.Descriptor instead.
 func (*RetransliterateResponse) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{11}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RetransliterateResponse) GetTranscript() *Transcript {
@@ -786,7 +1186,7 @@ type Engine struct {
 
 func (x *Engine) Reset() {
 	*x = Engine{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[12]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -798,7 +1198,7 @@ func (x *Engine) String() string {
 func (*Engine) ProtoMessage() {}
 
 func (x *Engine) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[12]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -811,7 +1211,7 @@ func (x *Engine) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Engine.ProtoReflect.Descriptor instead.
 func (*Engine) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{12}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Engine) GetRegistryId() string {
@@ -857,7 +1257,7 @@ type ListEnginesRequest struct {
 
 func (x *ListEnginesRequest) Reset() {
 	*x = ListEnginesRequest{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[13]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -869,7 +1269,7 @@ func (x *ListEnginesRequest) String() string {
 func (*ListEnginesRequest) ProtoMessage() {}
 
 func (x *ListEnginesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[13]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -882,7 +1282,7 @@ func (x *ListEnginesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEnginesRequest.ProtoReflect.Descriptor instead.
 func (*ListEnginesRequest) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{13}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{18}
 }
 
 type ListEnginesResponse struct {
@@ -894,7 +1294,7 @@ type ListEnginesResponse struct {
 
 func (x *ListEnginesResponse) Reset() {
 	*x = ListEnginesResponse{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[14]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -906,7 +1306,7 @@ func (x *ListEnginesResponse) String() string {
 func (*ListEnginesResponse) ProtoMessage() {}
 
 func (x *ListEnginesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[14]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -919,7 +1319,7 @@ func (x *ListEnginesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEnginesResponse.ProtoReflect.Descriptor instead.
 func (*ListEnginesResponse) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{14}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ListEnginesResponse) GetEngines() []*Engine {
@@ -938,7 +1338,7 @@ type CancelJobRequest struct {
 
 func (x *CancelJobRequest) Reset() {
 	*x = CancelJobRequest{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[15]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -950,7 +1350,7 @@ func (x *CancelJobRequest) String() string {
 func (*CancelJobRequest) ProtoMessage() {}
 
 func (x *CancelJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[15]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -963,7 +1363,7 @@ func (x *CancelJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelJobRequest.ProtoReflect.Descriptor instead.
 func (*CancelJobRequest) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{15}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CancelJobRequest) GetJobId() string {
@@ -983,7 +1383,7 @@ type CancelJobResponse struct {
 
 func (x *CancelJobResponse) Reset() {
 	*x = CancelJobResponse{}
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[16]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -995,7 +1395,7 @@ func (x *CancelJobResponse) String() string {
 func (*CancelJobResponse) ProtoMessage() {}
 
 func (x *CancelJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[16]
+	mi := &file_likho_transcription_v1_transcription_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1008,7 +1408,7 @@ func (x *CancelJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelJobResponse.ProtoReflect.Descriptor instead.
 func (*CancelJobResponse) Descriptor() ([]byte, []int) {
-	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{16}
+	return file_likho_transcription_v1_transcription_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *CancelJobResponse) GetCancelled() bool {
@@ -1071,7 +1471,39 @@ const file_likho_transcription_v1_transcription_proto_rawDesc = "" +
 	"\astarted\x18\x01 \x01(\v2).likho.transcription.v1.TranscribeStartedH\x00R\astarted\x124\n" +
 	"\asegment\x18\x02 \x01(\v2\x18.likho.common.v1.SegmentH\x00R\asegment\x12B\n" +
 	"\tcompleted\x18\x03 \x01(\v2\".likho.transcription.v1.TranscriptH\x00R\tcompletedB\a\n" +
-	"\x05event\"=\n" +
+	"\x05event\"\xf8\x02\n" +
+	"\n" +
+	"Correction\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
+	"\frecording_id\x18\x02 \x01(\tR\vrecordingId\x12#\n" +
+	"\rtranscript_id\x18\x03 \x01(\tR\ftranscriptId\x126\n" +
+	"\x17corrected_transcript_id\x18\x04 \x01(\tR\x15correctedTranscriptId\x12#\n" +
+	"\rsegment_index\x18\x05 \x01(\rR\fsegmentIndex\x123\n" +
+	"\x05layer\x18\x06 \x01(\x0e2\x1d.likho.transcription.v1.LayerR\x05layer\x12\x16\n" +
+	"\x06before\x18\a \x01(\tR\x06before\x12\x14\n" +
+	"\x05after\x18\b \x01(\tR\x05after\x12\x17\n" +
+	"\auser_id\x18\t \x01(\tR\x06userId\x129\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xe6\x01\n" +
+	"\x15CorrectSegmentRequest\x12#\n" +
+	"\rtranscript_id\x18\x01 \x01(\tR\ftranscriptId\x12#\n" +
+	"\rsegment_index\x18\x02 \x01(\rR\fsegmentIndex\x123\n" +
+	"\x05layer\x18\x03 \x01(\x0e2\x1d.likho.transcription.v1.LayerR\x05layer\x12\x12\n" +
+	"\x04text\x18\x04 \x01(\tR\x04text\x12\x17\n" +
+	"\auser_id\x18\x05 \x01(\tR\x06userId\x12!\n" +
+	"\fworkspace_id\x18\x06 \x01(\tR\vworkspaceId\"\xa0\x01\n" +
+	"\x16CorrectSegmentResponse\x12B\n" +
+	"\n" +
+	"transcript\x18\x01 \x01(\v2\".likho.transcription.v1.TranscriptR\n" +
+	"transcript\x12B\n" +
+	"\n" +
+	"correction\x18\x02 \x01(\v2\".likho.transcription.v1.CorrectionR\n" +
+	"correction\";\n" +
+	"\x16ListCorrectionsRequest\x12!\n" +
+	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\"_\n" +
+	"\x17ListCorrectionsResponse\x12D\n" +
+	"\vcorrections\x18\x01 \x03(\v2\".likho.transcription.v1.CorrectionR\vcorrections\"=\n" +
 	"\x16RetransliterateRequest\x12#\n" +
 	"\rtranscript_id\x18\x01 \x01(\tR\ftranscriptId\"]\n" +
 	"\x17RetransliterateResponse\x12B\n" +
@@ -1092,13 +1524,19 @@ const file_likho_transcription_v1_transcription_proto_rawDesc = "" +
 	"\x10CancelJobRequest\x12\x15\n" +
 	"\x06job_id\x18\x01 \x01(\tR\x05jobId\"1\n" +
 	"\x11CancelJobResponse\x12\x1c\n" +
-	"\tcancelled\x18\x01 \x01(\bR\tcancelled2\x9d\x05\n" +
+	"\tcancelled\x18\x01 \x01(\bR\tcancelled*A\n" +
+	"\x05Layer\x12\x15\n" +
+	"\x11LAYER_UNSPECIFIED\x10\x00\x12\x10\n" +
+	"\fLAYER_SCRIPT\x10\x01\x12\x0f\n" +
+	"\vLAYER_ROMAN\x10\x022\x82\a\n" +
 	"\x14TranscriptionService\x12l\n" +
 	"\rGetTranscript\x12,.likho.transcription.v1.GetTranscriptRequest\x1a-.likho.transcription.v1.GetTranscriptResponse\x12r\n" +
 	"\x0fListTranscripts\x12..likho.transcription.v1.ListTranscriptsRequest\x1a/.likho.transcription.v1.ListTranscriptsResponse\x12e\n" +
 	"\n" +
 	"Transcribe\x12).likho.transcription.v1.TranscribeRequest\x1a*.likho.transcription.v1.TranscribeResponse0\x01\x12r\n" +
-	"\x0fRetransliterate\x12..likho.transcription.v1.RetransliterateRequest\x1a/.likho.transcription.v1.RetransliterateResponse\x12f\n" +
+	"\x0fRetransliterate\x12..likho.transcription.v1.RetransliterateRequest\x1a/.likho.transcription.v1.RetransliterateResponse\x12o\n" +
+	"\x0eCorrectSegment\x12-.likho.transcription.v1.CorrectSegmentRequest\x1a..likho.transcription.v1.CorrectSegmentResponse\x12r\n" +
+	"\x0fListCorrections\x12..likho.transcription.v1.ListCorrectionsRequest\x1a/.likho.transcription.v1.ListCorrectionsResponse\x12f\n" +
 	"\vListEngines\x12*.likho.transcription.v1.ListEnginesRequest\x1a+.likho.transcription.v1.ListEnginesResponse\x12`\n" +
 	"\tCancelJob\x12(.likho.transcription.v1.CancelJobRequest\x1a).likho.transcription.v1.CancelJobResponseB\x86\x02\n" +
 	"\x1acom.likho.transcription.v1B\x12TranscriptionProtoP\x01ZZgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/transcription/v1;transcriptionv1\xa2\x02\x03LTX\xaa\x02\x16Likho.Transcription.V1\xca\x02\x16Likho\\Transcription\\V1\xe2\x02\"Likho\\Transcription\\V1\\GPBMetadata\xea\x02\x18Likho::Transcription::V1b\x06proto3"
@@ -1115,63 +1553,80 @@ func file_likho_transcription_v1_transcription_proto_rawDescGZIP() []byte {
 	return file_likho_transcription_v1_transcription_proto_rawDescData
 }
 
-var file_likho_transcription_v1_transcription_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_likho_transcription_v1_transcription_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_likho_transcription_v1_transcription_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_likho_transcription_v1_transcription_proto_goTypes = []any{
-	(*ModelRef)(nil),                // 0: likho.transcription.v1.ModelRef
-	(*TranscriptStats)(nil),         // 1: likho.transcription.v1.TranscriptStats
-	(*Transcript)(nil),              // 2: likho.transcription.v1.Transcript
-	(*GetTranscriptRequest)(nil),    // 3: likho.transcription.v1.GetTranscriptRequest
-	(*GetTranscriptResponse)(nil),   // 4: likho.transcription.v1.GetTranscriptResponse
-	(*ListTranscriptsRequest)(nil),  // 5: likho.transcription.v1.ListTranscriptsRequest
-	(*ListTranscriptsResponse)(nil), // 6: likho.transcription.v1.ListTranscriptsResponse
-	(*TranscribeRequest)(nil),       // 7: likho.transcription.v1.TranscribeRequest
-	(*TranscribeStarted)(nil),       // 8: likho.transcription.v1.TranscribeStarted
-	(*TranscribeResponse)(nil),      // 9: likho.transcription.v1.TranscribeResponse
-	(*RetransliterateRequest)(nil),  // 10: likho.transcription.v1.RetransliterateRequest
-	(*RetransliterateResponse)(nil), // 11: likho.transcription.v1.RetransliterateResponse
-	(*Engine)(nil),                  // 12: likho.transcription.v1.Engine
-	(*ListEnginesRequest)(nil),      // 13: likho.transcription.v1.ListEnginesRequest
-	(*ListEnginesResponse)(nil),     // 14: likho.transcription.v1.ListEnginesResponse
-	(*CancelJobRequest)(nil),        // 15: likho.transcription.v1.CancelJobRequest
-	(*CancelJobResponse)(nil),       // 16: likho.transcription.v1.CancelJobResponse
-	(*v1.LanguageDetection)(nil),    // 17: likho.common.v1.LanguageDetection
-	(v1.Script)(0),                  // 18: likho.common.v1.Script
-	(*v1.Segment)(nil),              // 19: likho.common.v1.Segment
-	(*timestamppb.Timestamp)(nil),   // 20: google.protobuf.Timestamp
+	(Layer)(0),                      // 0: likho.transcription.v1.Layer
+	(*ModelRef)(nil),                // 1: likho.transcription.v1.ModelRef
+	(*TranscriptStats)(nil),         // 2: likho.transcription.v1.TranscriptStats
+	(*Transcript)(nil),              // 3: likho.transcription.v1.Transcript
+	(*GetTranscriptRequest)(nil),    // 4: likho.transcription.v1.GetTranscriptRequest
+	(*GetTranscriptResponse)(nil),   // 5: likho.transcription.v1.GetTranscriptResponse
+	(*ListTranscriptsRequest)(nil),  // 6: likho.transcription.v1.ListTranscriptsRequest
+	(*ListTranscriptsResponse)(nil), // 7: likho.transcription.v1.ListTranscriptsResponse
+	(*TranscribeRequest)(nil),       // 8: likho.transcription.v1.TranscribeRequest
+	(*TranscribeStarted)(nil),       // 9: likho.transcription.v1.TranscribeStarted
+	(*TranscribeResponse)(nil),      // 10: likho.transcription.v1.TranscribeResponse
+	(*Correction)(nil),              // 11: likho.transcription.v1.Correction
+	(*CorrectSegmentRequest)(nil),   // 12: likho.transcription.v1.CorrectSegmentRequest
+	(*CorrectSegmentResponse)(nil),  // 13: likho.transcription.v1.CorrectSegmentResponse
+	(*ListCorrectionsRequest)(nil),  // 14: likho.transcription.v1.ListCorrectionsRequest
+	(*ListCorrectionsResponse)(nil), // 15: likho.transcription.v1.ListCorrectionsResponse
+	(*RetransliterateRequest)(nil),  // 16: likho.transcription.v1.RetransliterateRequest
+	(*RetransliterateResponse)(nil), // 17: likho.transcription.v1.RetransliterateResponse
+	(*Engine)(nil),                  // 18: likho.transcription.v1.Engine
+	(*ListEnginesRequest)(nil),      // 19: likho.transcription.v1.ListEnginesRequest
+	(*ListEnginesResponse)(nil),     // 20: likho.transcription.v1.ListEnginesResponse
+	(*CancelJobRequest)(nil),        // 21: likho.transcription.v1.CancelJobRequest
+	(*CancelJobResponse)(nil),       // 22: likho.transcription.v1.CancelJobResponse
+	(*v1.LanguageDetection)(nil),    // 23: likho.common.v1.LanguageDetection
+	(v1.Script)(0),                  // 24: likho.common.v1.Script
+	(*v1.Segment)(nil),              // 25: likho.common.v1.Segment
+	(*timestamppb.Timestamp)(nil),   // 26: google.protobuf.Timestamp
 }
 var file_likho_transcription_v1_transcription_proto_depIdxs = []int32{
-	0,  // 0: likho.transcription.v1.Transcript.model:type_name -> likho.transcription.v1.ModelRef
-	17, // 1: likho.transcription.v1.Transcript.language:type_name -> likho.common.v1.LanguageDetection
-	18, // 2: likho.transcription.v1.Transcript.script:type_name -> likho.common.v1.Script
-	19, // 3: likho.transcription.v1.Transcript.segments:type_name -> likho.common.v1.Segment
-	1,  // 4: likho.transcription.v1.Transcript.stats:type_name -> likho.transcription.v1.TranscriptStats
-	20, // 5: likho.transcription.v1.Transcript.created_at:type_name -> google.protobuf.Timestamp
-	2,  // 6: likho.transcription.v1.GetTranscriptResponse.transcript:type_name -> likho.transcription.v1.Transcript
-	2,  // 7: likho.transcription.v1.ListTranscriptsResponse.transcripts:type_name -> likho.transcription.v1.Transcript
-	17, // 8: likho.transcription.v1.TranscribeStarted.language:type_name -> likho.common.v1.LanguageDetection
-	8,  // 9: likho.transcription.v1.TranscribeResponse.started:type_name -> likho.transcription.v1.TranscribeStarted
-	19, // 10: likho.transcription.v1.TranscribeResponse.segment:type_name -> likho.common.v1.Segment
-	2,  // 11: likho.transcription.v1.TranscribeResponse.completed:type_name -> likho.transcription.v1.Transcript
-	2,  // 12: likho.transcription.v1.RetransliterateResponse.transcript:type_name -> likho.transcription.v1.Transcript
-	18, // 13: likho.transcription.v1.Engine.output_script:type_name -> likho.common.v1.Script
-	12, // 14: likho.transcription.v1.ListEnginesResponse.engines:type_name -> likho.transcription.v1.Engine
-	3,  // 15: likho.transcription.v1.TranscriptionService.GetTranscript:input_type -> likho.transcription.v1.GetTranscriptRequest
-	5,  // 16: likho.transcription.v1.TranscriptionService.ListTranscripts:input_type -> likho.transcription.v1.ListTranscriptsRequest
-	7,  // 17: likho.transcription.v1.TranscriptionService.Transcribe:input_type -> likho.transcription.v1.TranscribeRequest
-	10, // 18: likho.transcription.v1.TranscriptionService.Retransliterate:input_type -> likho.transcription.v1.RetransliterateRequest
-	13, // 19: likho.transcription.v1.TranscriptionService.ListEngines:input_type -> likho.transcription.v1.ListEnginesRequest
-	15, // 20: likho.transcription.v1.TranscriptionService.CancelJob:input_type -> likho.transcription.v1.CancelJobRequest
-	4,  // 21: likho.transcription.v1.TranscriptionService.GetTranscript:output_type -> likho.transcription.v1.GetTranscriptResponse
-	6,  // 22: likho.transcription.v1.TranscriptionService.ListTranscripts:output_type -> likho.transcription.v1.ListTranscriptsResponse
-	9,  // 23: likho.transcription.v1.TranscriptionService.Transcribe:output_type -> likho.transcription.v1.TranscribeResponse
-	11, // 24: likho.transcription.v1.TranscriptionService.Retransliterate:output_type -> likho.transcription.v1.RetransliterateResponse
-	14, // 25: likho.transcription.v1.TranscriptionService.ListEngines:output_type -> likho.transcription.v1.ListEnginesResponse
-	16, // 26: likho.transcription.v1.TranscriptionService.CancelJob:output_type -> likho.transcription.v1.CancelJobResponse
-	21, // [21:27] is the sub-list for method output_type
-	15, // [15:21] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	1,  // 0: likho.transcription.v1.Transcript.model:type_name -> likho.transcription.v1.ModelRef
+	23, // 1: likho.transcription.v1.Transcript.language:type_name -> likho.common.v1.LanguageDetection
+	24, // 2: likho.transcription.v1.Transcript.script:type_name -> likho.common.v1.Script
+	25, // 3: likho.transcription.v1.Transcript.segments:type_name -> likho.common.v1.Segment
+	2,  // 4: likho.transcription.v1.Transcript.stats:type_name -> likho.transcription.v1.TranscriptStats
+	26, // 5: likho.transcription.v1.Transcript.created_at:type_name -> google.protobuf.Timestamp
+	3,  // 6: likho.transcription.v1.GetTranscriptResponse.transcript:type_name -> likho.transcription.v1.Transcript
+	3,  // 7: likho.transcription.v1.ListTranscriptsResponse.transcripts:type_name -> likho.transcription.v1.Transcript
+	23, // 8: likho.transcription.v1.TranscribeStarted.language:type_name -> likho.common.v1.LanguageDetection
+	9,  // 9: likho.transcription.v1.TranscribeResponse.started:type_name -> likho.transcription.v1.TranscribeStarted
+	25, // 10: likho.transcription.v1.TranscribeResponse.segment:type_name -> likho.common.v1.Segment
+	3,  // 11: likho.transcription.v1.TranscribeResponse.completed:type_name -> likho.transcription.v1.Transcript
+	0,  // 12: likho.transcription.v1.Correction.layer:type_name -> likho.transcription.v1.Layer
+	26, // 13: likho.transcription.v1.Correction.created_at:type_name -> google.protobuf.Timestamp
+	0,  // 14: likho.transcription.v1.CorrectSegmentRequest.layer:type_name -> likho.transcription.v1.Layer
+	3,  // 15: likho.transcription.v1.CorrectSegmentResponse.transcript:type_name -> likho.transcription.v1.Transcript
+	11, // 16: likho.transcription.v1.CorrectSegmentResponse.correction:type_name -> likho.transcription.v1.Correction
+	11, // 17: likho.transcription.v1.ListCorrectionsResponse.corrections:type_name -> likho.transcription.v1.Correction
+	3,  // 18: likho.transcription.v1.RetransliterateResponse.transcript:type_name -> likho.transcription.v1.Transcript
+	24, // 19: likho.transcription.v1.Engine.output_script:type_name -> likho.common.v1.Script
+	18, // 20: likho.transcription.v1.ListEnginesResponse.engines:type_name -> likho.transcription.v1.Engine
+	4,  // 21: likho.transcription.v1.TranscriptionService.GetTranscript:input_type -> likho.transcription.v1.GetTranscriptRequest
+	6,  // 22: likho.transcription.v1.TranscriptionService.ListTranscripts:input_type -> likho.transcription.v1.ListTranscriptsRequest
+	8,  // 23: likho.transcription.v1.TranscriptionService.Transcribe:input_type -> likho.transcription.v1.TranscribeRequest
+	16, // 24: likho.transcription.v1.TranscriptionService.Retransliterate:input_type -> likho.transcription.v1.RetransliterateRequest
+	12, // 25: likho.transcription.v1.TranscriptionService.CorrectSegment:input_type -> likho.transcription.v1.CorrectSegmentRequest
+	14, // 26: likho.transcription.v1.TranscriptionService.ListCorrections:input_type -> likho.transcription.v1.ListCorrectionsRequest
+	19, // 27: likho.transcription.v1.TranscriptionService.ListEngines:input_type -> likho.transcription.v1.ListEnginesRequest
+	21, // 28: likho.transcription.v1.TranscriptionService.CancelJob:input_type -> likho.transcription.v1.CancelJobRequest
+	5,  // 29: likho.transcription.v1.TranscriptionService.GetTranscript:output_type -> likho.transcription.v1.GetTranscriptResponse
+	7,  // 30: likho.transcription.v1.TranscriptionService.ListTranscripts:output_type -> likho.transcription.v1.ListTranscriptsResponse
+	10, // 31: likho.transcription.v1.TranscriptionService.Transcribe:output_type -> likho.transcription.v1.TranscribeResponse
+	17, // 32: likho.transcription.v1.TranscriptionService.Retransliterate:output_type -> likho.transcription.v1.RetransliterateResponse
+	13, // 33: likho.transcription.v1.TranscriptionService.CorrectSegment:output_type -> likho.transcription.v1.CorrectSegmentResponse
+	15, // 34: likho.transcription.v1.TranscriptionService.ListCorrections:output_type -> likho.transcription.v1.ListCorrectionsResponse
+	20, // 35: likho.transcription.v1.TranscriptionService.ListEngines:output_type -> likho.transcription.v1.ListEnginesResponse
+	22, // 36: likho.transcription.v1.TranscriptionService.CancelJob:output_type -> likho.transcription.v1.CancelJobResponse
+	29, // [29:37] is the sub-list for method output_type
+	21, // [21:29] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_likho_transcription_v1_transcription_proto_init() }
@@ -1189,13 +1644,14 @@ func file_likho_transcription_v1_transcription_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_likho_transcription_v1_transcription_proto_rawDesc), len(file_likho_transcription_v1_transcription_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   17,
+			NumEnums:      1,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_likho_transcription_v1_transcription_proto_goTypes,
 		DependencyIndexes: file_likho_transcription_v1_transcription_proto_depIdxs,
+		EnumInfos:         file_likho_transcription_v1_transcription_proto_enumTypes,
 		MessageInfos:      file_likho_transcription_v1_transcription_proto_msgTypes,
 	}.Build()
 	File_likho_transcription_v1_transcription_proto = out.File

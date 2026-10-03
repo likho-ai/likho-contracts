@@ -2,7 +2,7 @@
 // @generated from file likho/transcription/v1/transcription.proto (package likho.transcription.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 import type { LanguageDetection, Script, Segment } from "../../common/v1/common_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
@@ -305,6 +305,176 @@ export declare type TranscribeResponse = Message<"likho.transcription.v1.Transcr
 export declare const TranscribeResponseSchema: GenMessage<TranscribeResponse>;
 
 /**
+ * One change a person made to one line. A correction never edits a transcript in place: it
+ * makes the next version, and the correction itself is kept as training data.
+ *
+ * @generated from message likho.transcription.v1.Correction
+ */
+export declare type Correction = Message<"likho.transcription.v1.Correction"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string recording_id = 2;
+   */
+  recordingId: string;
+
+  /**
+   * The version the person was looking at, and the version the correction made.
+   *
+   * @generated from field: string transcript_id = 3;
+   */
+  transcriptId: string;
+
+  /**
+   * @generated from field: string corrected_transcript_id = 4;
+   */
+  correctedTranscriptId: string;
+
+  /**
+   * @generated from field: uint32 segment_index = 5;
+   */
+  segmentIndex: number;
+
+  /**
+   * @generated from field: likho.transcription.v1.Layer layer = 6;
+   */
+  layer: Layer;
+
+  /**
+   * @generated from field: string before = 7;
+   */
+  before: string;
+
+  /**
+   * @generated from field: string after = 8;
+   */
+  after: string;
+
+  /**
+   * @generated from field: string user_id = 9;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 10;
+   */
+  createdAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message likho.transcription.v1.Correction.
+ * Use `create(CorrectionSchema)` to create a new message.
+ */
+export declare const CorrectionSchema: GenMessage<Correction>;
+
+/**
+ * @generated from message likho.transcription.v1.CorrectSegmentRequest
+ */
+export declare type CorrectSegmentRequest = Message<"likho.transcription.v1.CorrectSegmentRequest"> & {
+  /**
+   * The version being looked at; it must be the recording's latest.
+   *
+   * @generated from field: string transcript_id = 1;
+   */
+  transcriptId: string;
+
+  /**
+   * @generated from field: uint32 segment_index = 2;
+   */
+  segmentIndex: number;
+
+  /**
+   * @generated from field: likho.transcription.v1.Layer layer = 3;
+   */
+  layer: Layer;
+
+  /**
+   * What the line should read.
+   *
+   * @generated from field: string text = 4;
+   */
+  text: string;
+
+  /**
+   * @generated from field: string user_id = 5;
+   */
+  userId: string;
+
+  /**
+   * Whose spellings apply when the Hinglish is re-derived.
+   *
+   * @generated from field: string workspace_id = 6;
+   */
+  workspaceId: string;
+};
+
+/**
+ * Describes the message likho.transcription.v1.CorrectSegmentRequest.
+ * Use `create(CorrectSegmentRequestSchema)` to create a new message.
+ */
+export declare const CorrectSegmentRequestSchema: GenMessage<CorrectSegmentRequest>;
+
+/**
+ * @generated from message likho.transcription.v1.CorrectSegmentResponse
+ */
+export declare type CorrectSegmentResponse = Message<"likho.transcription.v1.CorrectSegmentResponse"> & {
+  /**
+   * The new version, with every line.
+   *
+   * @generated from field: likho.transcription.v1.Transcript transcript = 1;
+   */
+  transcript?: Transcript | undefined;
+
+  /**
+   * @generated from field: likho.transcription.v1.Correction correction = 2;
+   */
+  correction?: Correction | undefined;
+};
+
+/**
+ * Describes the message likho.transcription.v1.CorrectSegmentResponse.
+ * Use `create(CorrectSegmentResponseSchema)` to create a new message.
+ */
+export declare const CorrectSegmentResponseSchema: GenMessage<CorrectSegmentResponse>;
+
+/**
+ * @generated from message likho.transcription.v1.ListCorrectionsRequest
+ */
+export declare type ListCorrectionsRequest = Message<"likho.transcription.v1.ListCorrectionsRequest"> & {
+  /**
+   * @generated from field: string recording_id = 1;
+   */
+  recordingId: string;
+};
+
+/**
+ * Describes the message likho.transcription.v1.ListCorrectionsRequest.
+ * Use `create(ListCorrectionsRequestSchema)` to create a new message.
+ */
+export declare const ListCorrectionsRequestSchema: GenMessage<ListCorrectionsRequest>;
+
+/**
+ * @generated from message likho.transcription.v1.ListCorrectionsResponse
+ */
+export declare type ListCorrectionsResponse = Message<"likho.transcription.v1.ListCorrectionsResponse"> & {
+  /**
+   * Newest first.
+   *
+   * @generated from field: repeated likho.transcription.v1.Correction corrections = 1;
+   */
+  corrections: Correction[];
+};
+
+/**
+ * Describes the message likho.transcription.v1.ListCorrectionsResponse.
+ * Use `create(ListCorrectionsResponseSchema)` to create a new message.
+ */
+export declare const ListCorrectionsResponseSchema: GenMessage<ListCorrectionsResponse>;
+
+/**
  * @generated from message likho.transcription.v1.RetransliterateRequest
  */
 export declare type RetransliterateRequest = Message<"likho.transcription.v1.RetransliterateRequest"> & {
@@ -437,6 +607,37 @@ export declare type CancelJobResponse = Message<"likho.transcription.v1.CancelJo
 export declare const CancelJobResponseSchema: GenMessage<CancelJobResponse>;
 
 /**
+ * The layer of a line a person corrected.
+ *
+ * @generated from enum likho.transcription.v1.Layer
+ */
+export enum Layer {
+  /**
+   * @generated from enum value: LAYER_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * The text as spoken, in its script (Devanagari).
+   *
+   * @generated from enum value: LAYER_SCRIPT = 1;
+   */
+  SCRIPT = 1,
+
+  /**
+   * The Hinglish (Latin letters).
+   *
+   * @generated from enum value: LAYER_ROMAN = 2;
+   */
+  ROMAN = 2,
+}
+
+/**
+ * Describes the enum likho.transcription.v1.Layer.
+ */
+export declare const LayerSchema: GenEnum<Layer>;
+
+/**
  * Owned by likho-transcription: runs the speech model and stores both text layers.
  *
  * @generated from service likho.transcription.v1.TranscriptionService
@@ -480,6 +681,28 @@ export declare const TranscriptionService: GenService<{
     methodKind: "unary";
     input: typeof RetransliterateRequestSchema;
     output: typeof RetransliterateResponseSchema;
+  },
+  /**
+   * Replaces one line's text in one layer with what a person wrote: a new version of the
+   * transcript, the correction kept, likho.transcript.corrected published. When the script
+   * layer was corrected the line's Hinglish is derived again; a corrected Hinglish stands as written.
+   *
+   * @generated from rpc likho.transcription.v1.TranscriptionService.CorrectSegment
+   */
+  correctSegment: {
+    methodKind: "unary";
+    input: typeof CorrectSegmentRequestSchema;
+    output: typeof CorrectSegmentResponseSchema;
+  },
+  /**
+   * Every correction made to a recording's transcripts, newest first.
+   *
+   * @generated from rpc likho.transcription.v1.TranscriptionService.ListCorrections
+   */
+  listCorrections: {
+    methodKind: "unary";
+    input: typeof ListCorrectionsRequestSchema;
+    output: typeof ListCorrectionsResponseSchema;
   },
   /**
    * @generated from rpc likho.transcription.v1.TranscriptionService.ListEngines

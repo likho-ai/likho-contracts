@@ -45,6 +45,12 @@ const (
 	// TranscriptionServiceRetransliterateProcedure is the fully-qualified name of the
 	// TranscriptionService's Retransliterate RPC.
 	TranscriptionServiceRetransliterateProcedure = "/likho.transcription.v1.TranscriptionService/Retransliterate"
+	// TranscriptionServiceCorrectSegmentProcedure is the fully-qualified name of the
+	// TranscriptionService's CorrectSegment RPC.
+	TranscriptionServiceCorrectSegmentProcedure = "/likho.transcription.v1.TranscriptionService/CorrectSegment"
+	// TranscriptionServiceListCorrectionsProcedure is the fully-qualified name of the
+	// TranscriptionService's ListCorrections RPC.
+	TranscriptionServiceListCorrectionsProcedure = "/likho.transcription.v1.TranscriptionService/ListCorrections"
 	// TranscriptionServiceListEnginesProcedure is the fully-qualified name of the
 	// TranscriptionService's ListEngines RPC.
 	TranscriptionServiceListEnginesProcedure = "/likho.transcription.v1.TranscriptionService/ListEngines"
@@ -64,6 +70,12 @@ type TranscriptionServiceClient interface {
 	Transcribe(context.Context, *connect.Request[v1.TranscribeRequest]) (*connect.ServerStreamForClient[v1.TranscribeResponse], error)
 	// Rebuilds the Hinglish layer from the saved script layer. The speech model does not run.
 	Retransliterate(context.Context, *connect.Request[v1.RetransliterateRequest]) (*connect.Response[v1.RetransliterateResponse], error)
+	// Replaces one line's text in one layer with what a person wrote: a new version of the
+	// transcript, the correction kept, likho.transcript.corrected published. When the script
+	// layer was corrected the line's Hinglish is derived again; a corrected Hinglish stands as written.
+	CorrectSegment(context.Context, *connect.Request[v1.CorrectSegmentRequest]) (*connect.Response[v1.CorrectSegmentResponse], error)
+	// Every correction made to a recording's transcripts, newest first.
+	ListCorrections(context.Context, *connect.Request[v1.ListCorrectionsRequest]) (*connect.Response[v1.ListCorrectionsResponse], error)
 	ListEngines(context.Context, *connect.Request[v1.ListEnginesRequest]) (*connect.Response[v1.ListEnginesResponse], error)
 	CancelJob(context.Context, *connect.Request[v1.CancelJobRequest]) (*connect.Response[v1.CancelJobResponse], error)
 }
@@ -104,6 +116,18 @@ func NewTranscriptionServiceClient(httpClient connect.HTTPClient, baseURL string
 			connect.WithSchema(transcriptionServiceMethods.ByName("Retransliterate")),
 			connect.WithClientOptions(opts...),
 		),
+		correctSegment: connect.NewClient[v1.CorrectSegmentRequest, v1.CorrectSegmentResponse](
+			httpClient,
+			baseURL+TranscriptionServiceCorrectSegmentProcedure,
+			connect.WithSchema(transcriptionServiceMethods.ByName("CorrectSegment")),
+			connect.WithClientOptions(opts...),
+		),
+		listCorrections: connect.NewClient[v1.ListCorrectionsRequest, v1.ListCorrectionsResponse](
+			httpClient,
+			baseURL+TranscriptionServiceListCorrectionsProcedure,
+			connect.WithSchema(transcriptionServiceMethods.ByName("ListCorrections")),
+			connect.WithClientOptions(opts...),
+		),
 		listEngines: connect.NewClient[v1.ListEnginesRequest, v1.ListEnginesResponse](
 			httpClient,
 			baseURL+TranscriptionServiceListEnginesProcedure,
@@ -125,6 +149,8 @@ type transcriptionServiceClient struct {
 	listTranscripts *connect.Client[v1.ListTranscriptsRequest, v1.ListTranscriptsResponse]
 	transcribe      *connect.Client[v1.TranscribeRequest, v1.TranscribeResponse]
 	retransliterate *connect.Client[v1.RetransliterateRequest, v1.RetransliterateResponse]
+	correctSegment  *connect.Client[v1.CorrectSegmentRequest, v1.CorrectSegmentResponse]
+	listCorrections *connect.Client[v1.ListCorrectionsRequest, v1.ListCorrectionsResponse]
 	listEngines     *connect.Client[v1.ListEnginesRequest, v1.ListEnginesResponse]
 	cancelJob       *connect.Client[v1.CancelJobRequest, v1.CancelJobResponse]
 }
@@ -149,6 +175,16 @@ func (c *transcriptionServiceClient) Retransliterate(ctx context.Context, req *c
 	return c.retransliterate.CallUnary(ctx, req)
 }
 
+// CorrectSegment calls likho.transcription.v1.TranscriptionService.CorrectSegment.
+func (c *transcriptionServiceClient) CorrectSegment(ctx context.Context, req *connect.Request[v1.CorrectSegmentRequest]) (*connect.Response[v1.CorrectSegmentResponse], error) {
+	return c.correctSegment.CallUnary(ctx, req)
+}
+
+// ListCorrections calls likho.transcription.v1.TranscriptionService.ListCorrections.
+func (c *transcriptionServiceClient) ListCorrections(ctx context.Context, req *connect.Request[v1.ListCorrectionsRequest]) (*connect.Response[v1.ListCorrectionsResponse], error) {
+	return c.listCorrections.CallUnary(ctx, req)
+}
+
 // ListEngines calls likho.transcription.v1.TranscriptionService.ListEngines.
 func (c *transcriptionServiceClient) ListEngines(ctx context.Context, req *connect.Request[v1.ListEnginesRequest]) (*connect.Response[v1.ListEnginesResponse], error) {
 	return c.listEngines.CallUnary(ctx, req)
@@ -170,6 +206,12 @@ type TranscriptionServiceHandler interface {
 	Transcribe(context.Context, *connect.Request[v1.TranscribeRequest], *connect.ServerStream[v1.TranscribeResponse]) error
 	// Rebuilds the Hinglish layer from the saved script layer. The speech model does not run.
 	Retransliterate(context.Context, *connect.Request[v1.RetransliterateRequest]) (*connect.Response[v1.RetransliterateResponse], error)
+	// Replaces one line's text in one layer with what a person wrote: a new version of the
+	// transcript, the correction kept, likho.transcript.corrected published. When the script
+	// layer was corrected the line's Hinglish is derived again; a corrected Hinglish stands as written.
+	CorrectSegment(context.Context, *connect.Request[v1.CorrectSegmentRequest]) (*connect.Response[v1.CorrectSegmentResponse], error)
+	// Every correction made to a recording's transcripts, newest first.
+	ListCorrections(context.Context, *connect.Request[v1.ListCorrectionsRequest]) (*connect.Response[v1.ListCorrectionsResponse], error)
 	ListEngines(context.Context, *connect.Request[v1.ListEnginesRequest]) (*connect.Response[v1.ListEnginesResponse], error)
 	CancelJob(context.Context, *connect.Request[v1.CancelJobRequest]) (*connect.Response[v1.CancelJobResponse], error)
 }
@@ -205,6 +247,18 @@ func NewTranscriptionServiceHandler(svc TranscriptionServiceHandler, opts ...con
 		connect.WithSchema(transcriptionServiceMethods.ByName("Retransliterate")),
 		connect.WithHandlerOptions(opts...),
 	)
+	transcriptionServiceCorrectSegmentHandler := connect.NewUnaryHandler(
+		TranscriptionServiceCorrectSegmentProcedure,
+		svc.CorrectSegment,
+		connect.WithSchema(transcriptionServiceMethods.ByName("CorrectSegment")),
+		connect.WithHandlerOptions(opts...),
+	)
+	transcriptionServiceListCorrectionsHandler := connect.NewUnaryHandler(
+		TranscriptionServiceListCorrectionsProcedure,
+		svc.ListCorrections,
+		connect.WithSchema(transcriptionServiceMethods.ByName("ListCorrections")),
+		connect.WithHandlerOptions(opts...),
+	)
 	transcriptionServiceListEnginesHandler := connect.NewUnaryHandler(
 		TranscriptionServiceListEnginesProcedure,
 		svc.ListEngines,
@@ -227,6 +281,10 @@ func NewTranscriptionServiceHandler(svc TranscriptionServiceHandler, opts ...con
 			transcriptionServiceTranscribeHandler.ServeHTTP(w, r)
 		case TranscriptionServiceRetransliterateProcedure:
 			transcriptionServiceRetransliterateHandler.ServeHTTP(w, r)
+		case TranscriptionServiceCorrectSegmentProcedure:
+			transcriptionServiceCorrectSegmentHandler.ServeHTTP(w, r)
+		case TranscriptionServiceListCorrectionsProcedure:
+			transcriptionServiceListCorrectionsHandler.ServeHTTP(w, r)
 		case TranscriptionServiceListEnginesProcedure:
 			transcriptionServiceListEnginesHandler.ServeHTTP(w, r)
 		case TranscriptionServiceCancelJobProcedure:
@@ -254,6 +312,14 @@ func (UnimplementedTranscriptionServiceHandler) Transcribe(context.Context, *con
 
 func (UnimplementedTranscriptionServiceHandler) Retransliterate(context.Context, *connect.Request[v1.RetransliterateRequest]) (*connect.Response[v1.RetransliterateResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.transcription.v1.TranscriptionService.Retransliterate is not implemented"))
+}
+
+func (UnimplementedTranscriptionServiceHandler) CorrectSegment(context.Context, *connect.Request[v1.CorrectSegmentRequest]) (*connect.Response[v1.CorrectSegmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.transcription.v1.TranscriptionService.CorrectSegment is not implemented"))
+}
+
+func (UnimplementedTranscriptionServiceHandler) ListCorrections(context.Context, *connect.Request[v1.ListCorrectionsRequest]) (*connect.Response[v1.ListCorrectionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.transcription.v1.TranscriptionService.ListCorrections is not implemented"))
 }
 
 func (UnimplementedTranscriptionServiceHandler) ListEngines(context.Context, *connect.Request[v1.ListEnginesRequest]) (*connect.Response[v1.ListEnginesResponse], error) {
