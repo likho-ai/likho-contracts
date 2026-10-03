@@ -1,0 +1,30 @@
+# On a version tag: a GitHub release with the TypeScript package attached, so services and web
+# apps install it from the release (pnpm and npm take a tarball URL; no registry account needed).
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Pack the TypeScript package
+        run: |
+          cd packages/ts
+          test "$(node -p "require('./package.json').version")" = "${GITHUB_REF_NAME#v}" || { echo "packages/ts/package.json version differs from the tag"; exit 1; }
+          npm pack
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: packages/ts/likho-ai-contracts-*.tgz
+          body: |
+            TypeScript package attached (`likho-ai-contracts-${{ github.ref_name }}.tgz`, without the `v`).
+            Python: `likho-contracts = { git = "...", tag = "${{ github.ref_name }}", subdirectory = "packages/python" }`.
+            Go: `go get github.com/likho-ai/likho-contracts/packages/go@${{ github.ref_name }}`.

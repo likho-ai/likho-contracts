@@ -49,10 +49,11 @@ so the Python services call it with their normal gRPC clients.
 
 ## Use from a TypeScript service or web app
 
-With pnpm, which can install a package from a folder of a git repository:
+Every version tag has a GitHub release with the package attached; npm and pnpm install a
+tarball by URL, no registry account needed:
 
 ```json
-"@likho-ai/contracts": "github:likho-ai/likho-contracts#v0.5.0&path:/packages/ts"
+"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.5.0/likho-ai-contracts-0.5.0.tgz"
 ```
 
 ```ts
@@ -60,8 +61,8 @@ import { MediaService } from "@likho-ai/contracts/media/v1/media_pb";
 ```
 
 The generated Python, Go and TypeScript code is committed, and CI fails if it does not match
-the protos. A release has two tags: `vX.Y.Z` (Python and TypeScript) and `packages/go/vX.Y.Z`
-(the Go module).
+the protos. A release has two tags: `vX.Y.Z` (Python, and the TypeScript tarball attached to the GitHub
+release by CI) and `packages/go/vX.Y.Z` (the Go module).
 
 ## gRPC services (version 1)
 

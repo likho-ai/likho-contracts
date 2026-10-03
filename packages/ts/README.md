@@ -2,12 +2,12 @@
 
 Generated from the protos in this repository (`npm run generate`). Do not edit `gen/`.
 
-With pnpm, straight from the repository at a tag:
+From the tarball attached to the release of the same version:
 
 ```json
 {
   "dependencies": {
-    "@likho-ai/contracts": "github:likho-ai/likho-contracts#v0.5.0&path:/packages/ts",
+    "@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.5.0/likho-ai-contracts-0.5.0.tgz",
     "@bufbuild/protobuf": "^2.2.0",
     "@connectrpc/connect": "^2.0.0"
   }
