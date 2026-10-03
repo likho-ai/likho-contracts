@@ -9,7 +9,7 @@
 streams:
   LIKHO:
     description: Business events, kept 30 days
-    subjects: ["likho.media.*", "likho.transcription.*", "likho.vocabulary.*", "likho.insights.*", "likho.dead"]
+    subjects: ["likho.media.*", "likho.transcription.*", "likho.vocabulary.*", "likho.insights.*", "likho.import.*", "likho.recording.*", "likho.dead"]
     max_age: 30d
   LIKHO_LIVE:
     description: Live transcript lines, only useful while a job runs
@@ -65,6 +65,26 @@ events:
     stream: LIKHO_KEEP
     producer: likho-api
     consumers: [likho-search]
+  likho.import.requested.v1:
+    subject: likho.import.requested
+    stream: LIKHO
+    producer: likho-api
+    consumers: [likho-connector-ameyo]
+  likho.import.completed.v1:
+    subject: likho.import.completed
+    stream: LIKHO
+    producer: likho-connector-ameyo
+    consumers: [likho-api]
+  likho.import.failed.v1:
+    subject: likho.import.failed
+    stream: LIKHO
+    producer: likho-connector-ameyo
+    consumers: [likho-api]
+  likho.recording.deleted.v1:
+    subject: likho.recording.deleted
+    stream: LIKHO
+    producer: likho-api
+    consumers: [likho-search, likho-connector-ameyo]
 
 # Durable consumer settings. Name = <service>-<last part of the subject>.
 consumer_defaults:

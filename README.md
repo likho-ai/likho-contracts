@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src, packages/go/gen and packages/
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.5.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.6.0", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.5.0
+go get github.com/likho-ai/likho-contracts/packages/go@v0.6.0
 ```
 
 ```go
@@ -53,7 +53,7 @@ Every version tag has a GitHub release with the package attached; npm and pnpm i
 tarball by URL, no registry account needed:
 
 ```json
-"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.5.0/likho-ai-contracts-0.5.0.tgz"
+"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.6.0/likho-ai-contracts-0.6.0.tgz"
 ```
 
 ```ts
@@ -71,6 +71,7 @@ release by CI) and `packages/go/vX.Y.Z` (the Go module).
 | `likho.media.v1.MediaService` | likho-media | `GetMedia`, `CreateUpload`, `GetDownloadUrl`, `DeleteMedia` |
 | `likho.transcription.v1.TranscriptionService` | likho-transcription | `GetTranscript`, `ListTranscripts`, `Transcribe` (streams lines), `Retransliterate`, `ListEngines`, `CancelJob` |
 | `likho.language.v1.LanguageService` | likho-language | `Transliterate`, `TransliterateBatch`, `GetHotwords`, `ResolveDecodePolicy`, glossary and spelling calls |
+| `likho.search.v1.SearchService` | likho-search | `Search` (lines matching a query, with the matches marked), `Reindex`, `DeleteRecording` |
 
 Shared messages are in `likho.common.v1`: `Segment` (one transcript line with both text
 layers), `LanguageDetection`, `DialerCall`, `Script`.
@@ -88,6 +89,10 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | `likho.transcription.failed.v1` | `likho.transcription.failed` | LIKHO | likho-transcription | likho-api |
 | `likho.vocabulary.updated.v1` | `likho.vocabulary.updated` | LIKHO | likho-language | likho-transcription |
 | `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-api | likho-search |
+| `likho.import.requested.v1` | `likho.import.requested` | LIKHO | likho-api | likho-connector-ameyo (fetch this call from the dialer) |
+| `likho.import.completed.v1` | `likho.import.completed` | LIKHO | likho-connector-ameyo | likho-api |
+| `likho.import.failed.v1` | `likho.import.failed` | LIKHO | likho-connector-ameyo | likho-api |
+| `likho.recording.deleted.v1` | `likho.recording.deleted` | LIKHO | likho-api | likho-search, likho-connector-ameyo |
 
 ## Rules
 

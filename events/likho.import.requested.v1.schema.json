@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://likho-ai.github.io/likho-contracts/events/likho.import.requested.v1.schema.json",
+  "title": "A call is to be fetched from an external system",
+  "description": "data of likho.import.requested.v1; published by likho-api on NATS subject likho.import.requested when a person or a schedule asks for a call by its id in the dialer",
+  "type": "object",
+  "required": [
+    "request_id",
+    "workspace_id",
+    "source",
+    "external_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^imp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^wsp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "source": {
+      "type": "string",
+      "description": "Which connector: the system the call comes from, e.g. ameyo"
+    },
+    "external_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The call's id in that system (the dialer's crt_object_id)"
+    },
+    "requested_by": {
+      "type": "string",
+      "pattern": "^usr_[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "The person who asked, when one did"
+    },
+    "transcribe": {
+      "type": "boolean",
+      "description": "Start a transcription once the recording is stored (default true)"
+    }
+  }
+}

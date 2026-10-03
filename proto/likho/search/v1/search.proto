@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package likho.search.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by likho-search: every line of every transcript, searchable with typo tolerance
+// (Hinglish is spelled many ways). It indexes transcripts as they are completed and corrected.
+service SearchService {
+  // Lines matching the query in one workspace, best first, with the matches marked.
+  rpc Search(SearchRequest) returns (SearchResponse);
+  // Indexes one transcript again (or for the first time), replacing what the index holds.
+  rpc Reindex(ReindexRequest) returns (ReindexResponse);
+  // Forgets every line of a recording.
+  rpc DeleteRecording(DeleteRecordingRequest) returns (DeleteRecordingResponse);
+}
+
+message SearchRequest {
+  string workspace_id = 1;
+  // Words in either layer: Hinglish ("namaskar") or Devanagari ("नमस्कार").
+  string query = 2;
+  // Limit to one detected language (ISO 639-1); empty = any.
+  string language = 3;
+  // Limit to one recording; empty = the whole workspace.
+  string recording_id = 4;
+  // Lines of transcripts created in this window; either side may be absent.
+  google.protobuf.Timestamp since = 5;
+  google.protobuf.Timestamp until = 6;
+  uint32 page = 7;       // 1-based; 0 = 1
+  uint32 page_size = 8;  // 0 = 20, at most 100
+}
+
+message Hit {
+  string recording_id = 1;
+  string recording_name = 2;
+  string transcript_id = 3;
+  uint32 segment_index = 4;
+  double start_seconds = 5;
+  double end_seconds = 6;
+  string text_roman = 7;
+  string text_script = 8;
+  // The two texts with every match wrapped in <mark>…</mark>.
+  string highlight_roman = 9;
+  string highlight_script = 10;
+  string language = 11;
+  google.protobuf.Timestamp created_at = 12;
+}
+
+message SearchResponse {
+  repeated Hit hits = 1;
+  uint32 page = 2;
+  uint32 page_size = 3;
+  // Lines matched in all, so a client can page.
+  uint32 total = 4;
+  uint32 processing_ms = 5;
+}
+
+message ReindexRequest {
+  string transcript_id = 1;
+}
+
+message ReindexResponse {
+  uint32 lines = 1;
+}
+
+message DeleteRecordingRequest {
+  string recording_id = 1;
+}
+
+message DeleteRecordingResponse {}

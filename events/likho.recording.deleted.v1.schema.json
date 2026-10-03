@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://likho-ai.github.io/likho-contracts/events/likho.recording.deleted.v1.schema.json",
+  "title": "A recording and everything derived from it are gone",
+  "description": "data of likho.recording.deleted.v1; published by likho-api on NATS subject likho.recording.deleted",
+  "type": "object",
+  "required": [
+    "recording_id",
+    "workspace_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "recording_id": {
+      "type": "string",
+      "pattern": "^rec_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^wsp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "media_id": {
+      "type": "string",
+      "pattern": "^med_[0-9A-HJKMNP-TV-Z]{26}$"
+    }
+  }
+}

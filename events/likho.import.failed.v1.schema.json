@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://likho-ai.github.io/likho-contracts/events/likho.import.failed.v1.schema.json",
+  "title": "The call could not be fetched from the external system",
+  "description": "data of likho.import.failed.v1; published by a connector on NATS subject likho.import.failed",
+  "type": "object",
+  "required": [
+    "request_id",
+    "workspace_id",
+    "source",
+    "external_id",
+    "reason"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^imp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^wsp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "source": {
+      "type": "string",
+      "description": "Which connector: the system the call comes from, e.g. ameyo"
+    },
+    "external_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The call's id in that system (the dialer's crt_object_id)"
+    },
+    "reason": {
+      "type": "string",
+      "description": "What went wrong, for a person"
+    },
+    "code": {
+      "type": "string",
+      "enum": [
+        "not_found",
+        "no_recording",
+        "unavailable",
+        "rejected",
+        "error"
+      ],
+      "description": "not_found: no such call; no_recording: the call has no audio; unavailable: the external system did not answer; rejected: the policy excludes the call"
+    }
+  }
+}

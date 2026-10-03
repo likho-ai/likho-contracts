@@ -1,0 +1,17 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E07",
+  "source": "likho-api",
+  "type": "likho.import.requested.v1",
+  "time": "2026-10-03T09:00:00Z",
+  "subject": "imp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "request_id": "imp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "source": "ameyo",
+    "external_id": "d000-0a1b2c3d-vce-0001",
+    "requested_by": "usr_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "transcribe": true
+  }
+}
