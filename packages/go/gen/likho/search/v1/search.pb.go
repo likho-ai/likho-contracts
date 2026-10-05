@@ -32,10 +32,18 @@ type SearchRequest struct {
 	// Limit to one recording; empty = the whole workspace.
 	RecordingId string `protobuf:"bytes,4,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
 	// Lines of transcripts created in this window; either side may be absent.
-	Since         *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=since,proto3" json:"since,omitempty"`
-	Until         *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=until,proto3" json:"until,omitempty"`
-	Page          uint32                 `protobuf:"varint,7,opt,name=page,proto3" json:"page,omitempty"`                         // 1-based; 0 = 1
-	PageSize      uint32                 `protobuf:"varint,8,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // 0 = 20, at most 100
+	Since    *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=since,proto3" json:"since,omitempty"`
+	Until    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=until,proto3" json:"until,omitempty"`
+	Page     uint32                 `protobuf:"varint,7,opt,name=page,proto3" json:"page,omitempty"`                         // 1-based; 0 = 1
+	PageSize uint32                 `protobuf:"varint,8,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // 0 = 20, at most 100
+	// The facts of the recording (from likho.recording.updated): exact values; empty = any.
+	Campaign    string `protobuf:"bytes,9,opt,name=campaign,proto3" json:"campaign,omitempty"`
+	Agent       string `protobuf:"bytes,10,opt,name=agent,proto3" json:"agent,omitempty"`
+	Disposition string `protobuf:"bytes,11,opt,name=disposition,proto3" json:"disposition,omitempty"`
+	Source      string `protobuf:"bytes,12,opt,name=source,proto3" json:"source,omitempty"`
+	// When the call happened (the dialer's call time, else when the recording was made).
+	CallSince     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=call_since,json=callSince,proto3" json:"call_since,omitempty"`
+	CallUntil     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=call_until,json=callUntil,proto3" json:"call_until,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,6 +134,48 @@ func (x *SearchRequest) GetPageSize() uint32 {
 	return 0
 }
 
+func (x *SearchRequest) GetCampaign() string {
+	if x != nil {
+		return x.Campaign
+	}
+	return ""
+}
+
+func (x *SearchRequest) GetAgent() string {
+	if x != nil {
+		return x.Agent
+	}
+	return ""
+}
+
+func (x *SearchRequest) GetDisposition() string {
+	if x != nil {
+		return x.Disposition
+	}
+	return ""
+}
+
+func (x *SearchRequest) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+func (x *SearchRequest) GetCallSince() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CallSince
+	}
+	return nil
+}
+
+func (x *SearchRequest) GetCallUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CallUntil
+	}
+	return nil
+}
+
 type Hit struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RecordingId   string                 `protobuf:"bytes,1,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
@@ -141,8 +191,14 @@ type Hit struct {
 	HighlightScript string                 `protobuf:"bytes,10,opt,name=highlight_script,json=highlightScript,proto3" json:"highlight_script,omitempty"`
 	Language        string                 `protobuf:"bytes,11,opt,name=language,proto3" json:"language,omitempty"`
 	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// The recording's facts as indexed (likho-api decorates hits with the current ones).
+	Campaign      string                 `protobuf:"bytes,13,opt,name=campaign,proto3" json:"campaign,omitempty"`
+	Agent         string                 `protobuf:"bytes,14,opt,name=agent,proto3" json:"agent,omitempty"`
+	Disposition   string                 `protobuf:"bytes,15,opt,name=disposition,proto3" json:"disposition,omitempty"`
+	Source        string                 `protobuf:"bytes,16,opt,name=source,proto3" json:"source,omitempty"`
+	CallTime      *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=call_time,json=callTime,proto3" json:"call_time,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Hit) Reset() {
@@ -255,6 +311,41 @@ func (x *Hit) GetLanguage() string {
 func (x *Hit) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Hit) GetCampaign() string {
+	if x != nil {
+		return x.Campaign
+	}
+	return ""
+}
+
+func (x *Hit) GetAgent() string {
+	if x != nil {
+		return x.Agent
+	}
+	return ""
+}
+
+func (x *Hit) GetDisposition() string {
+	if x != nil {
+		return x.Disposition
+	}
+	return ""
+}
+
+func (x *Hit) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+func (x *Hit) GetCallTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CallTime
 	}
 	return nil
 }
@@ -517,7 +608,7 @@ var File_likho_search_v1_search_proto protoreflect.FileDescriptor
 
 const file_likho_search_v1_search_proto_rawDesc = "" +
 	"\n" +
-	"\x1clikho/search/v1/search.proto\x12\x0flikho.search.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9c\x02\n" +
+	"\x1clikho/search/v1/search.proto\x12\x0flikho.search.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xfe\x03\n" +
 	"\rSearchRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x14\n" +
 	"\x05query\x18\x02 \x01(\tR\x05query\x12\x1a\n" +
@@ -526,7 +617,16 @@ const file_likho_search_v1_search_proto_rawDesc = "" +
 	"\x05since\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x05since\x120\n" +
 	"\x05until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x05until\x12\x12\n" +
 	"\x04page\x18\a \x01(\rR\x04page\x12\x1b\n" +
-	"\tpage_size\x18\b \x01(\rR\bpageSize\"\xca\x03\n" +
+	"\tpage_size\x18\b \x01(\rR\bpageSize\x12\x1a\n" +
+	"\bcampaign\x18\t \x01(\tR\bcampaign\x12\x14\n" +
+	"\x05agent\x18\n" +
+	" \x01(\tR\x05agent\x12 \n" +
+	"\vdisposition\x18\v \x01(\tR\vdisposition\x12\x16\n" +
+	"\x06source\x18\f \x01(\tR\x06source\x129\n" +
+	"\n" +
+	"call_since\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tcallSince\x129\n" +
+	"\n" +
+	"call_until\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tcallUntil\"\xef\x04\n" +
 	"\x03Hit\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12%\n" +
 	"\x0erecording_name\x18\x02 \x01(\tR\rrecordingName\x12#\n" +
@@ -544,7 +644,12 @@ const file_likho_search_v1_search_proto_rawDesc = "" +
 	" \x01(\tR\x0fhighlightScript\x12\x1a\n" +
 	"\blanguage\x18\v \x01(\tR\blanguage\x129\n" +
 	"\n" +
-	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xa6\x01\n" +
+	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12\x1a\n" +
+	"\bcampaign\x18\r \x01(\tR\bcampaign\x12\x14\n" +
+	"\x05agent\x18\x0e \x01(\tR\x05agent\x12 \n" +
+	"\vdisposition\x18\x0f \x01(\tR\vdisposition\x12\x16\n" +
+	"\x06source\x18\x10 \x01(\tR\x06source\x127\n" +
+	"\tcall_time\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampR\bcallTime\"\xa6\x01\n" +
 	"\x0eSearchResponse\x12(\n" +
 	"\x04hits\x18\x01 \x03(\v2\x14.likho.search.v1.HitR\x04hits\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n" +
@@ -589,21 +694,24 @@ var file_likho_search_v1_search_proto_goTypes = []any{
 	(*timestamppb.Timestamp)(nil),   // 7: google.protobuf.Timestamp
 }
 var file_likho_search_v1_search_proto_depIdxs = []int32{
-	7, // 0: likho.search.v1.SearchRequest.since:type_name -> google.protobuf.Timestamp
-	7, // 1: likho.search.v1.SearchRequest.until:type_name -> google.protobuf.Timestamp
-	7, // 2: likho.search.v1.Hit.created_at:type_name -> google.protobuf.Timestamp
-	1, // 3: likho.search.v1.SearchResponse.hits:type_name -> likho.search.v1.Hit
-	0, // 4: likho.search.v1.SearchService.Search:input_type -> likho.search.v1.SearchRequest
-	3, // 5: likho.search.v1.SearchService.Reindex:input_type -> likho.search.v1.ReindexRequest
-	5, // 6: likho.search.v1.SearchService.DeleteRecording:input_type -> likho.search.v1.DeleteRecordingRequest
-	2, // 7: likho.search.v1.SearchService.Search:output_type -> likho.search.v1.SearchResponse
-	4, // 8: likho.search.v1.SearchService.Reindex:output_type -> likho.search.v1.ReindexResponse
-	6, // 9: likho.search.v1.SearchService.DeleteRecording:output_type -> likho.search.v1.DeleteRecordingResponse
-	7, // [7:10] is the sub-list for method output_type
-	4, // [4:7] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	7,  // 0: likho.search.v1.SearchRequest.since:type_name -> google.protobuf.Timestamp
+	7,  // 1: likho.search.v1.SearchRequest.until:type_name -> google.protobuf.Timestamp
+	7,  // 2: likho.search.v1.SearchRequest.call_since:type_name -> google.protobuf.Timestamp
+	7,  // 3: likho.search.v1.SearchRequest.call_until:type_name -> google.protobuf.Timestamp
+	7,  // 4: likho.search.v1.Hit.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 5: likho.search.v1.Hit.call_time:type_name -> google.protobuf.Timestamp
+	1,  // 6: likho.search.v1.SearchResponse.hits:type_name -> likho.search.v1.Hit
+	0,  // 7: likho.search.v1.SearchService.Search:input_type -> likho.search.v1.SearchRequest
+	3,  // 8: likho.search.v1.SearchService.Reindex:input_type -> likho.search.v1.ReindexRequest
+	5,  // 9: likho.search.v1.SearchService.DeleteRecording:input_type -> likho.search.v1.DeleteRecordingRequest
+	2,  // 10: likho.search.v1.SearchService.Search:output_type -> likho.search.v1.SearchResponse
+	4,  // 11: likho.search.v1.SearchService.Reindex:output_type -> likho.search.v1.ReindexResponse
+	6,  // 12: likho.search.v1.SearchService.DeleteRecording:output_type -> likho.search.v1.DeleteRecordingResponse
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_likho_search_v1_search_proto_init() }

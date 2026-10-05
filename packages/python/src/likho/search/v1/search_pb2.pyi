@@ -10,7 +10,7 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class SearchRequest(_message.Message):
-    __slots__ = ("workspace_id", "query", "language", "recording_id", "since", "until", "page", "page_size")
+    __slots__ = ("workspace_id", "query", "language", "recording_id", "since", "until", "page", "page_size", "campaign", "agent", "disposition", "source", "call_since", "call_until")
     WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
     QUERY_FIELD_NUMBER: _ClassVar[int]
     LANGUAGE_FIELD_NUMBER: _ClassVar[int]
@@ -19,6 +19,12 @@ class SearchRequest(_message.Message):
     UNTIL_FIELD_NUMBER: _ClassVar[int]
     PAGE_FIELD_NUMBER: _ClassVar[int]
     PAGE_SIZE_FIELD_NUMBER: _ClassVar[int]
+    CAMPAIGN_FIELD_NUMBER: _ClassVar[int]
+    AGENT_FIELD_NUMBER: _ClassVar[int]
+    DISPOSITION_FIELD_NUMBER: _ClassVar[int]
+    SOURCE_FIELD_NUMBER: _ClassVar[int]
+    CALL_SINCE_FIELD_NUMBER: _ClassVar[int]
+    CALL_UNTIL_FIELD_NUMBER: _ClassVar[int]
     workspace_id: str
     query: str
     language: str
@@ -27,10 +33,16 @@ class SearchRequest(_message.Message):
     until: _timestamp_pb2.Timestamp
     page: int
     page_size: int
-    def __init__(self, workspace_id: _Optional[str] = ..., query: _Optional[str] = ..., language: _Optional[str] = ..., recording_id: _Optional[str] = ..., since: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., until: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., page: _Optional[int] = ..., page_size: _Optional[int] = ...) -> None: ...
+    campaign: str
+    agent: str
+    disposition: str
+    source: str
+    call_since: _timestamp_pb2.Timestamp
+    call_until: _timestamp_pb2.Timestamp
+    def __init__(self, workspace_id: _Optional[str] = ..., query: _Optional[str] = ..., language: _Optional[str] = ..., recording_id: _Optional[str] = ..., since: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., until: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., page: _Optional[int] = ..., page_size: _Optional[int] = ..., campaign: _Optional[str] = ..., agent: _Optional[str] = ..., disposition: _Optional[str] = ..., source: _Optional[str] = ..., call_since: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., call_until: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Hit(_message.Message):
-    __slots__ = ("recording_id", "recording_name", "transcript_id", "segment_index", "start_seconds", "end_seconds", "text_roman", "text_script", "highlight_roman", "highlight_script", "language", "created_at")
+    __slots__ = ("recording_id", "recording_name", "transcript_id", "segment_index", "start_seconds", "end_seconds", "text_roman", "text_script", "highlight_roman", "highlight_script", "language", "created_at", "campaign", "agent", "disposition", "source", "call_time")
     RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
     RECORDING_NAME_FIELD_NUMBER: _ClassVar[int]
     TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
@@ -43,6 +55,11 @@ class Hit(_message.Message):
     HIGHLIGHT_SCRIPT_FIELD_NUMBER: _ClassVar[int]
     LANGUAGE_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
+    CAMPAIGN_FIELD_NUMBER: _ClassVar[int]
+    AGENT_FIELD_NUMBER: _ClassVar[int]
+    DISPOSITION_FIELD_NUMBER: _ClassVar[int]
+    SOURCE_FIELD_NUMBER: _ClassVar[int]
+    CALL_TIME_FIELD_NUMBER: _ClassVar[int]
     recording_id: str
     recording_name: str
     transcript_id: str
@@ -55,7 +72,12 @@ class Hit(_message.Message):
     highlight_script: str
     language: str
     created_at: _timestamp_pb2.Timestamp
-    def __init__(self, recording_id: _Optional[str] = ..., recording_name: _Optional[str] = ..., transcript_id: _Optional[str] = ..., segment_index: _Optional[int] = ..., start_seconds: _Optional[float] = ..., end_seconds: _Optional[float] = ..., text_roman: _Optional[str] = ..., text_script: _Optional[str] = ..., highlight_roman: _Optional[str] = ..., highlight_script: _Optional[str] = ..., language: _Optional[str] = ..., created_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    campaign: str
+    agent: str
+    disposition: str
+    source: str
+    call_time: _timestamp_pb2.Timestamp
+    def __init__(self, recording_id: _Optional[str] = ..., recording_name: _Optional[str] = ..., transcript_id: _Optional[str] = ..., segment_index: _Optional[int] = ..., start_seconds: _Optional[float] = ..., end_seconds: _Optional[float] = ..., text_roman: _Optional[str] = ..., text_script: _Optional[str] = ..., highlight_roman: _Optional[str] = ..., highlight_script: _Optional[str] = ..., language: _Optional[str] = ..., created_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., campaign: _Optional[str] = ..., agent: _Optional[str] = ..., disposition: _Optional[str] = ..., source: _Optional[str] = ..., call_time: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class SearchResponse(_message.Message):
     __slots__ = ("hits", "page", "page_size", "total", "processing_ms")

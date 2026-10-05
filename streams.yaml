@@ -91,6 +91,12 @@ events:
     stream: LIKHO
     producer: likho-api
     consumers: [likho-search, likho-connector-ameyo]
+  likho.recording.updated.v1:
+    subject: likho.recording.updated
+    stream: LIKHO
+    producer: likho-api
+    # The recording's facts (source, campaign, agent, ...) travel beside its lines in the index.
+    consumers: [likho-search]
 
 # Durable consumer settings. Name = <service>-<last part of the subject>.
 consumer_defaults:

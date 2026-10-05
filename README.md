@@ -24,7 +24,7 @@ npm run generate     # writes packages/python/src, packages/go/gen and packages/
 dependencies = ["likho-contracts"]
 
 [tool.uv.sources]
-likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.9.0", subdirectory = "packages/python" }
+likho-contracts = { git = "https://github.com/likho-ai/likho-contracts", tag = "v0.10.0", subdirectory = "packages/python" }
 ```
 
 ```python
@@ -34,7 +34,7 @@ from likho.language.v1 import language_pb2, language_pb2_grpc
 ## Use from a Go service
 
 ```bash
-go get github.com/likho-ai/likho-contracts/packages/go@v0.9.0
+go get github.com/likho-ai/likho-contracts/packages/go@v0.10.0
 ```
 
 ```go
@@ -53,7 +53,7 @@ Every version tag has a GitHub release with the package attached; npm and pnpm i
 tarball by URL, no registry account needed:
 
 ```json
-"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.9.0/likho-ai-contracts-0.9.0.tgz"
+"@likho-ai/contracts": "https://github.com/likho-ai/likho-contracts/releases/download/v0.10.0/likho-ai-contracts-0.10.0.tgz"
 ```
 
 ```ts

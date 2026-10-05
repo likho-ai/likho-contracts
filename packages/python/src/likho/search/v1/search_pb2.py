@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1clikho/search/v1/search.proto\x12\x0flikho.search.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9c\x02\n\rSearchRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x14\n\x05query\x18\x02 \x01(\tR\x05query\x12\x1a\n\x08language\x18\x03 \x01(\tR\x08language\x12!\n\x0crecording_id\x18\x04 \x01(\tR\x0brecordingId\x12\x30\n\x05since\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x05since\x12\x30\n\x05until\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x05until\x12\x12\n\x04page\x18\x07 \x01(\rR\x04page\x12\x1b\n\tpage_size\x18\x08 \x01(\rR\x08pageSize\"\xca\x03\n\x03Hit\x12!\n\x0crecording_id\x18\x01 \x01(\tR\x0brecordingId\x12%\n\x0erecording_name\x18\x02 \x01(\tR\rrecordingName\x12#\n\rtranscript_id\x18\x03 \x01(\tR\x0ctranscriptId\x12#\n\rsegment_index\x18\x04 \x01(\rR\x0csegmentIndex\x12#\n\rstart_seconds\x18\x05 \x01(\x01R\x0cstartSeconds\x12\x1f\n\x0b\x65nd_seconds\x18\x06 \x01(\x01R\nendSeconds\x12\x1d\n\ntext_roman\x18\x07 \x01(\tR\ttextRoman\x12\x1f\n\x0btext_script\x18\x08 \x01(\tR\ntextScript\x12\'\n\x0fhighlight_roman\x18\t \x01(\tR\x0ehighlightRoman\x12)\n\x10highlight_script\x18\n \x01(\tR\x0fhighlightScript\x12\x1a\n\x08language\x18\x0b \x01(\tR\x08language\x12\x39\n\ncreated_at\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcreatedAt\"\xa6\x01\n\x0eSearchResponse\x12(\n\x04hits\x18\x01 \x03(\x0b\x32\x14.likho.search.v1.HitR\x04hits\x12\x12\n\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n\tpage_size\x18\x03 \x01(\rR\x08pageSize\x12\x14\n\x05total\x18\x04 \x01(\rR\x05total\x12#\n\rprocessing_ms\x18\x05 \x01(\rR\x0cprocessingMs\"X\n\x0eReindexRequest\x12#\n\rtranscript_id\x18\x01 \x01(\tR\x0ctranscriptId\x12!\n\x0cworkspace_id\x18\x02 \x01(\tR\x0bworkspaceId\"\'\n\x0fReindexResponse\x12\x14\n\x05lines\x18\x01 \x01(\rR\x05lines\";\n\x16\x44\x65leteRecordingRequest\x12!\n\x0crecording_id\x18\x01 \x01(\tR\x0brecordingId\"\x19\n\x17\x44\x65leteRecordingResponse2\x8e\x02\n\rSearchService\x12I\n\x06Search\x12\x1e.likho.search.v1.SearchRequest\x1a\x1f.likho.search.v1.SearchResponse\x12L\n\x07Reindex\x12\x1f.likho.search.v1.ReindexRequest\x1a .likho.search.v1.ReindexResponse\x12\x64\n\x0f\x44\x65leteRecording\x12\'.likho.search.v1.DeleteRecordingRequest\x1a(.likho.search.v1.DeleteRecordingResponseB\xce\x01\n\x13\x63om.likho.search.v1B\x0bSearchProtoP\x01ZLgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/search/v1;searchv1\xa2\x02\x03LSX\xaa\x02\x0fLikho.Search.V1\xca\x02\x0fLikho\\Search\\V1\xe2\x02\x1bLikho\\Search\\V1\\GPBMetadata\xea\x02\x11Likho::Search::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1clikho/search/v1/search.proto\x12\x0flikho.search.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xfe\x03\n\rSearchRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x14\n\x05query\x18\x02 \x01(\tR\x05query\x12\x1a\n\x08language\x18\x03 \x01(\tR\x08language\x12!\n\x0crecording_id\x18\x04 \x01(\tR\x0brecordingId\x12\x30\n\x05since\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x05since\x12\x30\n\x05until\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x05until\x12\x12\n\x04page\x18\x07 \x01(\rR\x04page\x12\x1b\n\tpage_size\x18\x08 \x01(\rR\x08pageSize\x12\x1a\n\x08\x63\x61mpaign\x18\t \x01(\tR\x08\x63\x61mpaign\x12\x14\n\x05\x61gent\x18\n \x01(\tR\x05\x61gent\x12 \n\x0b\x64isposition\x18\x0b \x01(\tR\x0b\x64isposition\x12\x16\n\x06source\x18\x0c \x01(\tR\x06source\x12\x39\n\ncall_since\x18\r \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcallSince\x12\x39\n\ncall_until\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcallUntil\"\xef\x04\n\x03Hit\x12!\n\x0crecording_id\x18\x01 \x01(\tR\x0brecordingId\x12%\n\x0erecording_name\x18\x02 \x01(\tR\rrecordingName\x12#\n\rtranscript_id\x18\x03 \x01(\tR\x0ctranscriptId\x12#\n\rsegment_index\x18\x04 \x01(\rR\x0csegmentIndex\x12#\n\rstart_seconds\x18\x05 \x01(\x01R\x0cstartSeconds\x12\x1f\n\x0b\x65nd_seconds\x18\x06 \x01(\x01R\nendSeconds\x12\x1d\n\ntext_roman\x18\x07 \x01(\tR\ttextRoman\x12\x1f\n\x0btext_script\x18\x08 \x01(\tR\ntextScript\x12\'\n\x0fhighlight_roman\x18\t \x01(\tR\x0ehighlightRoman\x12)\n\x10highlight_script\x18\n \x01(\tR\x0fhighlightScript\x12\x1a\n\x08language\x18\x0b \x01(\tR\x08language\x12\x39\n\ncreated_at\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.TimestampR\tcreatedAt\x12\x1a\n\x08\x63\x61mpaign\x18\r \x01(\tR\x08\x63\x61mpaign\x12\x14\n\x05\x61gent\x18\x0e \x01(\tR\x05\x61gent\x12 \n\x0b\x64isposition\x18\x0f \x01(\tR\x0b\x64isposition\x12\x16\n\x06source\x18\x10 \x01(\tR\x06source\x12\x37\n\tcall_time\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x08\x63\x61llTime\"\xa6\x01\n\x0eSearchResponse\x12(\n\x04hits\x18\x01 \x03(\x0b\x32\x14.likho.search.v1.HitR\x04hits\x12\x12\n\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n\tpage_size\x18\x03 \x01(\rR\x08pageSize\x12\x14\n\x05total\x18\x04 \x01(\rR\x05total\x12#\n\rprocessing_ms\x18\x05 \x01(\rR\x0cprocessingMs\"X\n\x0eReindexRequest\x12#\n\rtranscript_id\x18\x01 \x01(\tR\x0ctranscriptId\x12!\n\x0cworkspace_id\x18\x02 \x01(\tR\x0bworkspaceId\"\'\n\x0fReindexResponse\x12\x14\n\x05lines\x18\x01 \x01(\rR\x05lines\";\n\x16\x44\x65leteRecordingRequest\x12!\n\x0crecording_id\x18\x01 \x01(\tR\x0brecordingId\"\x19\n\x17\x44\x65leteRecordingResponse2\x8e\x02\n\rSearchService\x12I\n\x06Search\x12\x1e.likho.search.v1.SearchRequest\x1a\x1f.likho.search.v1.SearchResponse\x12L\n\x07Reindex\x12\x1f.likho.search.v1.ReindexRequest\x1a .likho.search.v1.ReindexResponse\x12\x64\n\x0f\x44\x65leteRecording\x12\'.likho.search.v1.DeleteRecordingRequest\x1a(.likho.search.v1.DeleteRecordingResponseB\xce\x01\n\x13\x63om.likho.search.v1B\x0bSearchProtoP\x01ZLgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/search/v1;searchv1\xa2\x02\x03LSX\xaa\x02\x0fLikho.Search.V1\xca\x02\x0fLikho\\Search\\V1\xe2\x02\x1bLikho\\Search\\V1\\GPBMetadata\xea\x02\x11Likho::Search::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,19 +34,19 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\023com.likho.search.v1B\013SearchProtoP\001ZLgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/search/v1;searchv1\242\002\003LSX\252\002\017Likho.Search.V1\312\002\017Likho\\Search\\V1\342\002\033Likho\\Search\\V1\\GPBMetadata\352\002\021Likho::Search::V1'
   _globals['_SEARCHREQUEST']._serialized_start=83
-  _globals['_SEARCHREQUEST']._serialized_end=367
-  _globals['_HIT']._serialized_start=370
-  _globals['_HIT']._serialized_end=828
-  _globals['_SEARCHRESPONSE']._serialized_start=831
-  _globals['_SEARCHRESPONSE']._serialized_end=997
-  _globals['_REINDEXREQUEST']._serialized_start=999
-  _globals['_REINDEXREQUEST']._serialized_end=1087
-  _globals['_REINDEXRESPONSE']._serialized_start=1089
-  _globals['_REINDEXRESPONSE']._serialized_end=1128
-  _globals['_DELETERECORDINGREQUEST']._serialized_start=1130
-  _globals['_DELETERECORDINGREQUEST']._serialized_end=1189
-  _globals['_DELETERECORDINGRESPONSE']._serialized_start=1191
-  _globals['_DELETERECORDINGRESPONSE']._serialized_end=1216
-  _globals['_SEARCHSERVICE']._serialized_start=1219
-  _globals['_SEARCHSERVICE']._serialized_end=1489
+  _globals['_SEARCHREQUEST']._serialized_end=593
+  _globals['_HIT']._serialized_start=596
+  _globals['_HIT']._serialized_end=1219
+  _globals['_SEARCHRESPONSE']._serialized_start=1222
+  _globals['_SEARCHRESPONSE']._serialized_end=1388
+  _globals['_REINDEXREQUEST']._serialized_start=1390
+  _globals['_REINDEXREQUEST']._serialized_end=1478
+  _globals['_REINDEXRESPONSE']._serialized_start=1480
+  _globals['_REINDEXRESPONSE']._serialized_end=1519
+  _globals['_DELETERECORDINGREQUEST']._serialized_start=1521
+  _globals['_DELETERECORDINGREQUEST']._serialized_end=1580
+  _globals['_DELETERECORDINGRESPONSE']._serialized_start=1582
+  _globals['_DELETERECORDINGRESPONSE']._serialized_end=1607
+  _globals['_SEARCHSERVICE']._serialized_start=1610
+  _globals['_SEARCHSERVICE']._serialized_end=1880
 # @@protoc_insertion_point(module_scope)

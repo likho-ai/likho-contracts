@@ -66,6 +66,40 @@ export declare type SearchRequest = Message<"likho.search.v1.SearchRequest"> & {
    * @generated from field: uint32 page_size = 8;
    */
   pageSize: number;
+
+  /**
+   * The facts of the recording (from likho.recording.updated): exact values; empty = any.
+   *
+   * @generated from field: string campaign = 9;
+   */
+  campaign: string;
+
+  /**
+   * @generated from field: string agent = 10;
+   */
+  agent: string;
+
+  /**
+   * @generated from field: string disposition = 11;
+   */
+  disposition: string;
+
+  /**
+   * @generated from field: string source = 12;
+   */
+  source: string;
+
+  /**
+   * When the call happened (the dialer's call time, else when the recording was made).
+   *
+   * @generated from field: google.protobuf.Timestamp call_since = 13;
+   */
+  callSince?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp call_until = 14;
+   */
+  callUntil?: Timestamp | undefined;
 };
 
 /**
@@ -139,6 +173,33 @@ export declare type Hit = Message<"likho.search.v1.Hit"> & {
    * @generated from field: google.protobuf.Timestamp created_at = 12;
    */
   createdAt?: Timestamp | undefined;
+
+  /**
+   * The recording's facts as indexed (likho-api decorates hits with the current ones).
+   *
+   * @generated from field: string campaign = 13;
+   */
+  campaign: string;
+
+  /**
+   * @generated from field: string agent = 14;
+   */
+  agent: string;
+
+  /**
+   * @generated from field: string disposition = 15;
+   */
+  disposition: string;
+
+  /**
+   * @generated from field: string source = 16;
+   */
+  source: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp call_time = 17;
+   */
+  callTime?: Timestamp | undefined;
 };
 
 /**

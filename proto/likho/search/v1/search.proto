@@ -28,6 +28,14 @@ message SearchRequest {
   google.protobuf.Timestamp until = 6;
   uint32 page = 7;       // 1-based; 0 = 1
   uint32 page_size = 8;  // 0 = 20, at most 100
+  // The facts of the recording (from likho.recording.updated): exact values; empty = any.
+  string campaign = 9;
+  string agent = 10;
+  string disposition = 11;
+  string source = 12;
+  // When the call happened (the dialer's call time, else when the recording was made).
+  google.protobuf.Timestamp call_since = 13;
+  google.protobuf.Timestamp call_until = 14;
 }
 
 message Hit {
@@ -44,6 +52,12 @@ message Hit {
   string highlight_script = 10;
   string language = 11;
   google.protobuf.Timestamp created_at = 12;
+  // The recording's facts as indexed (likho-api decorates hits with the current ones).
+  string campaign = 13;
+  string agent = 14;
+  string disposition = 15;
+  string source = 16;
+  google.protobuf.Timestamp call_time = 17;
 }
 
 message SearchResponse {

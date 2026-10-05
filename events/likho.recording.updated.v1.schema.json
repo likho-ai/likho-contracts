@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://likho-ai.github.io/likho-contracts/events/likho.recording.updated.v1.schema.json",
+  "title": "A recording exists, or its facts changed",
+  "description": "data of likho.recording.updated.v1; published by likho-api on NATS subject likho.recording.updated when a recording is made and whenever its source, name or attributes change. likho-search keeps these facts beside the recording's lines, so a search can be narrowed by campaign, agent, disposition, source or when the call happened.",
+  "type": "object",
+  "required": [
+    "recording_id",
+    "workspace_id",
+    "source",
+    "attributes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "recording_id": {
+      "type": "string",
+      "pattern": "^rec_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^wsp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "source": {
+      "type": "string",
+      "description": "Where the call came from: upload, api, or a connector's name such as ameyo"
+    },
+    "external_id": {
+      "type": "string",
+      "description": "The caller's own id for the call (a dialer id); empty for an upload"
+    },
+    "name": {
+      "type": "string",
+      "description": "The file name"
+    },
+    "call_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the call happened: the dialer's call time when known, else when the recording was made"
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Facts about the call: campaign, agent, disposition, ... (text values)",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}
