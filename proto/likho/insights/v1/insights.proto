@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package likho.insights.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by likho-insights: what a language model says about a transcribed call - a summary, the
+// products mentioned, the customer's mood, and the auditor's checks pre-filled. It works on
+// transcripts as they are completed and keeps one result per transcript.
+service InsightsService {
+  // The insights of a recording's latest transcript (or of one transcript), if they exist.
+  rpc GetInsights(GetInsightsRequest) returns (GetInsightsResponse);
+  // Analyses a transcript now (again, when force), and answers when done.
+  rpc Analyse(AnalyseRequest) returns (AnalyseResponse);
+  // Which model answers, and whether text may leave at all.
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+}
+
+message GetInsightsRequest {
+  // One of the two.
+  string recording_id = 1;
+  string transcript_id = 2;
+}
+
+message GetInsightsResponse {
+  Insights insights = 1;
+}
+
+message AnalyseRequest {
+  string transcript_id = 1;
+  string workspace_id = 2;
+  // Analyse even when this transcript has insights already.
+  bool force = 3;
+}
+
+message AnalyseResponse {
+  Insights insights = 1;
+}
+
+message GetStatusRequest {}
+
+message GetStatusResponse {
+  // Whether a model is configured: without one, nothing is analysed and no text leaves.
+  bool enabled = 1;
+  // The model's registry name, e.g. anthropic/claude-sonnet-5-5.
+  string model = 2;
+  // The form's version the checks follow (the company's configuration).
+  string form_version = 3;
+}
+
+// One yes/no observation of the auditor's form, answered from the transcript.
+message Check {
+  string key = 1;
+  string label = 2;
+  // yes, no, or na (the call gave no way to tell).
+  string answer = 3;
+  // The line (or lines) the answer rests on, quoted.
+  string evidence = 4;
+}
+
+// One scored point of the auditor's form.
+message Score {
+  string key = 1;
+  string label = 2;
+  double score = 3;
+  double max = 4;
+  string reason = 5;
+}
+
+message Insights {
+  string id = 1;
+  string transcript_id = 2;
+  string recording_id = 3;
+  string workspace_id = 4;
+  // The transcript's version the insights were made from.
+  uint32 transcript_version = 5;
+  // A few sentences, in the workspace's language of reports.
+  string summary = 6;
+  repeated string products = 7;
+  // positive, neutral, negative, or mixed.
+  string sentiment = 8;
+  // What the customer wanted, in a few words.
+  string intent = 9;
+  repeated Check checks = 10;
+  repeated Score scores = 11;
+  double score_total = 12;
+  double score_max = 13;
+  string model = 14;
+  uint32 input_tokens = 15;
+  uint32 output_tokens = 16;
+  string form_version = 17;
+  google.protobuf.Timestamp created_at = 18;
+}

@@ -97,6 +97,17 @@ events:
     producer: likho-api
     # The recording's facts (source, campaign, agent, ...) travel beside its lines in the index.
     consumers: [likho-search]
+  likho.insights.completed.v1:
+    subject: likho.insights.completed
+    stream: LIKHO
+    producer: likho-insights
+    # likho-api tells the open pages; the insights themselves are fetched over gRPC.
+    consumers: [likho-api]
+  likho.insights.failed.v1:
+    subject: likho.insights.failed
+    stream: LIKHO
+    producer: likho-insights
+    consumers: [likho-api]
 
 # Durable consumer settings. Name = <service>-<last part of the subject>.
 consumer_defaults:
