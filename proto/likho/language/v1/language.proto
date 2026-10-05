@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package likho.language.v1;
 
+import "google/protobuf/timestamp.proto";
 import "likho/common/v1/common.proto";
 
 // Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+// It also counts how often each term and spelling is heard, from the lines the workers publish.
 service LanguageService {
   // Writes one line in Hinglish using the rules and the workspace's spelling table.
   rpc Transliterate(TransliterateRequest) returns (TransliterateResponse);
@@ -17,10 +19,13 @@ service LanguageService {
   rpc ListGlossaryTerms(ListGlossaryTermsRequest) returns (ListGlossaryTermsResponse);
   rpc UpsertGlossaryTerm(UpsertGlossaryTermRequest) returns (UpsertGlossaryTermResponse);
   rpc DeleteGlossaryTerm(DeleteGlossaryTermRequest) returns (DeleteGlossaryTermResponse);
+  // Many terms at once (a CSV import): one transaction, one version, one event.
+  rpc ImportGlossaryTerms(ImportGlossaryTermsRequest) returns (ImportGlossaryTermsResponse);
 
   rpc ListSpellings(ListSpellingsRequest) returns (ListSpellingsResponse);
   rpc UpsertSpelling(UpsertSpellingRequest) returns (UpsertSpellingResponse);
   rpc DeleteSpelling(DeleteSpellingRequest) returns (DeleteSpellingResponse);
+  rpc ImportSpellings(ImportSpellingsRequest) returns (ImportSpellingsResponse);
 }
 
 message TransliterateRequest {
@@ -72,10 +77,16 @@ message ResolveDecodePolicyResponse {
 
 message GlossaryTerm {
   string id = 1;
+  // A name, or a whole phrase (several words), in the script of the audio.
   string term = 2;
   string language = 3;
   bool enabled = 4;
   string note = 5;
+  // Decided by the service: a term with spaces.
+  bool is_phrase = 6;
+  // How many transcript lines contained the term, and when the last one was heard.
+  uint64 heard = 7;
+  google.protobuf.Timestamp last_heard_at = 8;
 }
 
 message ListGlossaryTermsRequest {
@@ -104,6 +115,18 @@ message DeleteGlossaryTermRequest {
 
 message DeleteGlossaryTermResponse {}
 
+message ImportGlossaryTermsRequest {
+  string workspace_id = 1;
+  // Each term is created, or updates the one with the same text (ids are ignored).
+  repeated GlossaryTerm terms = 2;
+}
+
+message ImportGlossaryTermsResponse {
+  uint32 added = 1;
+  uint32 updated = 2;
+  uint64 vocabulary_version = 3;
+}
+
 message Spelling {
   string id = 1;
   // What the model writes, in the source script. Several words make a phrase.
@@ -112,6 +135,20 @@ message Spelling {
   string target = 3;
   bool is_phrase = 4;
   bool enabled = 5;
+  // How many transcript lines the spelling was applied to, and when the last one was heard.
+  uint64 applied = 6;
+  google.protobuf.Timestamp last_applied_at = 7;
+  // The last few lines it was applied to, newest first: what the model wrote and what came out.
+  repeated SpellingExample examples = 8;
+}
+
+message SpellingExample {
+  string recording_id = 1;
+  uint32 segment_index = 2;
+  // The line as the model wrote it (layer 1) and as it was written in Hinglish (layer 2).
+  string before = 3;
+  string after = 4;
+  google.protobuf.Timestamp heard_at = 5;
 }
 
 message ListSpellingsRequest {
@@ -139,3 +176,15 @@ message DeleteSpellingRequest {
 }
 
 message DeleteSpellingResponse {}
+
+message ImportSpellingsRequest {
+  string workspace_id = 1;
+  // Each spelling is created, or updates the one with the same source (ids are ignored).
+  repeated Spelling spellings = 2;
+}
+
+message ImportSpellingsResponse {
+  uint32 added = 1;
+  uint32 updated = 2;
+  uint64 vocabulary_version = 3;
+}

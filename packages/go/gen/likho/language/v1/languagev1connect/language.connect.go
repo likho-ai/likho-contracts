@@ -54,6 +54,9 @@ const (
 	// LanguageServiceDeleteGlossaryTermProcedure is the fully-qualified name of the LanguageService's
 	// DeleteGlossaryTerm RPC.
 	LanguageServiceDeleteGlossaryTermProcedure = "/likho.language.v1.LanguageService/DeleteGlossaryTerm"
+	// LanguageServiceImportGlossaryTermsProcedure is the fully-qualified name of the LanguageService's
+	// ImportGlossaryTerms RPC.
+	LanguageServiceImportGlossaryTermsProcedure = "/likho.language.v1.LanguageService/ImportGlossaryTerms"
 	// LanguageServiceListSpellingsProcedure is the fully-qualified name of the LanguageService's
 	// ListSpellings RPC.
 	LanguageServiceListSpellingsProcedure = "/likho.language.v1.LanguageService/ListSpellings"
@@ -63,6 +66,9 @@ const (
 	// LanguageServiceDeleteSpellingProcedure is the fully-qualified name of the LanguageService's
 	// DeleteSpelling RPC.
 	LanguageServiceDeleteSpellingProcedure = "/likho.language.v1.LanguageService/DeleteSpelling"
+	// LanguageServiceImportSpellingsProcedure is the fully-qualified name of the LanguageService's
+	// ImportSpellings RPC.
+	LanguageServiceImportSpellingsProcedure = "/likho.language.v1.LanguageService/ImportSpellings"
 )
 
 // LanguageServiceClient is a client for the likho.language.v1.LanguageService service.
@@ -77,9 +83,12 @@ type LanguageServiceClient interface {
 	ListGlossaryTerms(context.Context, *connect.Request[v1.ListGlossaryTermsRequest]) (*connect.Response[v1.ListGlossaryTermsResponse], error)
 	UpsertGlossaryTerm(context.Context, *connect.Request[v1.UpsertGlossaryTermRequest]) (*connect.Response[v1.UpsertGlossaryTermResponse], error)
 	DeleteGlossaryTerm(context.Context, *connect.Request[v1.DeleteGlossaryTermRequest]) (*connect.Response[v1.DeleteGlossaryTermResponse], error)
+	// Many terms at once (a CSV import): one transaction, one version, one event.
+	ImportGlossaryTerms(context.Context, *connect.Request[v1.ImportGlossaryTermsRequest]) (*connect.Response[v1.ImportGlossaryTermsResponse], error)
 	ListSpellings(context.Context, *connect.Request[v1.ListSpellingsRequest]) (*connect.Response[v1.ListSpellingsResponse], error)
 	UpsertSpelling(context.Context, *connect.Request[v1.UpsertSpellingRequest]) (*connect.Response[v1.UpsertSpellingResponse], error)
 	DeleteSpelling(context.Context, *connect.Request[v1.DeleteSpellingRequest]) (*connect.Response[v1.DeleteSpellingResponse], error)
+	ImportSpellings(context.Context, *connect.Request[v1.ImportSpellingsRequest]) (*connect.Response[v1.ImportSpellingsResponse], error)
 }
 
 // NewLanguageServiceClient constructs a client for the likho.language.v1.LanguageService service.
@@ -135,6 +144,12 @@ func NewLanguageServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(languageServiceMethods.ByName("DeleteGlossaryTerm")),
 			connect.WithClientOptions(opts...),
 		),
+		importGlossaryTerms: connect.NewClient[v1.ImportGlossaryTermsRequest, v1.ImportGlossaryTermsResponse](
+			httpClient,
+			baseURL+LanguageServiceImportGlossaryTermsProcedure,
+			connect.WithSchema(languageServiceMethods.ByName("ImportGlossaryTerms")),
+			connect.WithClientOptions(opts...),
+		),
 		listSpellings: connect.NewClient[v1.ListSpellingsRequest, v1.ListSpellingsResponse](
 			httpClient,
 			baseURL+LanguageServiceListSpellingsProcedure,
@@ -153,6 +168,12 @@ func NewLanguageServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(languageServiceMethods.ByName("DeleteSpelling")),
 			connect.WithClientOptions(opts...),
 		),
+		importSpellings: connect.NewClient[v1.ImportSpellingsRequest, v1.ImportSpellingsResponse](
+			httpClient,
+			baseURL+LanguageServiceImportSpellingsProcedure,
+			connect.WithSchema(languageServiceMethods.ByName("ImportSpellings")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -165,9 +186,11 @@ type languageServiceClient struct {
 	listGlossaryTerms   *connect.Client[v1.ListGlossaryTermsRequest, v1.ListGlossaryTermsResponse]
 	upsertGlossaryTerm  *connect.Client[v1.UpsertGlossaryTermRequest, v1.UpsertGlossaryTermResponse]
 	deleteGlossaryTerm  *connect.Client[v1.DeleteGlossaryTermRequest, v1.DeleteGlossaryTermResponse]
+	importGlossaryTerms *connect.Client[v1.ImportGlossaryTermsRequest, v1.ImportGlossaryTermsResponse]
 	listSpellings       *connect.Client[v1.ListSpellingsRequest, v1.ListSpellingsResponse]
 	upsertSpelling      *connect.Client[v1.UpsertSpellingRequest, v1.UpsertSpellingResponse]
 	deleteSpelling      *connect.Client[v1.DeleteSpellingRequest, v1.DeleteSpellingResponse]
+	importSpellings     *connect.Client[v1.ImportSpellingsRequest, v1.ImportSpellingsResponse]
 }
 
 // Transliterate calls likho.language.v1.LanguageService.Transliterate.
@@ -205,6 +228,11 @@ func (c *languageServiceClient) DeleteGlossaryTerm(ctx context.Context, req *con
 	return c.deleteGlossaryTerm.CallUnary(ctx, req)
 }
 
+// ImportGlossaryTerms calls likho.language.v1.LanguageService.ImportGlossaryTerms.
+func (c *languageServiceClient) ImportGlossaryTerms(ctx context.Context, req *connect.Request[v1.ImportGlossaryTermsRequest]) (*connect.Response[v1.ImportGlossaryTermsResponse], error) {
+	return c.importGlossaryTerms.CallUnary(ctx, req)
+}
+
 // ListSpellings calls likho.language.v1.LanguageService.ListSpellings.
 func (c *languageServiceClient) ListSpellings(ctx context.Context, req *connect.Request[v1.ListSpellingsRequest]) (*connect.Response[v1.ListSpellingsResponse], error) {
 	return c.listSpellings.CallUnary(ctx, req)
@@ -220,6 +248,11 @@ func (c *languageServiceClient) DeleteSpelling(ctx context.Context, req *connect
 	return c.deleteSpelling.CallUnary(ctx, req)
 }
 
+// ImportSpellings calls likho.language.v1.LanguageService.ImportSpellings.
+func (c *languageServiceClient) ImportSpellings(ctx context.Context, req *connect.Request[v1.ImportSpellingsRequest]) (*connect.Response[v1.ImportSpellingsResponse], error) {
+	return c.importSpellings.CallUnary(ctx, req)
+}
+
 // LanguageServiceHandler is an implementation of the likho.language.v1.LanguageService service.
 type LanguageServiceHandler interface {
 	// Writes one line in Hinglish using the rules and the workspace's spelling table.
@@ -232,9 +265,12 @@ type LanguageServiceHandler interface {
 	ListGlossaryTerms(context.Context, *connect.Request[v1.ListGlossaryTermsRequest]) (*connect.Response[v1.ListGlossaryTermsResponse], error)
 	UpsertGlossaryTerm(context.Context, *connect.Request[v1.UpsertGlossaryTermRequest]) (*connect.Response[v1.UpsertGlossaryTermResponse], error)
 	DeleteGlossaryTerm(context.Context, *connect.Request[v1.DeleteGlossaryTermRequest]) (*connect.Response[v1.DeleteGlossaryTermResponse], error)
+	// Many terms at once (a CSV import): one transaction, one version, one event.
+	ImportGlossaryTerms(context.Context, *connect.Request[v1.ImportGlossaryTermsRequest]) (*connect.Response[v1.ImportGlossaryTermsResponse], error)
 	ListSpellings(context.Context, *connect.Request[v1.ListSpellingsRequest]) (*connect.Response[v1.ListSpellingsResponse], error)
 	UpsertSpelling(context.Context, *connect.Request[v1.UpsertSpellingRequest]) (*connect.Response[v1.UpsertSpellingResponse], error)
 	DeleteSpelling(context.Context, *connect.Request[v1.DeleteSpellingRequest]) (*connect.Response[v1.DeleteSpellingResponse], error)
+	ImportSpellings(context.Context, *connect.Request[v1.ImportSpellingsRequest]) (*connect.Response[v1.ImportSpellingsResponse], error)
 }
 
 // NewLanguageServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -286,6 +322,12 @@ func NewLanguageServiceHandler(svc LanguageServiceHandler, opts ...connect.Handl
 		connect.WithSchema(languageServiceMethods.ByName("DeleteGlossaryTerm")),
 		connect.WithHandlerOptions(opts...),
 	)
+	languageServiceImportGlossaryTermsHandler := connect.NewUnaryHandler(
+		LanguageServiceImportGlossaryTermsProcedure,
+		svc.ImportGlossaryTerms,
+		connect.WithSchema(languageServiceMethods.ByName("ImportGlossaryTerms")),
+		connect.WithHandlerOptions(opts...),
+	)
 	languageServiceListSpellingsHandler := connect.NewUnaryHandler(
 		LanguageServiceListSpellingsProcedure,
 		svc.ListSpellings,
@@ -304,6 +346,12 @@ func NewLanguageServiceHandler(svc LanguageServiceHandler, opts ...connect.Handl
 		connect.WithSchema(languageServiceMethods.ByName("DeleteSpelling")),
 		connect.WithHandlerOptions(opts...),
 	)
+	languageServiceImportSpellingsHandler := connect.NewUnaryHandler(
+		LanguageServiceImportSpellingsProcedure,
+		svc.ImportSpellings,
+		connect.WithSchema(languageServiceMethods.ByName("ImportSpellings")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/likho.language.v1.LanguageService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case LanguageServiceTransliterateProcedure:
@@ -320,12 +368,16 @@ func NewLanguageServiceHandler(svc LanguageServiceHandler, opts ...connect.Handl
 			languageServiceUpsertGlossaryTermHandler.ServeHTTP(w, r)
 		case LanguageServiceDeleteGlossaryTermProcedure:
 			languageServiceDeleteGlossaryTermHandler.ServeHTTP(w, r)
+		case LanguageServiceImportGlossaryTermsProcedure:
+			languageServiceImportGlossaryTermsHandler.ServeHTTP(w, r)
 		case LanguageServiceListSpellingsProcedure:
 			languageServiceListSpellingsHandler.ServeHTTP(w, r)
 		case LanguageServiceUpsertSpellingProcedure:
 			languageServiceUpsertSpellingHandler.ServeHTTP(w, r)
 		case LanguageServiceDeleteSpellingProcedure:
 			languageServiceDeleteSpellingHandler.ServeHTTP(w, r)
+		case LanguageServiceImportSpellingsProcedure:
+			languageServiceImportSpellingsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -363,6 +415,10 @@ func (UnimplementedLanguageServiceHandler) DeleteGlossaryTerm(context.Context, *
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.language.v1.LanguageService.DeleteGlossaryTerm is not implemented"))
 }
 
+func (UnimplementedLanguageServiceHandler) ImportGlossaryTerms(context.Context, *connect.Request[v1.ImportGlossaryTermsRequest]) (*connect.Response[v1.ImportGlossaryTermsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.language.v1.LanguageService.ImportGlossaryTerms is not implemented"))
+}
+
 func (UnimplementedLanguageServiceHandler) ListSpellings(context.Context, *connect.Request[v1.ListSpellingsRequest]) (*connect.Response[v1.ListSpellingsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.language.v1.LanguageService.ListSpellings is not implemented"))
 }
@@ -373,4 +429,8 @@ func (UnimplementedLanguageServiceHandler) UpsertSpelling(context.Context, *conn
 
 func (UnimplementedLanguageServiceHandler) DeleteSpelling(context.Context, *connect.Request[v1.DeleteSpellingRequest]) (*connect.Response[v1.DeleteSpellingResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.language.v1.LanguageService.DeleteSpelling is not implemented"))
+}
+
+func (UnimplementedLanguageServiceHandler) ImportSpellings(context.Context, *connect.Request[v1.ImportSpellingsRequest]) (*connect.Response[v1.ImportSpellingsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.language.v1.LanguageService.ImportSpellings is not implemented"))
 }

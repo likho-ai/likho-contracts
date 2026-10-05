@@ -10,6 +10,7 @@ import (
 	v1 "github.com/likho-ai/likho-contracts/packages/go/gen/likho/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -474,12 +475,18 @@ func (x *ResolveDecodePolicyResponse) GetTransliterate() bool {
 }
 
 type GlossaryTerm struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Term          string                 `protobuf:"bytes,2,opt,name=term,proto3" json:"term,omitempty"`
-	Language      string                 `protobuf:"bytes,3,opt,name=language,proto3" json:"language,omitempty"`
-	Enabled       bool                   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Note          string                 `protobuf:"bytes,5,opt,name=note,proto3" json:"note,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// A name, or a whole phrase (several words), in the script of the audio.
+	Term     string `protobuf:"bytes,2,opt,name=term,proto3" json:"term,omitempty"`
+	Language string `protobuf:"bytes,3,opt,name=language,proto3" json:"language,omitempty"`
+	Enabled  bool   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Note     string `protobuf:"bytes,5,opt,name=note,proto3" json:"note,omitempty"`
+	// Decided by the service: a term with spaces.
+	IsPhrase bool `protobuf:"varint,6,opt,name=is_phrase,json=isPhrase,proto3" json:"is_phrase,omitempty"`
+	// How many transcript lines contained the term, and when the last one was heard.
+	Heard         uint64                 `protobuf:"varint,7,opt,name=heard,proto3" json:"heard,omitempty"`
+	LastHeardAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_heard_at,json=lastHeardAt,proto3" json:"last_heard_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -547,6 +554,27 @@ func (x *GlossaryTerm) GetNote() string {
 		return x.Note
 	}
 	return ""
+}
+
+func (x *GlossaryTerm) GetIsPhrase() bool {
+	if x != nil {
+		return x.IsPhrase
+	}
+	return false
+}
+
+func (x *GlossaryTerm) GetHeard() uint64 {
+	if x != nil {
+		return x.Heard
+	}
+	return 0
+}
+
+func (x *GlossaryTerm) GetLastHeardAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastHeardAt
+	}
+	return nil
 }
 
 type ListGlossaryTermsRequest struct {
@@ -823,22 +851,140 @@ func (*DeleteGlossaryTermResponse) Descriptor() ([]byte, []int) {
 	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{14}
 }
 
+type ImportGlossaryTermsRequest struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	// Each term is created, or updates the one with the same text (ids are ignored).
+	Terms         []*GlossaryTerm `protobuf:"bytes,2,rep,name=terms,proto3" json:"terms,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImportGlossaryTermsRequest) Reset() {
+	*x = ImportGlossaryTermsRequest{}
+	mi := &file_likho_language_v1_language_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportGlossaryTermsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportGlossaryTermsRequest) ProtoMessage() {}
+
+func (x *ImportGlossaryTermsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_language_v1_language_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportGlossaryTermsRequest.ProtoReflect.Descriptor instead.
+func (*ImportGlossaryTermsRequest) Descriptor() ([]byte, []int) {
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ImportGlossaryTermsRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ImportGlossaryTermsRequest) GetTerms() []*GlossaryTerm {
+	if x != nil {
+		return x.Terms
+	}
+	return nil
+}
+
+type ImportGlossaryTermsResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Added             uint32                 `protobuf:"varint,1,opt,name=added,proto3" json:"added,omitempty"`
+	Updated           uint32                 `protobuf:"varint,2,opt,name=updated,proto3" json:"updated,omitempty"`
+	VocabularyVersion uint64                 `protobuf:"varint,3,opt,name=vocabulary_version,json=vocabularyVersion,proto3" json:"vocabulary_version,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ImportGlossaryTermsResponse) Reset() {
+	*x = ImportGlossaryTermsResponse{}
+	mi := &file_likho_language_v1_language_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportGlossaryTermsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportGlossaryTermsResponse) ProtoMessage() {}
+
+func (x *ImportGlossaryTermsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_language_v1_language_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportGlossaryTermsResponse.ProtoReflect.Descriptor instead.
+func (*ImportGlossaryTermsResponse) Descriptor() ([]byte, []int) {
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ImportGlossaryTermsResponse) GetAdded() uint32 {
+	if x != nil {
+		return x.Added
+	}
+	return 0
+}
+
+func (x *ImportGlossaryTermsResponse) GetUpdated() uint32 {
+	if x != nil {
+		return x.Updated
+	}
+	return 0
+}
+
+func (x *ImportGlossaryTermsResponse) GetVocabularyVersion() uint64 {
+	if x != nil {
+		return x.VocabularyVersion
+	}
+	return 0
+}
+
 type Spelling struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// What the model writes, in the source script. Several words make a phrase.
 	Source string `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
 	// How it must appear in Hinglish.
-	Target        string `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
-	IsPhrase      bool   `protobuf:"varint,4,opt,name=is_phrase,json=isPhrase,proto3" json:"is_phrase,omitempty"`
-	Enabled       bool   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Target   string `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
+	IsPhrase bool   `protobuf:"varint,4,opt,name=is_phrase,json=isPhrase,proto3" json:"is_phrase,omitempty"`
+	Enabled  bool   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// How many transcript lines the spelling was applied to, and when the last one was heard.
+	Applied       uint64                 `protobuf:"varint,6,opt,name=applied,proto3" json:"applied,omitempty"`
+	LastAppliedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=last_applied_at,json=lastAppliedAt,proto3" json:"last_applied_at,omitempty"`
+	// The last few lines it was applied to, newest first: what the model wrote and what came out.
+	Examples      []*SpellingExample `protobuf:"bytes,8,rep,name=examples,proto3" json:"examples,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Spelling) Reset() {
 	*x = Spelling{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[15]
+	mi := &file_likho_language_v1_language_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -850,7 +996,7 @@ func (x *Spelling) String() string {
 func (*Spelling) ProtoMessage() {}
 
 func (x *Spelling) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[15]
+	mi := &file_likho_language_v1_language_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -863,7 +1009,7 @@ func (x *Spelling) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Spelling.ProtoReflect.Descriptor instead.
 func (*Spelling) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{15}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Spelling) GetId() string {
@@ -901,6 +1047,104 @@ func (x *Spelling) GetEnabled() bool {
 	return false
 }
 
+func (x *Spelling) GetApplied() uint64 {
+	if x != nil {
+		return x.Applied
+	}
+	return 0
+}
+
+func (x *Spelling) GetLastAppliedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastAppliedAt
+	}
+	return nil
+}
+
+func (x *Spelling) GetExamples() []*SpellingExample {
+	if x != nil {
+		return x.Examples
+	}
+	return nil
+}
+
+type SpellingExample struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	RecordingId  string                 `protobuf:"bytes,1,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
+	SegmentIndex uint32                 `protobuf:"varint,2,opt,name=segment_index,json=segmentIndex,proto3" json:"segment_index,omitempty"`
+	// The line as the model wrote it (layer 1) and as it was written in Hinglish (layer 2).
+	Before        string                 `protobuf:"bytes,3,opt,name=before,proto3" json:"before,omitempty"`
+	After         string                 `protobuf:"bytes,4,opt,name=after,proto3" json:"after,omitempty"`
+	HeardAt       *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=heard_at,json=heardAt,proto3" json:"heard_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SpellingExample) Reset() {
+	*x = SpellingExample{}
+	mi := &file_likho_language_v1_language_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SpellingExample) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SpellingExample) ProtoMessage() {}
+
+func (x *SpellingExample) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_language_v1_language_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SpellingExample.ProtoReflect.Descriptor instead.
+func (*SpellingExample) Descriptor() ([]byte, []int) {
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SpellingExample) GetRecordingId() string {
+	if x != nil {
+		return x.RecordingId
+	}
+	return ""
+}
+
+func (x *SpellingExample) GetSegmentIndex() uint32 {
+	if x != nil {
+		return x.SegmentIndex
+	}
+	return 0
+}
+
+func (x *SpellingExample) GetBefore() string {
+	if x != nil {
+		return x.Before
+	}
+	return ""
+}
+
+func (x *SpellingExample) GetAfter() string {
+	if x != nil {
+		return x.After
+	}
+	return ""
+}
+
+func (x *SpellingExample) GetHeardAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.HeardAt
+	}
+	return nil
+}
+
 type ListSpellingsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WorkspaceId   string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
@@ -910,7 +1154,7 @@ type ListSpellingsRequest struct {
 
 func (x *ListSpellingsRequest) Reset() {
 	*x = ListSpellingsRequest{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[16]
+	mi := &file_likho_language_v1_language_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -922,7 +1166,7 @@ func (x *ListSpellingsRequest) String() string {
 func (*ListSpellingsRequest) ProtoMessage() {}
 
 func (x *ListSpellingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[16]
+	mi := &file_likho_language_v1_language_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -935,7 +1179,7 @@ func (x *ListSpellingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSpellingsRequest.ProtoReflect.Descriptor instead.
 func (*ListSpellingsRequest) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{16}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ListSpellingsRequest) GetWorkspaceId() string {
@@ -954,7 +1198,7 @@ type ListSpellingsResponse struct {
 
 func (x *ListSpellingsResponse) Reset() {
 	*x = ListSpellingsResponse{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[17]
+	mi := &file_likho_language_v1_language_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -966,7 +1210,7 @@ func (x *ListSpellingsResponse) String() string {
 func (*ListSpellingsResponse) ProtoMessage() {}
 
 func (x *ListSpellingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[17]
+	mi := &file_likho_language_v1_language_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -979,7 +1223,7 @@ func (x *ListSpellingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSpellingsResponse.ProtoReflect.Descriptor instead.
 func (*ListSpellingsResponse) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{17}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListSpellingsResponse) GetSpellings() []*Spelling {
@@ -1001,7 +1245,7 @@ type UpsertSpellingRequest struct {
 
 func (x *UpsertSpellingRequest) Reset() {
 	*x = UpsertSpellingRequest{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[18]
+	mi := &file_likho_language_v1_language_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1013,7 +1257,7 @@ func (x *UpsertSpellingRequest) String() string {
 func (*UpsertSpellingRequest) ProtoMessage() {}
 
 func (x *UpsertSpellingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[18]
+	mi := &file_likho_language_v1_language_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1026,7 +1270,7 @@ func (x *UpsertSpellingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertSpellingRequest.ProtoReflect.Descriptor instead.
 func (*UpsertSpellingRequest) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{18}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *UpsertSpellingRequest) GetWorkspaceId() string {
@@ -1052,7 +1296,7 @@ type UpsertSpellingResponse struct {
 
 func (x *UpsertSpellingResponse) Reset() {
 	*x = UpsertSpellingResponse{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[19]
+	mi := &file_likho_language_v1_language_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1064,7 +1308,7 @@ func (x *UpsertSpellingResponse) String() string {
 func (*UpsertSpellingResponse) ProtoMessage() {}
 
 func (x *UpsertSpellingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[19]
+	mi := &file_likho_language_v1_language_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1077,7 +1321,7 @@ func (x *UpsertSpellingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertSpellingResponse.ProtoReflect.Descriptor instead.
 func (*UpsertSpellingResponse) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{19}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *UpsertSpellingResponse) GetSpelling() *Spelling {
@@ -1097,7 +1341,7 @@ type DeleteSpellingRequest struct {
 
 func (x *DeleteSpellingRequest) Reset() {
 	*x = DeleteSpellingRequest{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[20]
+	mi := &file_likho_language_v1_language_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1109,7 +1353,7 @@ func (x *DeleteSpellingRequest) String() string {
 func (*DeleteSpellingRequest) ProtoMessage() {}
 
 func (x *DeleteSpellingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[20]
+	mi := &file_likho_language_v1_language_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1122,7 +1366,7 @@ func (x *DeleteSpellingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSpellingRequest.ProtoReflect.Descriptor instead.
 func (*DeleteSpellingRequest) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{20}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *DeleteSpellingRequest) GetWorkspaceId() string {
@@ -1147,7 +1391,7 @@ type DeleteSpellingResponse struct {
 
 func (x *DeleteSpellingResponse) Reset() {
 	*x = DeleteSpellingResponse{}
-	mi := &file_likho_language_v1_language_proto_msgTypes[21]
+	mi := &file_likho_language_v1_language_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1159,7 +1403,7 @@ func (x *DeleteSpellingResponse) String() string {
 func (*DeleteSpellingResponse) ProtoMessage() {}
 
 func (x *DeleteSpellingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_likho_language_v1_language_proto_msgTypes[21]
+	mi := &file_likho_language_v1_language_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1172,14 +1416,127 @@ func (x *DeleteSpellingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSpellingResponse.ProtoReflect.Descriptor instead.
 func (*DeleteSpellingResponse) Descriptor() ([]byte, []int) {
-	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{21}
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{24}
+}
+
+type ImportSpellingsRequest struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	// Each spelling is created, or updates the one with the same source (ids are ignored).
+	Spellings     []*Spelling `protobuf:"bytes,2,rep,name=spellings,proto3" json:"spellings,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImportSpellingsRequest) Reset() {
+	*x = ImportSpellingsRequest{}
+	mi := &file_likho_language_v1_language_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportSpellingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportSpellingsRequest) ProtoMessage() {}
+
+func (x *ImportSpellingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_language_v1_language_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportSpellingsRequest.ProtoReflect.Descriptor instead.
+func (*ImportSpellingsRequest) Descriptor() ([]byte, []int) {
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *ImportSpellingsRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ImportSpellingsRequest) GetSpellings() []*Spelling {
+	if x != nil {
+		return x.Spellings
+	}
+	return nil
+}
+
+type ImportSpellingsResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Added             uint32                 `protobuf:"varint,1,opt,name=added,proto3" json:"added,omitempty"`
+	Updated           uint32                 `protobuf:"varint,2,opt,name=updated,proto3" json:"updated,omitempty"`
+	VocabularyVersion uint64                 `protobuf:"varint,3,opt,name=vocabulary_version,json=vocabularyVersion,proto3" json:"vocabulary_version,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ImportSpellingsResponse) Reset() {
+	*x = ImportSpellingsResponse{}
+	mi := &file_likho_language_v1_language_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportSpellingsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportSpellingsResponse) ProtoMessage() {}
+
+func (x *ImportSpellingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_language_v1_language_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportSpellingsResponse.ProtoReflect.Descriptor instead.
+func (*ImportSpellingsResponse) Descriptor() ([]byte, []int) {
+	return file_likho_language_v1_language_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ImportSpellingsResponse) GetAdded() uint32 {
+	if x != nil {
+		return x.Added
+	}
+	return 0
+}
+
+func (x *ImportSpellingsResponse) GetUpdated() uint32 {
+	if x != nil {
+		return x.Updated
+	}
+	return 0
+}
+
+func (x *ImportSpellingsResponse) GetVocabularyVersion() uint64 {
+	if x != nil {
+		return x.VocabularyVersion
+	}
+	return 0
 }
 
 var File_likho_language_v1_language_proto protoreflect.FileDescriptor
 
 const file_likho_language_v1_language_proto_rawDesc = "" +
 	"\n" +
-	" likho/language/v1/language.proto\x12\x11likho.language.v1\x1a\x1clikho/common/v1/common.proto\"\x8b\x01\n" +
+	" likho/language/v1/language.proto\x12\x11likho.language.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1clikho/common/v1/common.proto\"\x8b\x01\n" +
 	"\x14TransliterateRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x12\n" +
 	"\x04text\x18\x02 \x01(\tR\x04text\x12<\n" +
@@ -1211,13 +1568,16 @@ const file_likho_language_v1_language_proto_rawDesc = "" +
 	"candidates\"`\n" +
 	"\x1bResolveDecodePolicyResponse\x12\x1b\n" +
 	"\tdecode_as\x18\x01 \x01(\tR\bdecodeAs\x12$\n" +
-	"\rtransliterate\x18\x02 \x01(\bR\rtransliterate\"|\n" +
+	"\rtransliterate\x18\x02 \x01(\bR\rtransliterate\"\xef\x01\n" +
 	"\fGlossaryTerm\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04term\x18\x02 \x01(\tR\x04term\x12\x1a\n" +
 	"\blanguage\x18\x03 \x01(\tR\blanguage\x12\x18\n" +
 	"\aenabled\x18\x04 \x01(\bR\aenabled\x12\x12\n" +
-	"\x04note\x18\x05 \x01(\tR\x04note\"=\n" +
+	"\x04note\x18\x05 \x01(\tR\x04note\x12\x1b\n" +
+	"\tis_phrase\x18\x06 \x01(\bR\bisPhrase\x12\x14\n" +
+	"\x05heard\x18\a \x01(\x04R\x05heard\x12>\n" +
+	"\rlast_heard_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\vlastHeardAt\"=\n" +
 	"\x18ListGlossaryTermsRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\"R\n" +
 	"\x19ListGlossaryTermsResponse\x125\n" +
@@ -1230,13 +1590,29 @@ const file_likho_language_v1_language_proto_rawDesc = "" +
 	"\x19DeleteGlossaryTermRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\"\x1c\n" +
-	"\x1aDeleteGlossaryTermResponse\"\x81\x01\n" +
+	"\x1aDeleteGlossaryTermResponse\"v\n" +
+	"\x1aImportGlossaryTermsRequest\x12!\n" +
+	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x125\n" +
+	"\x05terms\x18\x02 \x03(\v2\x1f.likho.language.v1.GlossaryTermR\x05terms\"|\n" +
+	"\x1bImportGlossaryTermsResponse\x12\x14\n" +
+	"\x05added\x18\x01 \x01(\rR\x05added\x12\x18\n" +
+	"\aupdated\x18\x02 \x01(\rR\aupdated\x12-\n" +
+	"\x12vocabulary_version\x18\x03 \x01(\x04R\x11vocabularyVersion\"\x9f\x02\n" +
 	"\bSpelling\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12\x16\n" +
 	"\x06target\x18\x03 \x01(\tR\x06target\x12\x1b\n" +
 	"\tis_phrase\x18\x04 \x01(\bR\bisPhrase\x12\x18\n" +
-	"\aenabled\x18\x05 \x01(\bR\aenabled\"9\n" +
+	"\aenabled\x18\x05 \x01(\bR\aenabled\x12\x18\n" +
+	"\aapplied\x18\x06 \x01(\x04R\aapplied\x12B\n" +
+	"\x0flast_applied_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\rlastAppliedAt\x12>\n" +
+	"\bexamples\x18\b \x03(\v2\".likho.language.v1.SpellingExampleR\bexamples\"\xbe\x01\n" +
+	"\x0fSpellingExample\x12!\n" +
+	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12#\n" +
+	"\rsegment_index\x18\x02 \x01(\rR\fsegmentIndex\x12\x16\n" +
+	"\x06before\x18\x03 \x01(\tR\x06before\x12\x14\n" +
+	"\x05after\x18\x04 \x01(\tR\x05after\x125\n" +
+	"\bheard_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\aheardAt\"9\n" +
 	"\x14ListSpellingsRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\"R\n" +
 	"\x15ListSpellingsResponse\x129\n" +
@@ -1249,7 +1625,15 @@ const file_likho_language_v1_language_proto_rawDesc = "" +
 	"\x15DeleteSpellingRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\"\x18\n" +
-	"\x16DeleteSpellingResponse2\xc4\b\n" +
+	"\x16DeleteSpellingResponse\"v\n" +
+	"\x16ImportSpellingsRequest\x12!\n" +
+	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x129\n" +
+	"\tspellings\x18\x02 \x03(\v2\x1b.likho.language.v1.SpellingR\tspellings\"x\n" +
+	"\x17ImportSpellingsResponse\x12\x14\n" +
+	"\x05added\x18\x01 \x01(\rR\x05added\x12\x18\n" +
+	"\aupdated\x18\x02 \x01(\rR\aupdated\x12-\n" +
+	"\x12vocabulary_version\x18\x03 \x01(\x04R\x11vocabularyVersion2\xa4\n" +
+	"\n" +
 	"\x0fLanguageService\x12b\n" +
 	"\rTransliterate\x12'.likho.language.v1.TransliterateRequest\x1a(.likho.language.v1.TransliterateResponse\x12q\n" +
 	"\x12TransliterateBatch\x12,.likho.language.v1.TransliterateBatchRequest\x1a-.likho.language.v1.TransliterateBatchResponse\x12\\\n" +
@@ -1257,10 +1641,12 @@ const file_likho_language_v1_language_proto_rawDesc = "" +
 	"\x13ResolveDecodePolicy\x12-.likho.language.v1.ResolveDecodePolicyRequest\x1a..likho.language.v1.ResolveDecodePolicyResponse\x12n\n" +
 	"\x11ListGlossaryTerms\x12+.likho.language.v1.ListGlossaryTermsRequest\x1a,.likho.language.v1.ListGlossaryTermsResponse\x12q\n" +
 	"\x12UpsertGlossaryTerm\x12,.likho.language.v1.UpsertGlossaryTermRequest\x1a-.likho.language.v1.UpsertGlossaryTermResponse\x12q\n" +
-	"\x12DeleteGlossaryTerm\x12,.likho.language.v1.DeleteGlossaryTermRequest\x1a-.likho.language.v1.DeleteGlossaryTermResponse\x12b\n" +
+	"\x12DeleteGlossaryTerm\x12,.likho.language.v1.DeleteGlossaryTermRequest\x1a-.likho.language.v1.DeleteGlossaryTermResponse\x12t\n" +
+	"\x13ImportGlossaryTerms\x12-.likho.language.v1.ImportGlossaryTermsRequest\x1a..likho.language.v1.ImportGlossaryTermsResponse\x12b\n" +
 	"\rListSpellings\x12'.likho.language.v1.ListSpellingsRequest\x1a(.likho.language.v1.ListSpellingsResponse\x12e\n" +
 	"\x0eUpsertSpelling\x12(.likho.language.v1.UpsertSpellingRequest\x1a).likho.language.v1.UpsertSpellingResponse\x12e\n" +
-	"\x0eDeleteSpelling\x12(.likho.language.v1.DeleteSpellingRequest\x1a).likho.language.v1.DeleteSpellingResponseB\xde\x01\n" +
+	"\x0eDeleteSpelling\x12(.likho.language.v1.DeleteSpellingRequest\x1a).likho.language.v1.DeleteSpellingResponse\x12h\n" +
+	"\x0fImportSpellings\x12).likho.language.v1.ImportSpellingsRequest\x1a*.likho.language.v1.ImportSpellingsResponseB\xde\x01\n" +
 	"\x15com.likho.language.v1B\rLanguageProtoP\x01ZPgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/language/v1;languagev1\xa2\x02\x03LLX\xaa\x02\x11Likho.Language.V1\xca\x02\x11Likho\\Language\\V1\xe2\x02\x1dLikho\\Language\\V1\\GPBMetadata\xea\x02\x13Likho::Language::V1b\x06proto3"
 
 var (
@@ -1275,7 +1661,7 @@ func file_likho_language_v1_language_proto_rawDescGZIP() []byte {
 	return file_likho_language_v1_language_proto_rawDescData
 }
 
-var file_likho_language_v1_language_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_likho_language_v1_language_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_likho_language_v1_language_proto_goTypes = []any{
 	(*TransliterateRequest)(nil),        // 0: likho.language.v1.TransliterateRequest
 	(*TransliterateResponse)(nil),       // 1: likho.language.v1.TransliterateResponse
@@ -1292,51 +1678,67 @@ var file_likho_language_v1_language_proto_goTypes = []any{
 	(*UpsertGlossaryTermResponse)(nil),  // 12: likho.language.v1.UpsertGlossaryTermResponse
 	(*DeleteGlossaryTermRequest)(nil),   // 13: likho.language.v1.DeleteGlossaryTermRequest
 	(*DeleteGlossaryTermResponse)(nil),  // 14: likho.language.v1.DeleteGlossaryTermResponse
-	(*Spelling)(nil),                    // 15: likho.language.v1.Spelling
-	(*ListSpellingsRequest)(nil),        // 16: likho.language.v1.ListSpellingsRequest
-	(*ListSpellingsResponse)(nil),       // 17: likho.language.v1.ListSpellingsResponse
-	(*UpsertSpellingRequest)(nil),       // 18: likho.language.v1.UpsertSpellingRequest
-	(*UpsertSpellingResponse)(nil),      // 19: likho.language.v1.UpsertSpellingResponse
-	(*DeleteSpellingRequest)(nil),       // 20: likho.language.v1.DeleteSpellingRequest
-	(*DeleteSpellingResponse)(nil),      // 21: likho.language.v1.DeleteSpellingResponse
-	(v1.Script)(0),                      // 22: likho.common.v1.Script
-	(*v1.LanguageCandidate)(nil),        // 23: likho.common.v1.LanguageCandidate
+	(*ImportGlossaryTermsRequest)(nil),  // 15: likho.language.v1.ImportGlossaryTermsRequest
+	(*ImportGlossaryTermsResponse)(nil), // 16: likho.language.v1.ImportGlossaryTermsResponse
+	(*Spelling)(nil),                    // 17: likho.language.v1.Spelling
+	(*SpellingExample)(nil),             // 18: likho.language.v1.SpellingExample
+	(*ListSpellingsRequest)(nil),        // 19: likho.language.v1.ListSpellingsRequest
+	(*ListSpellingsResponse)(nil),       // 20: likho.language.v1.ListSpellingsResponse
+	(*UpsertSpellingRequest)(nil),       // 21: likho.language.v1.UpsertSpellingRequest
+	(*UpsertSpellingResponse)(nil),      // 22: likho.language.v1.UpsertSpellingResponse
+	(*DeleteSpellingRequest)(nil),       // 23: likho.language.v1.DeleteSpellingRequest
+	(*DeleteSpellingResponse)(nil),      // 24: likho.language.v1.DeleteSpellingResponse
+	(*ImportSpellingsRequest)(nil),      // 25: likho.language.v1.ImportSpellingsRequest
+	(*ImportSpellingsResponse)(nil),     // 26: likho.language.v1.ImportSpellingsResponse
+	(v1.Script)(0),                      // 27: likho.common.v1.Script
+	(*v1.LanguageCandidate)(nil),        // 28: likho.common.v1.LanguageCandidate
+	(*timestamppb.Timestamp)(nil),       // 29: google.protobuf.Timestamp
 }
 var file_likho_language_v1_language_proto_depIdxs = []int32{
-	22, // 0: likho.language.v1.TransliterateRequest.source_script:type_name -> likho.common.v1.Script
-	22, // 1: likho.language.v1.TransliterateBatchRequest.source_script:type_name -> likho.common.v1.Script
-	23, // 2: likho.language.v1.ResolveDecodePolicyRequest.candidates:type_name -> likho.common.v1.LanguageCandidate
-	8,  // 3: likho.language.v1.ListGlossaryTermsResponse.terms:type_name -> likho.language.v1.GlossaryTerm
-	8,  // 4: likho.language.v1.UpsertGlossaryTermRequest.term:type_name -> likho.language.v1.GlossaryTerm
-	8,  // 5: likho.language.v1.UpsertGlossaryTermResponse.term:type_name -> likho.language.v1.GlossaryTerm
-	15, // 6: likho.language.v1.ListSpellingsResponse.spellings:type_name -> likho.language.v1.Spelling
-	15, // 7: likho.language.v1.UpsertSpellingRequest.spelling:type_name -> likho.language.v1.Spelling
-	15, // 8: likho.language.v1.UpsertSpellingResponse.spelling:type_name -> likho.language.v1.Spelling
-	0,  // 9: likho.language.v1.LanguageService.Transliterate:input_type -> likho.language.v1.TransliterateRequest
-	2,  // 10: likho.language.v1.LanguageService.TransliterateBatch:input_type -> likho.language.v1.TransliterateBatchRequest
-	4,  // 11: likho.language.v1.LanguageService.GetHotwords:input_type -> likho.language.v1.GetHotwordsRequest
-	6,  // 12: likho.language.v1.LanguageService.ResolveDecodePolicy:input_type -> likho.language.v1.ResolveDecodePolicyRequest
-	9,  // 13: likho.language.v1.LanguageService.ListGlossaryTerms:input_type -> likho.language.v1.ListGlossaryTermsRequest
-	11, // 14: likho.language.v1.LanguageService.UpsertGlossaryTerm:input_type -> likho.language.v1.UpsertGlossaryTermRequest
-	13, // 15: likho.language.v1.LanguageService.DeleteGlossaryTerm:input_type -> likho.language.v1.DeleteGlossaryTermRequest
-	16, // 16: likho.language.v1.LanguageService.ListSpellings:input_type -> likho.language.v1.ListSpellingsRequest
-	18, // 17: likho.language.v1.LanguageService.UpsertSpelling:input_type -> likho.language.v1.UpsertSpellingRequest
-	20, // 18: likho.language.v1.LanguageService.DeleteSpelling:input_type -> likho.language.v1.DeleteSpellingRequest
-	1,  // 19: likho.language.v1.LanguageService.Transliterate:output_type -> likho.language.v1.TransliterateResponse
-	3,  // 20: likho.language.v1.LanguageService.TransliterateBatch:output_type -> likho.language.v1.TransliterateBatchResponse
-	5,  // 21: likho.language.v1.LanguageService.GetHotwords:output_type -> likho.language.v1.GetHotwordsResponse
-	7,  // 22: likho.language.v1.LanguageService.ResolveDecodePolicy:output_type -> likho.language.v1.ResolveDecodePolicyResponse
-	10, // 23: likho.language.v1.LanguageService.ListGlossaryTerms:output_type -> likho.language.v1.ListGlossaryTermsResponse
-	12, // 24: likho.language.v1.LanguageService.UpsertGlossaryTerm:output_type -> likho.language.v1.UpsertGlossaryTermResponse
-	14, // 25: likho.language.v1.LanguageService.DeleteGlossaryTerm:output_type -> likho.language.v1.DeleteGlossaryTermResponse
-	17, // 26: likho.language.v1.LanguageService.ListSpellings:output_type -> likho.language.v1.ListSpellingsResponse
-	19, // 27: likho.language.v1.LanguageService.UpsertSpelling:output_type -> likho.language.v1.UpsertSpellingResponse
-	21, // 28: likho.language.v1.LanguageService.DeleteSpelling:output_type -> likho.language.v1.DeleteSpellingResponse
-	19, // [19:29] is the sub-list for method output_type
-	9,  // [9:19] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	27, // 0: likho.language.v1.TransliterateRequest.source_script:type_name -> likho.common.v1.Script
+	27, // 1: likho.language.v1.TransliterateBatchRequest.source_script:type_name -> likho.common.v1.Script
+	28, // 2: likho.language.v1.ResolveDecodePolicyRequest.candidates:type_name -> likho.common.v1.LanguageCandidate
+	29, // 3: likho.language.v1.GlossaryTerm.last_heard_at:type_name -> google.protobuf.Timestamp
+	8,  // 4: likho.language.v1.ListGlossaryTermsResponse.terms:type_name -> likho.language.v1.GlossaryTerm
+	8,  // 5: likho.language.v1.UpsertGlossaryTermRequest.term:type_name -> likho.language.v1.GlossaryTerm
+	8,  // 6: likho.language.v1.UpsertGlossaryTermResponse.term:type_name -> likho.language.v1.GlossaryTerm
+	8,  // 7: likho.language.v1.ImportGlossaryTermsRequest.terms:type_name -> likho.language.v1.GlossaryTerm
+	29, // 8: likho.language.v1.Spelling.last_applied_at:type_name -> google.protobuf.Timestamp
+	18, // 9: likho.language.v1.Spelling.examples:type_name -> likho.language.v1.SpellingExample
+	29, // 10: likho.language.v1.SpellingExample.heard_at:type_name -> google.protobuf.Timestamp
+	17, // 11: likho.language.v1.ListSpellingsResponse.spellings:type_name -> likho.language.v1.Spelling
+	17, // 12: likho.language.v1.UpsertSpellingRequest.spelling:type_name -> likho.language.v1.Spelling
+	17, // 13: likho.language.v1.UpsertSpellingResponse.spelling:type_name -> likho.language.v1.Spelling
+	17, // 14: likho.language.v1.ImportSpellingsRequest.spellings:type_name -> likho.language.v1.Spelling
+	0,  // 15: likho.language.v1.LanguageService.Transliterate:input_type -> likho.language.v1.TransliterateRequest
+	2,  // 16: likho.language.v1.LanguageService.TransliterateBatch:input_type -> likho.language.v1.TransliterateBatchRequest
+	4,  // 17: likho.language.v1.LanguageService.GetHotwords:input_type -> likho.language.v1.GetHotwordsRequest
+	6,  // 18: likho.language.v1.LanguageService.ResolveDecodePolicy:input_type -> likho.language.v1.ResolveDecodePolicyRequest
+	9,  // 19: likho.language.v1.LanguageService.ListGlossaryTerms:input_type -> likho.language.v1.ListGlossaryTermsRequest
+	11, // 20: likho.language.v1.LanguageService.UpsertGlossaryTerm:input_type -> likho.language.v1.UpsertGlossaryTermRequest
+	13, // 21: likho.language.v1.LanguageService.DeleteGlossaryTerm:input_type -> likho.language.v1.DeleteGlossaryTermRequest
+	15, // 22: likho.language.v1.LanguageService.ImportGlossaryTerms:input_type -> likho.language.v1.ImportGlossaryTermsRequest
+	19, // 23: likho.language.v1.LanguageService.ListSpellings:input_type -> likho.language.v1.ListSpellingsRequest
+	21, // 24: likho.language.v1.LanguageService.UpsertSpelling:input_type -> likho.language.v1.UpsertSpellingRequest
+	23, // 25: likho.language.v1.LanguageService.DeleteSpelling:input_type -> likho.language.v1.DeleteSpellingRequest
+	25, // 26: likho.language.v1.LanguageService.ImportSpellings:input_type -> likho.language.v1.ImportSpellingsRequest
+	1,  // 27: likho.language.v1.LanguageService.Transliterate:output_type -> likho.language.v1.TransliterateResponse
+	3,  // 28: likho.language.v1.LanguageService.TransliterateBatch:output_type -> likho.language.v1.TransliterateBatchResponse
+	5,  // 29: likho.language.v1.LanguageService.GetHotwords:output_type -> likho.language.v1.GetHotwordsResponse
+	7,  // 30: likho.language.v1.LanguageService.ResolveDecodePolicy:output_type -> likho.language.v1.ResolveDecodePolicyResponse
+	10, // 31: likho.language.v1.LanguageService.ListGlossaryTerms:output_type -> likho.language.v1.ListGlossaryTermsResponse
+	12, // 32: likho.language.v1.LanguageService.UpsertGlossaryTerm:output_type -> likho.language.v1.UpsertGlossaryTermResponse
+	14, // 33: likho.language.v1.LanguageService.DeleteGlossaryTerm:output_type -> likho.language.v1.DeleteGlossaryTermResponse
+	16, // 34: likho.language.v1.LanguageService.ImportGlossaryTerms:output_type -> likho.language.v1.ImportGlossaryTermsResponse
+	20, // 35: likho.language.v1.LanguageService.ListSpellings:output_type -> likho.language.v1.ListSpellingsResponse
+	22, // 36: likho.language.v1.LanguageService.UpsertSpelling:output_type -> likho.language.v1.UpsertSpellingResponse
+	24, // 37: likho.language.v1.LanguageService.DeleteSpelling:output_type -> likho.language.v1.DeleteSpellingResponse
+	26, // 38: likho.language.v1.LanguageService.ImportSpellings:output_type -> likho.language.v1.ImportSpellingsResponse
+	27, // [27:39] is the sub-list for method output_type
+	15, // [15:27] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_likho_language_v1_language_proto_init() }
@@ -1350,7 +1752,7 @@ func file_likho_language_v1_language_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_likho_language_v1_language_proto_rawDesc), len(file_likho_language_v1_language_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

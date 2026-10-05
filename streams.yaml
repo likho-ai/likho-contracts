@@ -49,7 +49,8 @@ events:
     subject: likho.live.segment
     stream: LIKHO_LIVE
     producer: likho-transcription
-    consumers: [likho-api]
+    # likho-api relays the line to browsers; likho-language counts the glossary terms and spellings in it.
+    consumers: [likho-api, likho-language]
   likho.transcription.completed.v1:
     subject: likho.transcription.completed
     stream: LIKHO

@@ -7,6 +7,7 @@ from likho.language.v1 import language_pb2 as likho_dot_language_dot_v1_dot_lang
 
 class LanguageServiceStub:
     """Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+    It also counts how often each term and spelling is heard, from the lines the workers publish.
     """
 
     def __init__(self, channel):
@@ -50,6 +51,11 @@ class LanguageServiceStub:
                 request_serializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteGlossaryTermRequest.SerializeToString,
                 response_deserializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteGlossaryTermResponse.FromString,
                 _registered_method=True)
+        self.ImportGlossaryTerms = channel.unary_unary(
+                '/likho.language.v1.LanguageService/ImportGlossaryTerms',
+                request_serializer=likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsRequest.SerializeToString,
+                response_deserializer=likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsResponse.FromString,
+                _registered_method=True)
         self.ListSpellings = channel.unary_unary(
                 '/likho.language.v1.LanguageService/ListSpellings',
                 request_serializer=likho_dot_language_dot_v1_dot_language__pb2.ListSpellingsRequest.SerializeToString,
@@ -65,10 +71,16 @@ class LanguageServiceStub:
                 request_serializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingRequest.SerializeToString,
                 response_deserializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingResponse.FromString,
                 _registered_method=True)
+        self.ImportSpellings = channel.unary_unary(
+                '/likho.language.v1.LanguageService/ImportSpellings',
+                request_serializer=likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsRequest.SerializeToString,
+                response_deserializer=likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsResponse.FromString,
+                _registered_method=True)
 
 
 class LanguageServiceServicer:
     """Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+    It also counts how often each term and spelling is heard, from the lines the workers publish.
     """
 
     def Transliterate(self, request, context):
@@ -116,6 +128,13 @@ class LanguageServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ImportGlossaryTerms(self, request, context):
+        """Many terms at once (a CSV import): one transaction, one version, one event.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def ListSpellings(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -129,6 +148,12 @@ class LanguageServiceServicer:
         raise NotImplementedError('Method not implemented!')
 
     def DeleteSpelling(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ImportSpellings(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -172,6 +197,11 @@ def add_LanguageServiceServicer_to_server(servicer, server):
                     request_deserializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteGlossaryTermRequest.FromString,
                     response_serializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteGlossaryTermResponse.SerializeToString,
             ),
+            'ImportGlossaryTerms': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImportGlossaryTerms,
+                    request_deserializer=likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsRequest.FromString,
+                    response_serializer=likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsResponse.SerializeToString,
+            ),
             'ListSpellings': grpc.unary_unary_rpc_method_handler(
                     servicer.ListSpellings,
                     request_deserializer=likho_dot_language_dot_v1_dot_language__pb2.ListSpellingsRequest.FromString,
@@ -187,6 +217,11 @@ def add_LanguageServiceServicer_to_server(servicer, server):
                     request_deserializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingRequest.FromString,
                     response_serializer=likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingResponse.SerializeToString,
             ),
+            'ImportSpellings': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImportSpellings,
+                    request_deserializer=likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsRequest.FromString,
+                    response_serializer=likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'likho.language.v1.LanguageService', rpc_method_handlers)
@@ -197,6 +232,7 @@ def add_LanguageServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class LanguageService:
     """Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+    It also counts how often each term and spelling is heard, from the lines the workers publish.
     """
 
     @staticmethod
@@ -389,6 +425,33 @@ class LanguageService:
             _registered_method=True)
 
     @staticmethod
+    def ImportGlossaryTerms(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/likho.language.v1.LanguageService/ImportGlossaryTerms',
+            likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsRequest.SerializeToString,
+            likho_dot_language_dot_v1_dot_language__pb2.ImportGlossaryTermsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def ListSpellings(request,
             target,
             options=(),
@@ -459,6 +522,33 @@ class LanguageService:
             '/likho.language.v1.LanguageService/DeleteSpelling',
             likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingRequest.SerializeToString,
             likho_dot_language_dot_v1_dot_language__pb2.DeleteSpellingResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ImportSpellings(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/likho.language.v1.LanguageService/ImportSpellings',
+            likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsRequest.SerializeToString,
+            likho_dot_language_dot_v1_dot_language__pb2.ImportSpellingsResponse.FromString,
             options,
             channel_credentials,
             insecure,

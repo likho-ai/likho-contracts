@@ -1,3 +1,6 @@
+import datetime
+
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from likho.common.v1 import common_pb2 as _common_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
@@ -80,18 +83,24 @@ class ResolveDecodePolicyResponse(_message.Message):
     def __init__(self, decode_as: _Optional[str] = ..., transliterate: _Optional[bool] = ...) -> None: ...
 
 class GlossaryTerm(_message.Message):
-    __slots__ = ("id", "term", "language", "enabled", "note")
+    __slots__ = ("id", "term", "language", "enabled", "note", "is_phrase", "heard", "last_heard_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     TERM_FIELD_NUMBER: _ClassVar[int]
     LANGUAGE_FIELD_NUMBER: _ClassVar[int]
     ENABLED_FIELD_NUMBER: _ClassVar[int]
     NOTE_FIELD_NUMBER: _ClassVar[int]
+    IS_PHRASE_FIELD_NUMBER: _ClassVar[int]
+    HEARD_FIELD_NUMBER: _ClassVar[int]
+    LAST_HEARD_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
     term: str
     language: str
     enabled: bool
     note: str
-    def __init__(self, id: _Optional[str] = ..., term: _Optional[str] = ..., language: _Optional[str] = ..., enabled: _Optional[bool] = ..., note: _Optional[str] = ...) -> None: ...
+    is_phrase: bool
+    heard: int
+    last_heard_at: _timestamp_pb2.Timestamp
+    def __init__(self, id: _Optional[str] = ..., term: _Optional[str] = ..., language: _Optional[str] = ..., enabled: _Optional[bool] = ..., note: _Optional[str] = ..., is_phrase: _Optional[bool] = ..., heard: _Optional[int] = ..., last_heard_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class ListGlossaryTermsRequest(_message.Message):
     __slots__ = ("workspace_id",)
@@ -131,19 +140,57 @@ class DeleteGlossaryTermResponse(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
+class ImportGlossaryTermsRequest(_message.Message):
+    __slots__ = ("workspace_id", "terms")
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    TERMS_FIELD_NUMBER: _ClassVar[int]
+    workspace_id: str
+    terms: _containers.RepeatedCompositeFieldContainer[GlossaryTerm]
+    def __init__(self, workspace_id: _Optional[str] = ..., terms: _Optional[_Iterable[_Union[GlossaryTerm, _Mapping]]] = ...) -> None: ...
+
+class ImportGlossaryTermsResponse(_message.Message):
+    __slots__ = ("added", "updated", "vocabulary_version")
+    ADDED_FIELD_NUMBER: _ClassVar[int]
+    UPDATED_FIELD_NUMBER: _ClassVar[int]
+    VOCABULARY_VERSION_FIELD_NUMBER: _ClassVar[int]
+    added: int
+    updated: int
+    vocabulary_version: int
+    def __init__(self, added: _Optional[int] = ..., updated: _Optional[int] = ..., vocabulary_version: _Optional[int] = ...) -> None: ...
+
 class Spelling(_message.Message):
-    __slots__ = ("id", "source", "target", "is_phrase", "enabled")
+    __slots__ = ("id", "source", "target", "is_phrase", "enabled", "applied", "last_applied_at", "examples")
     ID_FIELD_NUMBER: _ClassVar[int]
     SOURCE_FIELD_NUMBER: _ClassVar[int]
     TARGET_FIELD_NUMBER: _ClassVar[int]
     IS_PHRASE_FIELD_NUMBER: _ClassVar[int]
     ENABLED_FIELD_NUMBER: _ClassVar[int]
+    APPLIED_FIELD_NUMBER: _ClassVar[int]
+    LAST_APPLIED_AT_FIELD_NUMBER: _ClassVar[int]
+    EXAMPLES_FIELD_NUMBER: _ClassVar[int]
     id: str
     source: str
     target: str
     is_phrase: bool
     enabled: bool
-    def __init__(self, id: _Optional[str] = ..., source: _Optional[str] = ..., target: _Optional[str] = ..., is_phrase: _Optional[bool] = ..., enabled: _Optional[bool] = ...) -> None: ...
+    applied: int
+    last_applied_at: _timestamp_pb2.Timestamp
+    examples: _containers.RepeatedCompositeFieldContainer[SpellingExample]
+    def __init__(self, id: _Optional[str] = ..., source: _Optional[str] = ..., target: _Optional[str] = ..., is_phrase: _Optional[bool] = ..., enabled: _Optional[bool] = ..., applied: _Optional[int] = ..., last_applied_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., examples: _Optional[_Iterable[_Union[SpellingExample, _Mapping]]] = ...) -> None: ...
+
+class SpellingExample(_message.Message):
+    __slots__ = ("recording_id", "segment_index", "before", "after", "heard_at")
+    RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
+    SEGMENT_INDEX_FIELD_NUMBER: _ClassVar[int]
+    BEFORE_FIELD_NUMBER: _ClassVar[int]
+    AFTER_FIELD_NUMBER: _ClassVar[int]
+    HEARD_AT_FIELD_NUMBER: _ClassVar[int]
+    recording_id: str
+    segment_index: int
+    before: str
+    after: str
+    heard_at: _timestamp_pb2.Timestamp
+    def __init__(self, recording_id: _Optional[str] = ..., segment_index: _Optional[int] = ..., before: _Optional[str] = ..., after: _Optional[str] = ..., heard_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class ListSpellingsRequest(_message.Message):
     __slots__ = ("workspace_id",)
@@ -182,3 +229,21 @@ class DeleteSpellingRequest(_message.Message):
 class DeleteSpellingResponse(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class ImportSpellingsRequest(_message.Message):
+    __slots__ = ("workspace_id", "spellings")
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    SPELLINGS_FIELD_NUMBER: _ClassVar[int]
+    workspace_id: str
+    spellings: _containers.RepeatedCompositeFieldContainer[Spelling]
+    def __init__(self, workspace_id: _Optional[str] = ..., spellings: _Optional[_Iterable[_Union[Spelling, _Mapping]]] = ...) -> None: ...
+
+class ImportSpellingsResponse(_message.Message):
+    __slots__ = ("added", "updated", "vocabulary_version")
+    ADDED_FIELD_NUMBER: _ClassVar[int]
+    UPDATED_FIELD_NUMBER: _ClassVar[int]
+    VOCABULARY_VERSION_FIELD_NUMBER: _ClassVar[int]
+    added: int
+    updated: int
+    vocabulary_version: int
+    def __init__(self, added: _Optional[int] = ..., updated: _Optional[int] = ..., vocabulary_version: _Optional[int] = ...) -> None: ...

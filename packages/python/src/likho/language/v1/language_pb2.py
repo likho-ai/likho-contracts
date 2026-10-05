@@ -22,10 +22,11 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from likho.common.v1 import common_pb2 as likho_dot_common_dot_v1_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n likho/language/v1/language.proto\x12\x11likho.language.v1\x1a\x1clikho/common/v1/common.proto\"\x8b\x01\n\x14TransliterateRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x12\n\x04text\x18\x02 \x01(\tR\x04text\x12<\n\rsource_script\x18\x03 \x01(\x0e\x32\x17.likho.common.v1.ScriptR\x0csourceScript\"e\n\x15TransliterateResponse\x12\x1d\n\ntext_roman\x18\x01 \x01(\tR\ttextRoman\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"\x92\x01\n\x19TransliterateBatchRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x14\n\x05texts\x18\x02 \x03(\tR\x05texts\x12<\n\rsource_script\x18\x03 \x01(\x0e\x32\x17.likho.common.v1.ScriptR\x0csourceScript\"l\n\x1aTransliterateBatchResponse\x12\x1f\n\x0btexts_roman\x18\x01 \x03(\tR\ntextsRoman\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"S\n\x12GetHotwordsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x1a\n\x08language\x18\x02 \x01(\tR\x08language\"Z\n\x13GetHotwordsResponse\x12\x14\n\x05terms\x18\x01 \x03(\tR\x05terms\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"\xc1\x01\n\x1aResolveDecodePolicyRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x1a\n\x08\x64\x65tected\x18\x02 \x01(\tR\x08\x64\x65tected\x12 \n\x0bprobability\x18\x03 \x01(\x01R\x0bprobability\x12\x42\n\ncandidates\x18\x04 \x03(\x0b\x32\".likho.common.v1.LanguageCandidateR\ncandidates\"`\n\x1bResolveDecodePolicyResponse\x12\x1b\n\tdecode_as\x18\x01 \x01(\tR\x08\x64\x65\x63odeAs\x12$\n\rtransliterate\x18\x02 \x01(\x08R\rtransliterate\"|\n\x0cGlossaryTerm\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04term\x18\x02 \x01(\tR\x04term\x12\x1a\n\x08language\x18\x03 \x01(\tR\x08language\x12\x18\n\x07\x65nabled\x18\x04 \x01(\x08R\x07\x65nabled\x12\x12\n\x04note\x18\x05 \x01(\tR\x04note\"=\n\x18ListGlossaryTermsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\"R\n\x19ListGlossaryTermsResponse\x12\x35\n\x05terms\x18\x01 \x03(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x05terms\"s\n\x19UpsertGlossaryTermRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x33\n\x04term\x18\x02 \x01(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x04term\"Q\n\x1aUpsertGlossaryTermResponse\x12\x33\n\x04term\x18\x01 \x01(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x04term\"N\n\x19\x44\x65leteGlossaryTermRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x0e\n\x02id\x18\x02 \x01(\tR\x02id\"\x1c\n\x1a\x44\x65leteGlossaryTermResponse\"\x81\x01\n\x08Spelling\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n\x06source\x18\x02 \x01(\tR\x06source\x12\x16\n\x06target\x18\x03 \x01(\tR\x06target\x12\x1b\n\tis_phrase\x18\x04 \x01(\x08R\x08isPhrase\x12\x18\n\x07\x65nabled\x18\x05 \x01(\x08R\x07\x65nabled\"9\n\x14ListSpellingsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\"R\n\x15ListSpellingsResponse\x12\x39\n\tspellings\x18\x01 \x03(\x0b\x32\x1b.likho.language.v1.SpellingR\tspellings\"s\n\x15UpsertSpellingRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x37\n\x08spelling\x18\x02 \x01(\x0b\x32\x1b.likho.language.v1.SpellingR\x08spelling\"Q\n\x16UpsertSpellingResponse\x12\x37\n\x08spelling\x18\x01 \x01(\x0b\x32\x1b.likho.language.v1.SpellingR\x08spelling\"J\n\x15\x44\x65leteSpellingRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x0e\n\x02id\x18\x02 \x01(\tR\x02id\"\x18\n\x16\x44\x65leteSpellingResponse2\xc4\x08\n\x0fLanguageService\x12\x62\n\rTransliterate\x12\'.likho.language.v1.TransliterateRequest\x1a(.likho.language.v1.TransliterateResponse\x12q\n\x12TransliterateBatch\x12,.likho.language.v1.TransliterateBatchRequest\x1a-.likho.language.v1.TransliterateBatchResponse\x12\\\n\x0bGetHotwords\x12%.likho.language.v1.GetHotwordsRequest\x1a&.likho.language.v1.GetHotwordsResponse\x12t\n\x13ResolveDecodePolicy\x12-.likho.language.v1.ResolveDecodePolicyRequest\x1a..likho.language.v1.ResolveDecodePolicyResponse\x12n\n\x11ListGlossaryTerms\x12+.likho.language.v1.ListGlossaryTermsRequest\x1a,.likho.language.v1.ListGlossaryTermsResponse\x12q\n\x12UpsertGlossaryTerm\x12,.likho.language.v1.UpsertGlossaryTermRequest\x1a-.likho.language.v1.UpsertGlossaryTermResponse\x12q\n\x12\x44\x65leteGlossaryTerm\x12,.likho.language.v1.DeleteGlossaryTermRequest\x1a-.likho.language.v1.DeleteGlossaryTermResponse\x12\x62\n\rListSpellings\x12\'.likho.language.v1.ListSpellingsRequest\x1a(.likho.language.v1.ListSpellingsResponse\x12\x65\n\x0eUpsertSpelling\x12(.likho.language.v1.UpsertSpellingRequest\x1a).likho.language.v1.UpsertSpellingResponse\x12\x65\n\x0e\x44\x65leteSpelling\x12(.likho.language.v1.DeleteSpellingRequest\x1a).likho.language.v1.DeleteSpellingResponseB\xde\x01\n\x15\x63om.likho.language.v1B\rLanguageProtoP\x01ZPgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/language/v1;languagev1\xa2\x02\x03LLX\xaa\x02\x11Likho.Language.V1\xca\x02\x11Likho\\Language\\V1\xe2\x02\x1dLikho\\Language\\V1\\GPBMetadata\xea\x02\x13Likho::Language::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n likho/language/v1/language.proto\x12\x11likho.language.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1clikho/common/v1/common.proto\"\x8b\x01\n\x14TransliterateRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x12\n\x04text\x18\x02 \x01(\tR\x04text\x12<\n\rsource_script\x18\x03 \x01(\x0e\x32\x17.likho.common.v1.ScriptR\x0csourceScript\"e\n\x15TransliterateResponse\x12\x1d\n\ntext_roman\x18\x01 \x01(\tR\ttextRoman\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"\x92\x01\n\x19TransliterateBatchRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x14\n\x05texts\x18\x02 \x03(\tR\x05texts\x12<\n\rsource_script\x18\x03 \x01(\x0e\x32\x17.likho.common.v1.ScriptR\x0csourceScript\"l\n\x1aTransliterateBatchResponse\x12\x1f\n\x0btexts_roman\x18\x01 \x03(\tR\ntextsRoman\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"S\n\x12GetHotwordsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x1a\n\x08language\x18\x02 \x01(\tR\x08language\"Z\n\x13GetHotwordsResponse\x12\x14\n\x05terms\x18\x01 \x03(\tR\x05terms\x12-\n\x12vocabulary_version\x18\x02 \x01(\x04R\x11vocabularyVersion\"\xc1\x01\n\x1aResolveDecodePolicyRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x1a\n\x08\x64\x65tected\x18\x02 \x01(\tR\x08\x64\x65tected\x12 \n\x0bprobability\x18\x03 \x01(\x01R\x0bprobability\x12\x42\n\ncandidates\x18\x04 \x03(\x0b\x32\".likho.common.v1.LanguageCandidateR\ncandidates\"`\n\x1bResolveDecodePolicyResponse\x12\x1b\n\tdecode_as\x18\x01 \x01(\tR\x08\x64\x65\x63odeAs\x12$\n\rtransliterate\x18\x02 \x01(\x08R\rtransliterate\"\xef\x01\n\x0cGlossaryTerm\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n\x04term\x18\x02 \x01(\tR\x04term\x12\x1a\n\x08language\x18\x03 \x01(\tR\x08language\x12\x18\n\x07\x65nabled\x18\x04 \x01(\x08R\x07\x65nabled\x12\x12\n\x04note\x18\x05 \x01(\tR\x04note\x12\x1b\n\tis_phrase\x18\x06 \x01(\x08R\x08isPhrase\x12\x14\n\x05heard\x18\x07 \x01(\x04R\x05heard\x12>\n\rlast_heard_at\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0blastHeardAt\"=\n\x18ListGlossaryTermsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\"R\n\x19ListGlossaryTermsResponse\x12\x35\n\x05terms\x18\x01 \x03(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x05terms\"s\n\x19UpsertGlossaryTermRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x33\n\x04term\x18\x02 \x01(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x04term\"Q\n\x1aUpsertGlossaryTermResponse\x12\x33\n\x04term\x18\x01 \x01(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x04term\"N\n\x19\x44\x65leteGlossaryTermRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x0e\n\x02id\x18\x02 \x01(\tR\x02id\"\x1c\n\x1a\x44\x65leteGlossaryTermResponse\"v\n\x1aImportGlossaryTermsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x35\n\x05terms\x18\x02 \x03(\x0b\x32\x1f.likho.language.v1.GlossaryTermR\x05terms\"|\n\x1bImportGlossaryTermsResponse\x12\x14\n\x05\x61\x64\x64\x65\x64\x18\x01 \x01(\rR\x05\x61\x64\x64\x65\x64\x12\x18\n\x07updated\x18\x02 \x01(\rR\x07updated\x12-\n\x12vocabulary_version\x18\x03 \x01(\x04R\x11vocabularyVersion\"\x9f\x02\n\x08Spelling\x12\x0e\n\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n\x06source\x18\x02 \x01(\tR\x06source\x12\x16\n\x06target\x18\x03 \x01(\tR\x06target\x12\x1b\n\tis_phrase\x18\x04 \x01(\x08R\x08isPhrase\x12\x18\n\x07\x65nabled\x18\x05 \x01(\x08R\x07\x65nabled\x12\x18\n\x07\x61pplied\x18\x06 \x01(\x04R\x07\x61pplied\x12\x42\n\x0flast_applied_at\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\rlastAppliedAt\x12>\n\x08\x65xamples\x18\x08 \x03(\x0b\x32\".likho.language.v1.SpellingExampleR\x08\x65xamples\"\xbe\x01\n\x0fSpellingExample\x12!\n\x0crecording_id\x18\x01 \x01(\tR\x0brecordingId\x12#\n\rsegment_index\x18\x02 \x01(\rR\x0csegmentIndex\x12\x16\n\x06\x62\x65\x66ore\x18\x03 \x01(\tR\x06\x62\x65\x66ore\x12\x14\n\x05\x61\x66ter\x18\x04 \x01(\tR\x05\x61\x66ter\x12\x35\n\x08heard_at\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x07heardAt\"9\n\x14ListSpellingsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\"R\n\x15ListSpellingsResponse\x12\x39\n\tspellings\x18\x01 \x03(\x0b\x32\x1b.likho.language.v1.SpellingR\tspellings\"s\n\x15UpsertSpellingRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x37\n\x08spelling\x18\x02 \x01(\x0b\x32\x1b.likho.language.v1.SpellingR\x08spelling\"Q\n\x16UpsertSpellingResponse\x12\x37\n\x08spelling\x18\x01 \x01(\x0b\x32\x1b.likho.language.v1.SpellingR\x08spelling\"J\n\x15\x44\x65leteSpellingRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x0e\n\x02id\x18\x02 \x01(\tR\x02id\"\x18\n\x16\x44\x65leteSpellingResponse\"v\n\x16ImportSpellingsRequest\x12!\n\x0cworkspace_id\x18\x01 \x01(\tR\x0bworkspaceId\x12\x39\n\tspellings\x18\x02 \x03(\x0b\x32\x1b.likho.language.v1.SpellingR\tspellings\"x\n\x17ImportSpellingsResponse\x12\x14\n\x05\x61\x64\x64\x65\x64\x18\x01 \x01(\rR\x05\x61\x64\x64\x65\x64\x12\x18\n\x07updated\x18\x02 \x01(\rR\x07updated\x12-\n\x12vocabulary_version\x18\x03 \x01(\x04R\x11vocabularyVersion2\xa4\n\n\x0fLanguageService\x12\x62\n\rTransliterate\x12\'.likho.language.v1.TransliterateRequest\x1a(.likho.language.v1.TransliterateResponse\x12q\n\x12TransliterateBatch\x12,.likho.language.v1.TransliterateBatchRequest\x1a-.likho.language.v1.TransliterateBatchResponse\x12\\\n\x0bGetHotwords\x12%.likho.language.v1.GetHotwordsRequest\x1a&.likho.language.v1.GetHotwordsResponse\x12t\n\x13ResolveDecodePolicy\x12-.likho.language.v1.ResolveDecodePolicyRequest\x1a..likho.language.v1.ResolveDecodePolicyResponse\x12n\n\x11ListGlossaryTerms\x12+.likho.language.v1.ListGlossaryTermsRequest\x1a,.likho.language.v1.ListGlossaryTermsResponse\x12q\n\x12UpsertGlossaryTerm\x12,.likho.language.v1.UpsertGlossaryTermRequest\x1a-.likho.language.v1.UpsertGlossaryTermResponse\x12q\n\x12\x44\x65leteGlossaryTerm\x12,.likho.language.v1.DeleteGlossaryTermRequest\x1a-.likho.language.v1.DeleteGlossaryTermResponse\x12t\n\x13ImportGlossaryTerms\x12-.likho.language.v1.ImportGlossaryTermsRequest\x1a..likho.language.v1.ImportGlossaryTermsResponse\x12\x62\n\rListSpellings\x12\'.likho.language.v1.ListSpellingsRequest\x1a(.likho.language.v1.ListSpellingsResponse\x12\x65\n\x0eUpsertSpelling\x12(.likho.language.v1.UpsertSpellingRequest\x1a).likho.language.v1.UpsertSpellingResponse\x12\x65\n\x0e\x44\x65leteSpelling\x12(.likho.language.v1.DeleteSpellingRequest\x1a).likho.language.v1.DeleteSpellingResponse\x12h\n\x0fImportSpellings\x12).likho.language.v1.ImportSpellingsRequest\x1a*.likho.language.v1.ImportSpellingsResponseB\xde\x01\n\x15\x63om.likho.language.v1B\rLanguageProtoP\x01ZPgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/language/v1;languagev1\xa2\x02\x03LLX\xaa\x02\x11Likho.Language.V1\xca\x02\x11Likho\\Language\\V1\xe2\x02\x1dLikho\\Language\\V1\\GPBMetadata\xea\x02\x13Likho::Language::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,50 +34,60 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'likho.language.v1.language_
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\025com.likho.language.v1B\rLanguageProtoP\001ZPgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/language/v1;languagev1\242\002\003LLX\252\002\021Likho.Language.V1\312\002\021Likho\\Language\\V1\342\002\035Likho\\Language\\V1\\GPBMetadata\352\002\023Likho::Language::V1'
-  _globals['_TRANSLITERATEREQUEST']._serialized_start=86
-  _globals['_TRANSLITERATEREQUEST']._serialized_end=225
-  _globals['_TRANSLITERATERESPONSE']._serialized_start=227
-  _globals['_TRANSLITERATERESPONSE']._serialized_end=328
-  _globals['_TRANSLITERATEBATCHREQUEST']._serialized_start=331
-  _globals['_TRANSLITERATEBATCHREQUEST']._serialized_end=477
-  _globals['_TRANSLITERATEBATCHRESPONSE']._serialized_start=479
-  _globals['_TRANSLITERATEBATCHRESPONSE']._serialized_end=587
-  _globals['_GETHOTWORDSREQUEST']._serialized_start=589
-  _globals['_GETHOTWORDSREQUEST']._serialized_end=672
-  _globals['_GETHOTWORDSRESPONSE']._serialized_start=674
-  _globals['_GETHOTWORDSRESPONSE']._serialized_end=764
-  _globals['_RESOLVEDECODEPOLICYREQUEST']._serialized_start=767
-  _globals['_RESOLVEDECODEPOLICYREQUEST']._serialized_end=960
-  _globals['_RESOLVEDECODEPOLICYRESPONSE']._serialized_start=962
-  _globals['_RESOLVEDECODEPOLICYRESPONSE']._serialized_end=1058
-  _globals['_GLOSSARYTERM']._serialized_start=1060
-  _globals['_GLOSSARYTERM']._serialized_end=1184
-  _globals['_LISTGLOSSARYTERMSREQUEST']._serialized_start=1186
-  _globals['_LISTGLOSSARYTERMSREQUEST']._serialized_end=1247
-  _globals['_LISTGLOSSARYTERMSRESPONSE']._serialized_start=1249
-  _globals['_LISTGLOSSARYTERMSRESPONSE']._serialized_end=1331
-  _globals['_UPSERTGLOSSARYTERMREQUEST']._serialized_start=1333
-  _globals['_UPSERTGLOSSARYTERMREQUEST']._serialized_end=1448
-  _globals['_UPSERTGLOSSARYTERMRESPONSE']._serialized_start=1450
-  _globals['_UPSERTGLOSSARYTERMRESPONSE']._serialized_end=1531
-  _globals['_DELETEGLOSSARYTERMREQUEST']._serialized_start=1533
-  _globals['_DELETEGLOSSARYTERMREQUEST']._serialized_end=1611
-  _globals['_DELETEGLOSSARYTERMRESPONSE']._serialized_start=1613
-  _globals['_DELETEGLOSSARYTERMRESPONSE']._serialized_end=1641
-  _globals['_SPELLING']._serialized_start=1644
-  _globals['_SPELLING']._serialized_end=1773
-  _globals['_LISTSPELLINGSREQUEST']._serialized_start=1775
-  _globals['_LISTSPELLINGSREQUEST']._serialized_end=1832
-  _globals['_LISTSPELLINGSRESPONSE']._serialized_start=1834
-  _globals['_LISTSPELLINGSRESPONSE']._serialized_end=1916
-  _globals['_UPSERTSPELLINGREQUEST']._serialized_start=1918
-  _globals['_UPSERTSPELLINGREQUEST']._serialized_end=2033
-  _globals['_UPSERTSPELLINGRESPONSE']._serialized_start=2035
-  _globals['_UPSERTSPELLINGRESPONSE']._serialized_end=2116
-  _globals['_DELETESPELLINGREQUEST']._serialized_start=2118
-  _globals['_DELETESPELLINGREQUEST']._serialized_end=2192
-  _globals['_DELETESPELLINGRESPONSE']._serialized_start=2194
-  _globals['_DELETESPELLINGRESPONSE']._serialized_end=2218
-  _globals['_LANGUAGESERVICE']._serialized_start=2221
-  _globals['_LANGUAGESERVICE']._serialized_end=3313
+  _globals['_TRANSLITERATEREQUEST']._serialized_start=119
+  _globals['_TRANSLITERATEREQUEST']._serialized_end=258
+  _globals['_TRANSLITERATERESPONSE']._serialized_start=260
+  _globals['_TRANSLITERATERESPONSE']._serialized_end=361
+  _globals['_TRANSLITERATEBATCHREQUEST']._serialized_start=364
+  _globals['_TRANSLITERATEBATCHREQUEST']._serialized_end=510
+  _globals['_TRANSLITERATEBATCHRESPONSE']._serialized_start=512
+  _globals['_TRANSLITERATEBATCHRESPONSE']._serialized_end=620
+  _globals['_GETHOTWORDSREQUEST']._serialized_start=622
+  _globals['_GETHOTWORDSREQUEST']._serialized_end=705
+  _globals['_GETHOTWORDSRESPONSE']._serialized_start=707
+  _globals['_GETHOTWORDSRESPONSE']._serialized_end=797
+  _globals['_RESOLVEDECODEPOLICYREQUEST']._serialized_start=800
+  _globals['_RESOLVEDECODEPOLICYREQUEST']._serialized_end=993
+  _globals['_RESOLVEDECODEPOLICYRESPONSE']._serialized_start=995
+  _globals['_RESOLVEDECODEPOLICYRESPONSE']._serialized_end=1091
+  _globals['_GLOSSARYTERM']._serialized_start=1094
+  _globals['_GLOSSARYTERM']._serialized_end=1333
+  _globals['_LISTGLOSSARYTERMSREQUEST']._serialized_start=1335
+  _globals['_LISTGLOSSARYTERMSREQUEST']._serialized_end=1396
+  _globals['_LISTGLOSSARYTERMSRESPONSE']._serialized_start=1398
+  _globals['_LISTGLOSSARYTERMSRESPONSE']._serialized_end=1480
+  _globals['_UPSERTGLOSSARYTERMREQUEST']._serialized_start=1482
+  _globals['_UPSERTGLOSSARYTERMREQUEST']._serialized_end=1597
+  _globals['_UPSERTGLOSSARYTERMRESPONSE']._serialized_start=1599
+  _globals['_UPSERTGLOSSARYTERMRESPONSE']._serialized_end=1680
+  _globals['_DELETEGLOSSARYTERMREQUEST']._serialized_start=1682
+  _globals['_DELETEGLOSSARYTERMREQUEST']._serialized_end=1760
+  _globals['_DELETEGLOSSARYTERMRESPONSE']._serialized_start=1762
+  _globals['_DELETEGLOSSARYTERMRESPONSE']._serialized_end=1790
+  _globals['_IMPORTGLOSSARYTERMSREQUEST']._serialized_start=1792
+  _globals['_IMPORTGLOSSARYTERMSREQUEST']._serialized_end=1910
+  _globals['_IMPORTGLOSSARYTERMSRESPONSE']._serialized_start=1912
+  _globals['_IMPORTGLOSSARYTERMSRESPONSE']._serialized_end=2036
+  _globals['_SPELLING']._serialized_start=2039
+  _globals['_SPELLING']._serialized_end=2326
+  _globals['_SPELLINGEXAMPLE']._serialized_start=2329
+  _globals['_SPELLINGEXAMPLE']._serialized_end=2519
+  _globals['_LISTSPELLINGSREQUEST']._serialized_start=2521
+  _globals['_LISTSPELLINGSREQUEST']._serialized_end=2578
+  _globals['_LISTSPELLINGSRESPONSE']._serialized_start=2580
+  _globals['_LISTSPELLINGSRESPONSE']._serialized_end=2662
+  _globals['_UPSERTSPELLINGREQUEST']._serialized_start=2664
+  _globals['_UPSERTSPELLINGREQUEST']._serialized_end=2779
+  _globals['_UPSERTSPELLINGRESPONSE']._serialized_start=2781
+  _globals['_UPSERTSPELLINGRESPONSE']._serialized_end=2862
+  _globals['_DELETESPELLINGREQUEST']._serialized_start=2864
+  _globals['_DELETESPELLINGREQUEST']._serialized_end=2938
+  _globals['_DELETESPELLINGRESPONSE']._serialized_start=2940
+  _globals['_DELETESPELLINGRESPONSE']._serialized_end=2964
+  _globals['_IMPORTSPELLINGSREQUEST']._serialized_start=2966
+  _globals['_IMPORTSPELLINGSREQUEST']._serialized_end=3084
+  _globals['_IMPORTSPELLINGSRESPONSE']._serialized_start=3086
+  _globals['_IMPORTSPELLINGSRESPONSE']._serialized_end=3206
+  _globals['_LANGUAGESERVICE']._serialized_start=3209
+  _globals['_LANGUAGESERVICE']._serialized_end=4525
 # @@protoc_insertion_point(module_scope)

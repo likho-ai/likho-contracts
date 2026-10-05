@@ -5,6 +5,7 @@
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 import type { LanguageCandidate, Script } from "../../common/v1/common_pb.js";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 
 /**
  * Describes the file likho/language/v1/language.proto.
@@ -215,6 +216,8 @@ export declare type GlossaryTerm = Message<"likho.language.v1.GlossaryTerm"> & {
   id: string;
 
   /**
+   * A name, or a whole phrase (several words), in the script of the audio.
+   *
    * @generated from field: string term = 2;
    */
   term: string;
@@ -233,6 +236,25 @@ export declare type GlossaryTerm = Message<"likho.language.v1.GlossaryTerm"> & {
    * @generated from field: string note = 5;
    */
   note: string;
+
+  /**
+   * Decided by the service: a term with spaces.
+   *
+   * @generated from field: bool is_phrase = 6;
+   */
+  isPhrase: boolean;
+
+  /**
+   * How many transcript lines contained the term, and when the last one was heard.
+   *
+   * @generated from field: uint64 heard = 7;
+   */
+  heard: bigint;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp last_heard_at = 8;
+   */
+  lastHeardAt?: Timestamp | undefined;
 };
 
 /**
@@ -347,6 +369,55 @@ export declare type DeleteGlossaryTermResponse = Message<"likho.language.v1.Dele
 export declare const DeleteGlossaryTermResponseSchema: GenMessage<DeleteGlossaryTermResponse>;
 
 /**
+ * @generated from message likho.language.v1.ImportGlossaryTermsRequest
+ */
+export declare type ImportGlossaryTermsRequest = Message<"likho.language.v1.ImportGlossaryTermsRequest"> & {
+  /**
+   * @generated from field: string workspace_id = 1;
+   */
+  workspaceId: string;
+
+  /**
+   * Each term is created, or updates the one with the same text (ids are ignored).
+   *
+   * @generated from field: repeated likho.language.v1.GlossaryTerm terms = 2;
+   */
+  terms: GlossaryTerm[];
+};
+
+/**
+ * Describes the message likho.language.v1.ImportGlossaryTermsRequest.
+ * Use `create(ImportGlossaryTermsRequestSchema)` to create a new message.
+ */
+export declare const ImportGlossaryTermsRequestSchema: GenMessage<ImportGlossaryTermsRequest>;
+
+/**
+ * @generated from message likho.language.v1.ImportGlossaryTermsResponse
+ */
+export declare type ImportGlossaryTermsResponse = Message<"likho.language.v1.ImportGlossaryTermsResponse"> & {
+  /**
+   * @generated from field: uint32 added = 1;
+   */
+  added: number;
+
+  /**
+   * @generated from field: uint32 updated = 2;
+   */
+  updated: number;
+
+  /**
+   * @generated from field: uint64 vocabulary_version = 3;
+   */
+  vocabularyVersion: bigint;
+};
+
+/**
+ * Describes the message likho.language.v1.ImportGlossaryTermsResponse.
+ * Use `create(ImportGlossaryTermsResponseSchema)` to create a new message.
+ */
+export declare const ImportGlossaryTermsResponseSchema: GenMessage<ImportGlossaryTermsResponse>;
+
+/**
  * @generated from message likho.language.v1.Spelling
  */
 export declare type Spelling = Message<"likho.language.v1.Spelling"> & {
@@ -378,6 +449,25 @@ export declare type Spelling = Message<"likho.language.v1.Spelling"> & {
    * @generated from field: bool enabled = 5;
    */
   enabled: boolean;
+
+  /**
+   * How many transcript lines the spelling was applied to, and when the last one was heard.
+   *
+   * @generated from field: uint64 applied = 6;
+   */
+  applied: bigint;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp last_applied_at = 7;
+   */
+  lastAppliedAt?: Timestamp | undefined;
+
+  /**
+   * The last few lines it was applied to, newest first: what the model wrote and what came out.
+   *
+   * @generated from field: repeated likho.language.v1.SpellingExample examples = 8;
+   */
+  examples: SpellingExample[];
 };
 
 /**
@@ -385,6 +475,44 @@ export declare type Spelling = Message<"likho.language.v1.Spelling"> & {
  * Use `create(SpellingSchema)` to create a new message.
  */
 export declare const SpellingSchema: GenMessage<Spelling>;
+
+/**
+ * @generated from message likho.language.v1.SpellingExample
+ */
+export declare type SpellingExample = Message<"likho.language.v1.SpellingExample"> & {
+  /**
+   * @generated from field: string recording_id = 1;
+   */
+  recordingId: string;
+
+  /**
+   * @generated from field: uint32 segment_index = 2;
+   */
+  segmentIndex: number;
+
+  /**
+   * The line as the model wrote it (layer 1) and as it was written in Hinglish (layer 2).
+   *
+   * @generated from field: string before = 3;
+   */
+  before: string;
+
+  /**
+   * @generated from field: string after = 4;
+   */
+  after: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp heard_at = 5;
+   */
+  heardAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message likho.language.v1.SpellingExample.
+ * Use `create(SpellingExampleSchema)` to create a new message.
+ */
+export declare const SpellingExampleSchema: GenMessage<SpellingExample>;
 
 /**
  * @generated from message likho.language.v1.ListSpellingsRequest
@@ -492,7 +620,57 @@ export declare type DeleteSpellingResponse = Message<"likho.language.v1.DeleteSp
 export declare const DeleteSpellingResponseSchema: GenMessage<DeleteSpellingResponse>;
 
 /**
+ * @generated from message likho.language.v1.ImportSpellingsRequest
+ */
+export declare type ImportSpellingsRequest = Message<"likho.language.v1.ImportSpellingsRequest"> & {
+  /**
+   * @generated from field: string workspace_id = 1;
+   */
+  workspaceId: string;
+
+  /**
+   * Each spelling is created, or updates the one with the same source (ids are ignored).
+   *
+   * @generated from field: repeated likho.language.v1.Spelling spellings = 2;
+   */
+  spellings: Spelling[];
+};
+
+/**
+ * Describes the message likho.language.v1.ImportSpellingsRequest.
+ * Use `create(ImportSpellingsRequestSchema)` to create a new message.
+ */
+export declare const ImportSpellingsRequestSchema: GenMessage<ImportSpellingsRequest>;
+
+/**
+ * @generated from message likho.language.v1.ImportSpellingsResponse
+ */
+export declare type ImportSpellingsResponse = Message<"likho.language.v1.ImportSpellingsResponse"> & {
+  /**
+   * @generated from field: uint32 added = 1;
+   */
+  added: number;
+
+  /**
+   * @generated from field: uint32 updated = 2;
+   */
+  updated: number;
+
+  /**
+   * @generated from field: uint64 vocabulary_version = 3;
+   */
+  vocabularyVersion: bigint;
+};
+
+/**
+ * Describes the message likho.language.v1.ImportSpellingsResponse.
+ * Use `create(ImportSpellingsResponseSchema)` to create a new message.
+ */
+export declare const ImportSpellingsResponseSchema: GenMessage<ImportSpellingsResponse>;
+
+/**
  * Owned by likho-language: Hinglish rules, the spelling table, the glossary and the language policy.
+ * It also counts how often each term and spelling is heard, from the lines the workers publish.
  *
  * @generated from service likho.language.v1.LanguageService
  */
@@ -560,6 +738,16 @@ export declare const LanguageService: GenService<{
     output: typeof DeleteGlossaryTermResponseSchema;
   },
   /**
+   * Many terms at once (a CSV import): one transaction, one version, one event.
+   *
+   * @generated from rpc likho.language.v1.LanguageService.ImportGlossaryTerms
+   */
+  importGlossaryTerms: {
+    methodKind: "unary";
+    input: typeof ImportGlossaryTermsRequestSchema;
+    output: typeof ImportGlossaryTermsResponseSchema;
+  },
+  /**
    * @generated from rpc likho.language.v1.LanguageService.ListSpellings
    */
   listSpellings: {
@@ -582,6 +770,14 @@ export declare const LanguageService: GenService<{
     methodKind: "unary";
     input: typeof DeleteSpellingRequestSchema;
     output: typeof DeleteSpellingResponseSchema;
+  },
+  /**
+   * @generated from rpc likho.language.v1.LanguageService.ImportSpellings
+   */
+  importSpellings: {
+    methodKind: "unary";
+    input: typeof ImportSpellingsRequestSchema;
+    output: typeof ImportSpellingsResponseSchema;
   },
 }>;
 
