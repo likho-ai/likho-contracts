@@ -40,6 +40,11 @@ events:
     stream: LIKHO
     producer: likho-api
     consumers: [likho-transcription]
+  likho.transcription.started.v1:
+    subject: likho.transcription.started
+    stream: LIKHO
+    producer: likho-transcription
+    consumers: [likho-api]
   likho.transcription.segment.v1:
     subject: likho.live.segment
     stream: LIKHO_LIVE

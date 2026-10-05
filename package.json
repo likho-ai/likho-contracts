@@ -1,6 +1,6 @@
 {
   "name": "@likho-ai/contracts",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Likho interface definitions: gRPC services (Protobuf), event schemas (JSON Schema, CloudEvents) and NATS stream layout",
   "private": true,
   "type": "module",
