@@ -24,90 +24,90 @@ events:
     subject: likho.media.uploaded
     stream: LIKHO
     producer: likho-media
-    consumers: []
+    consumers: [likho-analytics]
   likho.media.ready.v1:
     subject: likho.media.ready
     stream: LIKHO
     producer: likho-media
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.media.failed.v1:
     subject: likho.media.failed
     stream: LIKHO
     producer: likho-media
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.transcription.requested.v1:
     subject: likho.transcription.requested
     stream: LIKHO
     producer: likho-api
-    consumers: [likho-transcription]
+    consumers: [likho-transcription, likho-analytics]
   likho.transcription.started.v1:
     subject: likho.transcription.started
     stream: LIKHO
     producer: likho-transcription
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.transcription.segment.v1:
     subject: likho.live.segment
     stream: LIKHO_LIVE
     producer: likho-transcription
     # likho-api relays the line to browsers; likho-language counts the glossary terms and spellings in it.
-    consumers: [likho-api, likho-language]
+    consumers: [likho-api, likho-language, likho-analytics]
   likho.transcription.completed.v1:
     subject: likho.transcription.completed
     stream: LIKHO
     producer: likho-transcription
-    consumers: [likho-api, likho-search]
+    consumers: [likho-api, likho-search, likho-analytics]
   likho.transcription.failed.v1:
     subject: likho.transcription.failed
     stream: LIKHO
     producer: likho-transcription
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.vocabulary.updated.v1:
     subject: likho.vocabulary.updated
     stream: LIKHO
     producer: likho-language
-    consumers: [likho-transcription]
+    consumers: [likho-transcription, likho-analytics]
   likho.transcript.corrected.v1:
     subject: likho.transcript.corrected
     stream: LIKHO_KEEP
     producer: likho-api
-    consumers: [likho-search]
+    consumers: [likho-search, likho-analytics]
   likho.import.requested.v1:
     subject: likho.import.requested
     stream: LIKHO
     producer: likho-api
-    consumers: [likho-connector-ameyo]
+    consumers: [likho-connector-ameyo, likho-analytics]
   likho.import.completed.v1:
     subject: likho.import.completed
     stream: LIKHO
     producer: likho-connector-ameyo
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.import.failed.v1:
     subject: likho.import.failed
     stream: LIKHO
     producer: likho-connector-ameyo
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.recording.deleted.v1:
     subject: likho.recording.deleted
     stream: LIKHO
     producer: likho-api
-    consumers: [likho-search, likho-connector-ameyo]
+    consumers: [likho-search, likho-connector-ameyo, likho-analytics]
   likho.recording.updated.v1:
     subject: likho.recording.updated
     stream: LIKHO
     producer: likho-api
     # The recording's facts (source, campaign, agent, ...) travel beside its lines in the index.
-    consumers: [likho-search]
+    consumers: [likho-search, likho-analytics]
   likho.insights.completed.v1:
     subject: likho.insights.completed
     stream: LIKHO
     producer: likho-insights
     # likho-api tells the open pages; the insights themselves are fetched over gRPC.
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
   likho.insights.failed.v1:
     subject: likho.insights.failed
     stream: LIKHO
     producer: likho-insights
-    consumers: [likho-api]
+    consumers: [likho-api, likho-analytics]
 
 # Durable consumer settings. Name = <service>-<last part of the subject>.
 consumer_defaults:

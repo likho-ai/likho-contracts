@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package likho.analytics.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by likho-analytics: the numbers behind the calls. It keeps every event of the platform
+// in ClickHouse and answers what happened in a window - how many calls, how many minutes, how
+// fast, in which languages, by whom, and what the model made of them.
+service AnalyticsService {
+  // The window's totals: one card each on a dashboard.
+  rpc GetOverview(GetOverviewRequest) returns (GetOverviewResponse);
+  // One number per day (or hour) across the window: a chart.
+  rpc GetTimeseries(GetTimeseriesRequest) returns (GetTimeseriesResponse);
+  // The window's calls split by agent, campaign, disposition, language or sentiment: a table.
+  rpc GetBreakdown(GetBreakdownRequest) returns (GetBreakdownResponse);
+}
+
+// A window of call time: since is included, until is not. Both are required.
+message Window {
+  google.protobuf.Timestamp since = 1;
+  google.protobuf.Timestamp until = 2;
+}
+
+// Narrows a request to calls with these facts (exact values; empty = any).
+message Facts {
+  string campaign = 1;
+  string agent = 2;
+  string disposition = 3;
+  string source = 4;
+  string language = 5;
+}
+
+message GetOverviewRequest {
+  string workspace_id = 1;
+  Window window = 2;
+  Facts facts = 3;
+}
+
+// What happened in the window.
+message Overview {
+  // Calls that arrived (recordings made).
+  uint64 calls = 1;
+  // Calls with a transcript.
+  uint64 transcribed = 2;
+  // Calls whose transcription failed (and was not redone).
+  uint64 failed = 3;
+  // Minutes of audio transcribed.
+  double minutes = 4;
+  // Seconds of transcription per second of audio, over the window (lower is faster).
+  double realtime_factor = 5;
+  // Calls the model analysed.
+  uint64 analysed = 6;
+  // The mean score of the analysed calls, as a share of the form's maximum (0 to 1); 0 when none.
+  double score = 7;
+  // Analysed calls by sentiment: positive, neutral, negative, mixed.
+  repeated Count sentiments = 8;
+  // Transcribed calls by detected language.
+  repeated Count languages = 9;
+}
+
+message Count {
+  string key = 1;
+  uint64 count = 2;
+}
+
+message GetOverviewResponse {
+  Overview overview = 1;
+}
+
+enum Metric {
+  METRIC_UNSPECIFIED = 0;
+  METRIC_CALLS = 1;            // calls that arrived
+  METRIC_TRANSCRIBED = 2;      // calls with a transcript
+  METRIC_MINUTES = 3;          // minutes of audio transcribed
+  METRIC_REALTIME_FACTOR = 4;  // transcription seconds per audio second
+  METRIC_ANALYSED = 5;         // calls the model analysed
+  METRIC_SCORE = 6;            // mean score, 0 to 1
+  METRIC_NEGATIVE = 7;         // analysed calls with a negative sentiment
+}
+
+enum Bucket {
+  BUCKET_UNSPECIFIED = 0;
+  BUCKET_DAY = 1;
+  BUCKET_HOUR = 2;
+}
+
+message GetTimeseriesRequest {
+  string workspace_id = 1;
+  Window window = 2;
+  Facts facts = 3;
+  Metric metric = 4;
+  // The size of each point; the day is the workspace's zone (TZ of the service).
+  Bucket bucket = 5;
+}
+
+message Point {
+  // The start of the bucket.
+  google.protobuf.Timestamp at = 1;
+  double value = 2;
+}
+
+message GetTimeseriesResponse {
+  repeated Point points = 1;
+}
+
+enum Dimension {
+  DIMENSION_UNSPECIFIED = 0;
+  DIMENSION_AGENT = 1;
+  DIMENSION_CAMPAIGN = 2;
+  DIMENSION_DISPOSITION = 3;
+  DIMENSION_LANGUAGE = 4;
+  DIMENSION_SENTIMENT = 5;
+  DIMENSION_SOURCE = 6;
+}
+
+message GetBreakdownRequest {
+  string workspace_id = 1;
+  Window window = 2;
+  Facts facts = 3;
+  Dimension by = 4;
+  // At most this many rows, largest first; 0 = 50, at most 500.
+  uint32 limit = 5;
+}
+
+// One row of a breakdown.
+message Row {
+  // The agent, campaign, disposition, language, sentiment or source; "(none)" when the call had none.
+  string key = 1;
+  uint64 calls = 2;
+  uint64 transcribed = 3;
+  double minutes = 4;
+  uint64 analysed = 5;
+  // The mean score of the analysed calls, 0 to 1; 0 when none.
+  double score = 6;
+  uint64 negative = 7;
+}
+
+message GetBreakdownResponse {
+  repeated Row rows = 1;
+}

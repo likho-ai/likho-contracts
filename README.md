@@ -72,6 +72,8 @@ release by CI) and `packages/go/vX.Y.Z` (the Go module).
 | `likho.transcription.v1.TranscriptionService` | likho-transcription | `GetTranscript`, `ListTranscripts`, `Transcribe` (streams lines), `Retransliterate`, `CorrectSegment` (a new version, the correction kept), `ListCorrections`, `ListEngines`, `CancelJob` |
 | `likho.language.v1.LanguageService` | likho-language | `Transliterate`, `TransliterateBatch`, `GetHotwords`, `ResolveDecodePolicy`, glossary and spelling calls |
 | `likho.search.v1.SearchService` | likho-search | `Search` (lines matching a query, with the matches marked), `Reindex`, `DeleteRecording` |
+| `likho.insights.v1.InsightsService` | likho-insights | `GetInsights`, `Analyse`, `GetStatus` (what a model says about a call: summary, products, sentiment, the auditor's checks) |
+| `likho.analytics.v1.AnalyticsService` | likho-analytics | `GetOverview`, `GetTimeseries`, `GetBreakdown` (the numbers behind the calls in a window: calls, minutes, speed, languages, by agent and campaign, what the model made of them) |
 
 Shared messages are in `likho.common.v1`: `Segment` (one transcript line with both text
 layers), `LanguageDetection`, `DialerCall`, `Script`.
@@ -80,19 +82,22 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 
 | Event type | NATS subject | Stream | Published by | Listened to by |
 | --- | --- | --- | --- | --- |
-| `likho.media.uploaded.v1` | `likho.media.uploaded` | LIKHO | likho-media | — |
-| `likho.media.ready.v1` | `likho.media.ready` | LIKHO | likho-media | likho-api |
-| `likho.media.failed.v1` | `likho.media.failed` | LIKHO | likho-media | likho-api |
-| `likho.transcription.requested.v1` | `likho.transcription.requested` | LIKHO | likho-api | likho-transcription (the job queue) |
-| `likho.transcription.segment.v1` | `likho.live.segment` | LIKHO_LIVE | likho-transcription | likho-api |
-| `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search |
-| `likho.transcription.failed.v1` | `likho.transcription.failed` | LIKHO | likho-transcription | likho-api |
-| `likho.vocabulary.updated.v1` | `likho.vocabulary.updated` | LIKHO | likho-language | likho-transcription |
-| `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-api | likho-search |
-| `likho.import.requested.v1` | `likho.import.requested` | LIKHO | likho-api | likho-connector-ameyo (fetch this call from the dialer) |
-| `likho.import.completed.v1` | `likho.import.completed` | LIKHO | likho-connector-ameyo | likho-api |
-| `likho.import.failed.v1` | `likho.import.failed` | LIKHO | likho-connector-ameyo | likho-api |
-| `likho.recording.deleted.v1` | `likho.recording.deleted` | LIKHO | likho-api | likho-search, likho-connector-ameyo |
+| `likho.media.uploaded.v1` | `likho.media.uploaded` | LIKHO | likho-media | likho-analytics |
+| `likho.media.ready.v1` | `likho.media.ready` | LIKHO | likho-media | likho-api, likho-analytics |
+| `likho.media.failed.v1` | `likho.media.failed` | LIKHO | likho-media | likho-api, likho-analytics |
+| `likho.transcription.requested.v1` | `likho.transcription.requested` | LIKHO | likho-api | likho-transcription (the job queue), likho-analytics |
+| `likho.transcription.segment.v1` | `likho.live.segment` | LIKHO_LIVE | likho-transcription | likho-api, likho-analytics |
+| `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search, likho-analytics |
+| `likho.transcription.failed.v1` | `likho.transcription.failed` | LIKHO | likho-transcription | likho-api, likho-analytics |
+| `likho.vocabulary.updated.v1` | `likho.vocabulary.updated` | LIKHO | likho-language | likho-transcription, likho-analytics |
+| `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-api | likho-search, likho-analytics |
+| `likho.import.requested.v1` | `likho.import.requested` | LIKHO | likho-api | likho-connector-ameyo (fetch this call from the dialer), likho-analytics |
+| `likho.import.completed.v1` | `likho.import.completed` | LIKHO | likho-connector-ameyo | likho-api, likho-analytics |
+| `likho.import.failed.v1` | `likho.import.failed` | LIKHO | likho-connector-ameyo | likho-api, likho-analytics |
+| `likho.recording.deleted.v1` | `likho.recording.deleted` | LIKHO | likho-api | likho-search, likho-connector-ameyo, likho-analytics |
+| `likho.recording.updated.v1` | `likho.recording.updated` | LIKHO | likho-api | likho-search, likho-analytics |
+| `likho.insights.completed.v1` | `likho.insights.completed` | LIKHO | likho-insights | likho-api, likho-analytics |
+| `likho.insights.failed.v1` | `likho.insights.failed` | LIKHO | likho-insights | likho-api, likho-analytics |
 
 ## Rules
 
