@@ -88,7 +88,7 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | `likho.media.failed.v1` | `likho.media.failed` | LIKHO | likho-media | likho-api, likho-analytics |
 | `likho.transcription.requested.v1` | `likho.transcription.requested` | LIKHO | likho-api | likho-transcription (the job queue), likho-analytics |
 | `likho.transcription.segment.v1` | `likho.live.segment` | LIKHO_LIVE | likho-transcription | likho-api, likho-analytics |
-| `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search, likho-analytics |
+| `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search, likho-insights, likho-connector-ameyo (write-back), likho-analytics |
 | `likho.transcription.failed.v1` | `likho.transcription.failed` | LIKHO | likho-transcription | likho-api, likho-analytics |
 | `likho.vocabulary.updated.v1` | `likho.vocabulary.updated` | LIKHO | likho-language | likho-transcription, likho-analytics |
 | `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-api | likho-search, likho-analytics |

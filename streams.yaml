@@ -55,7 +55,7 @@ events:
     subject: likho.transcription.completed
     stream: LIKHO
     producer: likho-transcription
-    consumers: [likho-api, likho-search, likho-analytics]
+    consumers: [likho-api, likho-search, likho-insights, likho-connector-ameyo, likho-analytics]
   likho.transcription.failed.v1:
     subject: likho.transcription.failed
     stream: LIKHO
