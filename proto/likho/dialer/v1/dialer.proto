@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package likho.dialer.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by the dialer connector (likho-connector-ameyo): what the dialer knows about its
+// calls, read from its reporting database - the campaigns, the agents and the calls of a
+// window - so that people choose from the real lists and fetch the calls they want, and what
+// the connector itself is doing (its schedule, its budget). The SQL that names the company's
+// tables stays in the connector's installation; this service only fixes the shape.
+service DialerService {
+  // The campaigns that had calls in the window, with their counts, most calls first.
+  rpc ListCampaigns(ListCampaignsRequest) returns (ListCampaignsResponse);
+  // The agents that took calls in the window (of one campaign when given), most calls first.
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse);
+  // The calls of the window, newest first, a page at a time.
+  rpc ListCalls(ListCallsRequest) returns (ListCallsResponse);
+  // One call by the dialer's id of the interaction.
+  rpc GetCall(GetCallRequest) returns (GetCallResponse);
+  // What the connector is doing: the schedule, the budget, the cursor.
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+}
+
+// A window of call time: since is included, until is not. Both are required. The connector
+// turns them into the dialer's own clock (the company's zone).
+message Window {
+  google.protobuf.Timestamp since = 1;
+  google.protobuf.Timestamp until = 2;
+}
+
+message ListCampaignsRequest {
+  Window window = 1;
+}
+
+message Campaign {
+  string name = 1;
+  // Legs the dialer logged (a transferred call has two).
+  uint64 calls = 2;
+  // Of those, the ones that connected.
+  uint64 connected = 3;
+  // Interactions: one recording each.
+  uint64 interactions = 4;
+  // Customer talk time of the connected legs, in seconds.
+  uint64 talk_seconds = 5;
+}
+
+message ListCampaignsResponse {
+  repeated Campaign campaigns = 1;
+}
+
+message ListAgentsRequest {
+  Window window = 1;
+  // Only this campaign's calls; empty = every campaign.
+  string campaign = 2;
+}
+
+message Agent {
+  // The dialer's user id.
+  string id = 1;
+  // The dialer's user name (what people know the agent by).
+  string name = 2;
+  uint64 calls = 3;
+  uint64 connected = 4;
+  uint64 talk_seconds = 5;
+}
+
+message ListAgentsResponse {
+  repeated Agent agents = 1;
+}
+
+message ListCallsRequest {
+  Window window = 1;
+  // Exact values; empty = any.
+  string campaign = 2;
+  string agent = 3;
+  // Only calls that connected (default: all).
+  bool connected_only = 4;
+  // Only calls with at least this much customer talk time, in seconds.
+  uint32 min_talk_seconds = 5;
+  // The cursor of the previous page (next_cursor), empty for the first page.
+  string after = 6;
+  // At most this many calls (default 50, at most 500).
+  uint32 limit = 7;
+}
+
+// One leg of a call as the dialer logged it. Phone numbers are already shortened to the
+// digits the connector is allowed to show.
+message Call {
+  // The interaction's id: the key of the recording (one per interaction).
+  string crt_object_id = 1;
+  // The leg's id.
+  string call_id = 2;
+  // When the call happened, as the dialer writes it (its own clock, text).
+  string call_time = 3;
+  string campaign = 4;
+  // The campaign the call was transferred to, when it was.
+  string transferred_campaign = 5;
+  string agent = 6;
+  string agent_id = 7;
+  string disposition = 8;
+  // inbound, outbound, transferred: the dialer's own words.
+  string call_type = 9;
+  bool connected = 10;
+  // Customer talk time, in seconds.
+  uint32 talk_seconds = 11;
+  string phone = 12;
+  // Who hung up: customer, agent, system, or the dialer's word.
+  string hangup_by = 13;
+  string queue = 14;
+}
+
+message ListCallsResponse {
+  repeated Call calls = 1;
+  // Empty when this was the last page.
+  string next_cursor = 2;
+}
+
+message GetCallRequest {
+  string crt_object_id = 1;
+}
+
+message GetCallResponse {
+  Call call = 1;
+}
+
+message GetStatusRequest {}
+
+// What the connector is doing.
+message GetStatusResponse {
+  // The reporting database is configured: lists and the schedule are possible.
+  bool database_configured = 1;
+  // The schedule runs (from the workspace's settings).
+  bool schedule_enabled = 2;
+  // Where the schedule stands: the dialer's call_time of the last call taken.
+  string cursor = 3;
+  // Calls fetched today, and the day's budget.
+  uint32 imported_today = 4;
+  uint32 daily_limit = 5;
+  // The campaigns the schedule takes; empty = every campaign.
+  repeated string campaigns = 6;
+  uint32 min_talk_seconds = 7;
+  // Transcripts are written back to the CRM.
+  bool writeback_enabled = 8;
+  // The archive of old recordings is looked in when the live server has none.
+  bool archive_enabled = 9;
+  // The connector's version.
+  string version = 10;
+  // The last run of the schedule, when there was one.
+  google.protobuf.Timestamp last_run_at = 11;
+  string last_run_summary = 12;
+}

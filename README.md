@@ -74,6 +74,7 @@ release by CI) and `packages/go/vX.Y.Z` (the Go module).
 | `likho.search.v1.SearchService` | likho-search | `Search` (lines matching a query, with the matches marked), `Reindex`, `DeleteRecording` |
 | `likho.insights.v1.InsightsService` | likho-insights | `GetInsights`, `Analyse`, `GetStatus` (what a model says about a call: summary, products, sentiment, the auditor's checks) |
 | `likho.analytics.v1.AnalyticsService` | likho-analytics | `GetOverview`, `GetTimeseries`, `GetBreakdown` (the numbers behind the calls in a window: calls, minutes, speed, languages, by agent and campaign, what the model made of them) |
+| `likho.dialer.v1.DialerService` | likho-connector-ameyo | `ListCampaigns`, `ListAgents`, `ListCalls`, `GetCall` (what the dialer knows about its calls, from its reporting database), `GetStatus` (the connector's schedule and budget) |
 
 Shared messages are in `likho.common.v1`: `Segment` (one transcript line with both text
 layers), `LanguageDetection`, `DialerCall`, `Script`.
@@ -98,6 +99,7 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | `likho.recording.updated.v1` | `likho.recording.updated` | LIKHO | likho-api | likho-search, likho-analytics |
 | `likho.insights.completed.v1` | `likho.insights.completed` | LIKHO | likho-insights | likho-api, likho-analytics |
 | `likho.insights.failed.v1` | `likho.insights.failed` | LIKHO | likho-insights | likho-api, likho-analytics |
+| `likho.settings.changed.v1` | `likho.settings.changed` | LIKHO | likho-api | likho-connector-ameyo, likho-insights, likho-analytics (the keys only; the values are read from likho-api) |
 
 ## Rules
 

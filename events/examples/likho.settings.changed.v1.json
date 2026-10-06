@@ -1,0 +1,14 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E12",
+  "source": "likho-api",
+  "type": "likho.settings.changed.v1",
+  "time": "2026-10-06T09:00:00Z",
+  "subject": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "keys": ["dialer.schedule_enabled", "dialer.campaigns", "dialer.daily_limit"],
+    "changed_by": "usr_01JB7Z5K3M9Q2W4X6Y8A0C1E3G"
+  }
+}

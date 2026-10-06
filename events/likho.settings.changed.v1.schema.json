@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://likho-ai.github.io/likho-contracts/events/likho.settings.changed.v1.schema.json",
+  "title": "A workspace's settings changed",
+  "description": "data of likho.settings.changed.v1; published by likho-api on NATS subject likho.settings.changed when an admin changes the workspace's settings. Only the keys travel: a service that cares reads the values from likho-api (GET /api/v1/settings), so nothing secret is on the bus.",
+  "type": "object",
+  "required": [
+    "workspace_id",
+    "keys"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "pattern": "^wsp_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "keys": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "description": "A setting's key, e.g. dialer.schedule_enabled"
+      }
+    },
+    "changed_by": {
+      "type": "string",
+      "pattern": "^usr_[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "The admin who changed them"
+    }
+  }
+}
