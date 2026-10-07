@@ -81,6 +81,9 @@ message TranscribeRequest {
   string media_id = 4;
   // Whose glossary, spellings and language policy apply.
   string workspace_id = 5;
+  // An evaluation (likho-ml scoring a model on the gold set): the transcript is returned but not
+  // kept - the recording's versions do not change, no event is published. Its version is 0.
+  bool evaluation = 6;
 }
 
 message TranscribeStarted {
