@@ -427,6 +427,13 @@ export declare type GoldItem = Message<"likho.ml.v1.GoldItem"> & {
    * @generated from field: google.protobuf.Timestamp added_at = 10;
    */
   addedAt?: Timestamp | undefined;
+
+  /**
+   * The recording's audio (likho-media), which an evaluation transcribes again.
+   *
+   * @generated from field: string media_id = 11;
+   */
+  mediaId: string;
 };
 
 /**
@@ -460,6 +467,13 @@ export declare type AddToGoldSetRequest = Message<"likho.ml.v1.AddToGoldSetReque
    * @generated from field: string user_id = 4;
    */
   userId: string;
+
+  /**
+   * The recording's audio (likho-api knows it): an evaluation transcribes it again.
+   *
+   * @generated from field: string media_id = 5;
+   */
+  mediaId: string;
 };
 
 /**

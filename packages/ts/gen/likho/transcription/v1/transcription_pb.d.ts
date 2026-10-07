@@ -241,6 +241,14 @@ export declare type TranscribeRequest = Message<"likho.transcription.v1.Transcri
    * @generated from field: string workspace_id = 5;
    */
   workspaceId: string;
+
+  /**
+   * An evaluation (likho-ml scoring a model on the gold set): the transcript is returned but not
+   * kept - the recording's versions do not change, no event is published. Its version is 0.
+   *
+   * @generated from field: bool evaluation = 6;
+   */
+  evaluation: boolean;
 };
 
 /**
