@@ -458,3 +458,25 @@ class ListTrainingRunsResponse(_message.Message):
     RUNS_FIELD_NUMBER: _ClassVar[int]
     runs: _containers.RepeatedCompositeFieldContainer[TrainingRun]
     def __init__(self, runs: _Optional[_Iterable[_Union[TrainingRun, _Mapping]]] = ...) -> None: ...
+
+class ReportTrainingRunRequest(_message.Message):
+    __slots__ = ("run_id", "status", "external_id", "registry_id", "artifact_uri", "error")
+    RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
+    EXTERNAL_ID_FIELD_NUMBER: _ClassVar[int]
+    REGISTRY_ID_FIELD_NUMBER: _ClassVar[int]
+    ARTIFACT_URI_FIELD_NUMBER: _ClassVar[int]
+    ERROR_FIELD_NUMBER: _ClassVar[int]
+    run_id: str
+    status: TrainingRunStatus
+    external_id: str
+    registry_id: str
+    artifact_uri: str
+    error: str
+    def __init__(self, run_id: _Optional[str] = ..., status: _Optional[_Union[TrainingRunStatus, str]] = ..., external_id: _Optional[str] = ..., registry_id: _Optional[str] = ..., artifact_uri: _Optional[str] = ..., error: _Optional[str] = ...) -> None: ...
+
+class ReportTrainingRunResponse(_message.Message):
+    __slots__ = ("run",)
+    RUN_FIELD_NUMBER: _ClassVar[int]
+    run: TrainingRun
+    def __init__(self, run: _Optional[_Union[TrainingRun, _Mapping]] = ...) -> None: ...

@@ -100,6 +100,11 @@ class MlServiceStub:
                 request_serializer=likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsRequest.SerializeToString,
                 response_deserializer=likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsResponse.FromString,
                 _registered_method=True)
+        self.ReportTrainingRun = channel.unary_unary(
+                '/likho.ml.v1.MlService/ReportTrainingRun',
+                request_serializer=likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunRequest.SerializeToString,
+                response_deserializer=likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunResponse.FromString,
+                _registered_method=True)
 
 
 class MlServiceServicer:
@@ -221,6 +226,14 @@ class MlServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ReportTrainingRun(self, request, context):
+        """What the fine-tuning job tells about its run: running, failed, or completed with the
+        weights it wrote - which registers the new model (fine-tuned from the run's base model).
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MlServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -303,6 +316,11 @@ def add_MlServiceServicer_to_server(servicer, server):
                     servicer.ListTrainingRuns,
                     request_deserializer=likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsRequest.FromString,
                     response_serializer=likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsResponse.SerializeToString,
+            ),
+            'ReportTrainingRun': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReportTrainingRun,
+                    request_deserializer=likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunRequest.FromString,
+                    response_serializer=likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -743,6 +761,33 @@ class MlService:
             '/likho.ml.v1.MlService/ListTrainingRuns',
             likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsRequest.SerializeToString,
             likho_dot_ml_dot_v1_dot_ml__pb2.ListTrainingRunsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ReportTrainingRun(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/likho.ml.v1.MlService/ReportTrainingRun',
+            likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunRequest.SerializeToString,
+            likho_dot_ml_dot_v1_dot_ml__pb2.ReportTrainingRunResponse.FromString,
             options,
             channel_credentials,
             insecure,

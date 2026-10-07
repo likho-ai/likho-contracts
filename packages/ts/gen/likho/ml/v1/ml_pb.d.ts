@@ -1143,6 +1143,71 @@ export declare type ListTrainingRunsResponse = Message<"likho.ml.v1.ListTraining
 export declare const ListTrainingRunsResponseSchema: GenMessage<ListTrainingRunsResponse>;
 
 /**
+ * @generated from message likho.ml.v1.ReportTrainingRunRequest
+ */
+export declare type ReportTrainingRunRequest = Message<"likho.ml.v1.ReportTrainingRunRequest"> & {
+  /**
+   * @generated from field: string run_id = 1;
+   */
+  runId: string;
+
+  /**
+   * RUNNING, COMPLETED or FAILED.
+   *
+   * @generated from field: likho.ml.v1.TrainingRunStatus status = 2;
+   */
+  status: TrainingRunStatus;
+
+  /**
+   * The run's own id where it runs (a job name), when it has one.
+   *
+   * @generated from field: string external_id = 3;
+   */
+  externalId: string;
+
+  /**
+   * COMPLETED: the new model's registry id (faster-whisper/likho-2026-10) and where its weights are.
+   *
+   * @generated from field: string registry_id = 4;
+   */
+  registryId: string;
+
+  /**
+   * @generated from field: string artifact_uri = 5;
+   */
+  artifactUri: string;
+
+  /**
+   * FAILED: why.
+   *
+   * @generated from field: string error = 6;
+   */
+  error: string;
+};
+
+/**
+ * Describes the message likho.ml.v1.ReportTrainingRunRequest.
+ * Use `create(ReportTrainingRunRequestSchema)` to create a new message.
+ */
+export declare const ReportTrainingRunRequestSchema: GenMessage<ReportTrainingRunRequest>;
+
+/**
+ * @generated from message likho.ml.v1.ReportTrainingRunResponse
+ */
+export declare type ReportTrainingRunResponse = Message<"likho.ml.v1.ReportTrainingRunResponse"> & {
+  /**
+   * @generated from field: likho.ml.v1.TrainingRun run = 1;
+   */
+  run?: TrainingRun | undefined;
+};
+
+/**
+ * Describes the message likho.ml.v1.ReportTrainingRunResponse.
+ * Use `create(ReportTrainingRunResponseSchema)` to create a new message.
+ */
+export declare const ReportTrainingRunResponseSchema: GenMessage<ReportTrainingRunResponse>;
+
+/**
  * @generated from enum likho.ml.v1.ModelStatus
  */
 export enum ModelStatus {
@@ -1403,6 +1468,17 @@ export declare const MlService: GenService<{
     methodKind: "unary";
     input: typeof ListTrainingRunsRequestSchema;
     output: typeof ListTrainingRunsResponseSchema;
+  },
+  /**
+   * What the fine-tuning job tells about its run: running, failed, or completed with the
+   * weights it wrote - which registers the new model (fine-tuned from the run's base model).
+   *
+   * @generated from rpc likho.ml.v1.MlService.ReportTrainingRun
+   */
+  reportTrainingRun: {
+    methodKind: "unary";
+    input: typeof ReportTrainingRunRequestSchema;
+    output: typeof ReportTrainingRunResponseSchema;
   },
 }>;
 
