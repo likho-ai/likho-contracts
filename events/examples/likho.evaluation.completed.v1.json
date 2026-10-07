@@ -1,0 +1,23 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E20",
+  "source": "likho-ml",
+  "type": "likho.evaluation.completed.v1",
+  "time": "2026-10-07T07:00:00Z",
+  "subject": "evl_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "evaluation_id": "evl_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "workspace_id": "wsp_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "model_id": "mdl_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "registry_id": "faster-whisper/turbo",
+    "items_scored": 24,
+    "items_failed": 0,
+    "audio_seconds": 3612.5,
+    "realtime_factor": 2.4,
+    "wer_script": 0.182,
+    "cer_script": 0.094,
+    "wer_roman": 0.211,
+    "cer_roman": 0.103
+  }
+}

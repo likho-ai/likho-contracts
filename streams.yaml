@@ -9,7 +9,7 @@
 streams:
   LIKHO:
     description: Business events, kept 30 days
-    subjects: ["likho.media.*", "likho.transcription.*", "likho.vocabulary.*", "likho.insights.*", "likho.import.*", "likho.recording.*", "likho.settings.*", "likho.dead"]
+    subjects: ["likho.media.*", "likho.transcription.*", "likho.vocabulary.*", "likho.insights.*", "likho.import.*", "likho.recording.*", "likho.settings.*", "likho.model.*", "likho.evaluation.*", "likho.dead"]
     max_age: 30d
   LIKHO_LIVE:
     description: Live transcript lines, only useful while a job runs
@@ -69,8 +69,9 @@ events:
   likho.transcript.corrected.v1:
     subject: likho.transcript.corrected
     stream: LIKHO_KEEP
-    producer: likho-api
-    consumers: [likho-search, likho-analytics]
+    producer: likho-transcription
+    # likho-ml keeps each corrected line as a training example.
+    consumers: [likho-search, likho-analytics, likho-ml]
   likho.import.requested.v1:
     subject: likho.import.requested
     stream: LIKHO
@@ -113,6 +114,29 @@ events:
     stream: LIKHO
     producer: likho-api
     consumers: [likho-connector-ameyo, likho-insights, likho-analytics]
+
+  likho.model.registered.v1:
+    subject: likho.model.registered
+    stream: LIKHO
+    producer: likho-ml
+    consumers: [likho-analytics]
+  likho.model.chosen.v1:
+    subject: likho.model.chosen
+    stream: LIKHO
+    producer: likho-ml
+    # likho-transcription loads the new default for the next job; likho-api tells the open pages.
+    consumers: [likho-transcription, likho-api, likho-analytics]
+  likho.evaluation.completed.v1:
+    subject: likho.evaluation.completed
+    stream: LIKHO
+    producer: likho-ml
+    # likho-api tells the open admin pages.
+    consumers: [likho-api, likho-analytics]
+  likho.evaluation.failed.v1:
+    subject: likho.evaluation.failed
+    stream: LIKHO
+    producer: likho-ml
+    consumers: [likho-api]
 
 # Durable consumer settings. Name = <service>-<last part of the subject>.
 consumer_defaults:
