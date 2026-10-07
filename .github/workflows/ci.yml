@@ -2,7 +2,7 @@ name: ci
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging, development]
   pull_request:
 
 jobs:
@@ -19,9 +19,9 @@ jobs:
       - run: npm ci
       - name: Lint and build the protos
         run: npm run lint && npm run build
-      - name: Breaking changes against main
+      - name: Breaking changes against the branch the pull request goes into
         if: github.event_name == 'pull_request'
-        run: npx buf breaking --against "https://github.com/${{ github.repository }}.git#branch=main"
+        run: npx buf breaking --against "https://github.com/${{ github.repository }}.git#branch=${{ github.base_ref }}"
       - name: Validate events and streams
         run: npm run validate
       - name: Generate code (TypeScript, Python, Go)
