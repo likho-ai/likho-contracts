@@ -516,7 +516,10 @@ type TranscribeRequest struct {
 	// The audio to read, as known to likho-media.
 	MediaId string `protobuf:"bytes,4,opt,name=media_id,json=mediaId,proto3" json:"media_id,omitempty"`
 	// Whose glossary, spellings and language policy apply.
-	WorkspaceId   string `protobuf:"bytes,5,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	WorkspaceId string `protobuf:"bytes,5,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	// An evaluation (likho-ml scoring a model on the gold set): the transcript is returned but not
+	// kept - the recording's versions do not change, no event is published. Its version is 0.
+	Evaluation    bool `protobuf:"varint,6,opt,name=evaluation,proto3" json:"evaluation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -584,6 +587,13 @@ func (x *TranscribeRequest) GetWorkspaceId() string {
 		return x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *TranscribeRequest) GetEvaluation() bool {
+	if x != nil {
+		return x.Evaluation
+	}
+	return false
 }
 
 type TranscribeStarted struct {
@@ -1457,13 +1467,16 @@ const file_likho_transcription_v1_transcription_proto_rawDesc = "" +
 	"\x16ListTranscriptsRequest\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\"_\n" +
 	"\x17ListTranscriptsResponse\x12D\n" +
-	"\vtranscripts\x18\x01 \x03(\v2\".likho.transcription.v1.TranscriptR\vtranscripts\"\xc9\x01\n" +
+	"\vtranscripts\x18\x01 \x03(\v2\".likho.transcription.v1.TranscriptR\vtranscripts\"\xe9\x01\n" +
 	"\x11TranscribeRequest\x12!\n" +
 	"\frecording_id\x18\x01 \x01(\tR\vrecordingId\x12*\n" +
 	"\x11model_registry_id\x18\x02 \x01(\tR\x0fmodelRegistryId\x12'\n" +
 	"\x0flanguage_policy\x18\x03 \x01(\tR\x0elanguagePolicy\x12\x19\n" +
 	"\bmedia_id\x18\x04 \x01(\tR\amediaId\x12!\n" +
-	"\fworkspace_id\x18\x05 \x01(\tR\vworkspaceId\"x\n" +
+	"\fworkspace_id\x18\x05 \x01(\tR\vworkspaceId\x12\x1e\n" +
+	"\n" +
+	"evaluation\x18\x06 \x01(\bR\n" +
+	"evaluation\"x\n" +
 	"\x11TranscribeStarted\x12#\n" +
 	"\raudio_seconds\x18\x01 \x01(\x01R\faudioSeconds\x12>\n" +
 	"\blanguage\x18\x02 \x01(\v2\".likho.common.v1.LanguageDetectionR\blanguage\"\xde\x01\n" +

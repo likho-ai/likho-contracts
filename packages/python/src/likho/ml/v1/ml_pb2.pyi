@@ -176,7 +176,7 @@ class RetireModelResponse(_message.Message):
     def __init__(self, model: _Optional[_Union[Model, _Mapping]] = ...) -> None: ...
 
 class GoldItem(_message.Message):
-    __slots__ = ("id", "workspace_id", "recording_id", "transcript_id", "transcript_version", "language", "audio_seconds", "lines", "added_by", "added_at")
+    __slots__ = ("id", "workspace_id", "recording_id", "transcript_id", "transcript_version", "language", "audio_seconds", "lines", "added_by", "added_at", "media_id")
     ID_FIELD_NUMBER: _ClassVar[int]
     WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
     RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
@@ -187,6 +187,7 @@ class GoldItem(_message.Message):
     LINES_FIELD_NUMBER: _ClassVar[int]
     ADDED_BY_FIELD_NUMBER: _ClassVar[int]
     ADDED_AT_FIELD_NUMBER: _ClassVar[int]
+    MEDIA_ID_FIELD_NUMBER: _ClassVar[int]
     id: str
     workspace_id: str
     recording_id: str
@@ -197,19 +198,22 @@ class GoldItem(_message.Message):
     lines: int
     added_by: str
     added_at: _timestamp_pb2.Timestamp
-    def __init__(self, id: _Optional[str] = ..., workspace_id: _Optional[str] = ..., recording_id: _Optional[str] = ..., transcript_id: _Optional[str] = ..., transcript_version: _Optional[int] = ..., language: _Optional[str] = ..., audio_seconds: _Optional[float] = ..., lines: _Optional[int] = ..., added_by: _Optional[str] = ..., added_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    media_id: str
+    def __init__(self, id: _Optional[str] = ..., workspace_id: _Optional[str] = ..., recording_id: _Optional[str] = ..., transcript_id: _Optional[str] = ..., transcript_version: _Optional[int] = ..., language: _Optional[str] = ..., audio_seconds: _Optional[float] = ..., lines: _Optional[int] = ..., added_by: _Optional[str] = ..., added_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., media_id: _Optional[str] = ...) -> None: ...
 
 class AddToGoldSetRequest(_message.Message):
-    __slots__ = ("workspace_id", "recording_id", "transcript_id", "user_id")
+    __slots__ = ("workspace_id", "recording_id", "transcript_id", "user_id", "media_id")
     WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
     RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
     TRANSCRIPT_ID_FIELD_NUMBER: _ClassVar[int]
     USER_ID_FIELD_NUMBER: _ClassVar[int]
+    MEDIA_ID_FIELD_NUMBER: _ClassVar[int]
     workspace_id: str
     recording_id: str
     transcript_id: str
     user_id: str
-    def __init__(self, workspace_id: _Optional[str] = ..., recording_id: _Optional[str] = ..., transcript_id: _Optional[str] = ..., user_id: _Optional[str] = ...) -> None: ...
+    media_id: str
+    def __init__(self, workspace_id: _Optional[str] = ..., recording_id: _Optional[str] = ..., transcript_id: _Optional[str] = ..., user_id: _Optional[str] = ..., media_id: _Optional[str] = ...) -> None: ...
 
 class AddToGoldSetResponse(_message.Message):
     __slots__ = ("item",)

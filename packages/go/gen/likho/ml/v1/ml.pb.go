@@ -1002,11 +1002,13 @@ type GoldItem struct {
 	TranscriptId      string `protobuf:"bytes,4,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
 	TranscriptVersion uint32 `protobuf:"varint,5,opt,name=transcript_version,json=transcriptVersion,proto3" json:"transcript_version,omitempty"`
 	// The reference's language as transcribed (hi, mr, ...), and its audio length.
-	Language      string                 `protobuf:"bytes,6,opt,name=language,proto3" json:"language,omitempty"`
-	AudioSeconds  float64                `protobuf:"fixed64,7,opt,name=audio_seconds,json=audioSeconds,proto3" json:"audio_seconds,omitempty"`
-	Lines         uint32                 `protobuf:"varint,8,opt,name=lines,proto3" json:"lines,omitempty"`
-	AddedBy       string                 `protobuf:"bytes,9,opt,name=added_by,json=addedBy,proto3" json:"added_by,omitempty"`
-	AddedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=added_at,json=addedAt,proto3" json:"added_at,omitempty"`
+	Language     string                 `protobuf:"bytes,6,opt,name=language,proto3" json:"language,omitempty"`
+	AudioSeconds float64                `protobuf:"fixed64,7,opt,name=audio_seconds,json=audioSeconds,proto3" json:"audio_seconds,omitempty"`
+	Lines        uint32                 `protobuf:"varint,8,opt,name=lines,proto3" json:"lines,omitempty"`
+	AddedBy      string                 `protobuf:"bytes,9,opt,name=added_by,json=addedBy,proto3" json:"added_by,omitempty"`
+	AddedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=added_at,json=addedAt,proto3" json:"added_at,omitempty"`
+	// The recording's audio (likho-media), which an evaluation transcribes again.
+	MediaId       string `protobuf:"bytes,11,opt,name=media_id,json=mediaId,proto3" json:"media_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1111,13 +1113,22 @@ func (x *GoldItem) GetAddedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *GoldItem) GetMediaId() string {
+	if x != nil {
+		return x.MediaId
+	}
+	return ""
+}
+
 type AddToGoldSetRequest struct {
 	state       protoimpl.MessageState `protogen:"open.v1"`
 	WorkspaceId string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	RecordingId string                 `protobuf:"bytes,2,opt,name=recording_id,json=recordingId,proto3" json:"recording_id,omitempty"`
 	// Empty = the recording's latest transcript.
-	TranscriptId  string `protobuf:"bytes,3,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
-	UserId        string `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TranscriptId string `protobuf:"bytes,3,opt,name=transcript_id,json=transcriptId,proto3" json:"transcript_id,omitempty"`
+	UserId       string `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// The recording's audio (likho-api knows it): an evaluation transcribes it again.
+	MediaId       string `protobuf:"bytes,5,opt,name=media_id,json=mediaId,proto3" json:"media_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1176,6 +1187,13 @@ func (x *AddToGoldSetRequest) GetTranscriptId() string {
 func (x *AddToGoldSetRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
+	}
+	return ""
+}
+
+func (x *AddToGoldSetRequest) GetMediaId() string {
+	if x != nil {
+		return x.MediaId
 	}
 	return ""
 }
@@ -2693,7 +2711,7 @@ const file_likho_ml_v1_ml_proto_rawDesc = "" +
 	"\bmodel_id\x18\x01 \x01(\tR\amodelId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"?\n" +
 	"\x13RetireModelResponse\x12(\n" +
-	"\x05model\x18\x01 \x01(\v2\x12.likho.ml.v1.ModelR\x05model\"\xdd\x02\n" +
+	"\x05model\x18\x01 \x01(\v2\x12.likho.ml.v1.ModelR\x05model\"\xf8\x02\n" +
 	"\bGoldItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12!\n" +
@@ -2705,12 +2723,14 @@ const file_likho_ml_v1_ml_proto_rawDesc = "" +
 	"\x05lines\x18\b \x01(\rR\x05lines\x12\x19\n" +
 	"\badded_by\x18\t \x01(\tR\aaddedBy\x125\n" +
 	"\badded_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\aaddedAt\"\x99\x01\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\aaddedAt\x12\x19\n" +
+	"\bmedia_id\x18\v \x01(\tR\amediaId\"\xb4\x01\n" +
 	"\x13AddToGoldSetRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12!\n" +
 	"\frecording_id\x18\x02 \x01(\tR\vrecordingId\x12#\n" +
 	"\rtranscript_id\x18\x03 \x01(\tR\ftranscriptId\x12\x17\n" +
-	"\auser_id\x18\x04 \x01(\tR\x06userId\"A\n" +
+	"\auser_id\x18\x04 \x01(\tR\x06userId\x12\x19\n" +
+	"\bmedia_id\x18\x05 \x01(\tR\amediaId\"A\n" +
 	"\x14AddToGoldSetResponse\x12)\n" +
 	"\x04item\x18\x01 \x01(\v2\x15.likho.ml.v1.GoldItemR\x04item\"y\n" +
 	"\x18RemoveFromGoldSetRequest\x12!\n" +

@@ -157,6 +157,8 @@ message GoldItem {
   uint32 lines = 8;
   string added_by = 9;
   google.protobuf.Timestamp added_at = 10;
+  // The recording's audio (likho-media), which an evaluation transcribes again.
+  string media_id = 11;
 }
 
 message AddToGoldSetRequest {
@@ -165,6 +167,8 @@ message AddToGoldSetRequest {
   // Empty = the recording's latest transcript.
   string transcript_id = 3;
   string user_id = 4;
+  // The recording's audio (likho-api knows it): an evaluation transcribes it again.
+  string media_id = 5;
 }
 
 message AddToGoldSetResponse {

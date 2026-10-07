@@ -93,18 +93,20 @@ class ListTranscriptsResponse(_message.Message):
     def __init__(self, transcripts: _Optional[_Iterable[_Union[Transcript, _Mapping]]] = ...) -> None: ...
 
 class TranscribeRequest(_message.Message):
-    __slots__ = ("recording_id", "model_registry_id", "language_policy", "media_id", "workspace_id")
+    __slots__ = ("recording_id", "model_registry_id", "language_policy", "media_id", "workspace_id", "evaluation")
     RECORDING_ID_FIELD_NUMBER: _ClassVar[int]
     MODEL_REGISTRY_ID_FIELD_NUMBER: _ClassVar[int]
     LANGUAGE_POLICY_FIELD_NUMBER: _ClassVar[int]
     MEDIA_ID_FIELD_NUMBER: _ClassVar[int]
     WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    EVALUATION_FIELD_NUMBER: _ClassVar[int]
     recording_id: str
     model_registry_id: str
     language_policy: str
     media_id: str
     workspace_id: str
-    def __init__(self, recording_id: _Optional[str] = ..., model_registry_id: _Optional[str] = ..., language_policy: _Optional[str] = ..., media_id: _Optional[str] = ..., workspace_id: _Optional[str] = ...) -> None: ...
+    evaluation: bool
+    def __init__(self, recording_id: _Optional[str] = ..., model_registry_id: _Optional[str] = ..., language_policy: _Optional[str] = ..., media_id: _Optional[str] = ..., workspace_id: _Optional[str] = ..., evaluation: _Optional[bool] = ...) -> None: ...
 
 class TranscribeStarted(_message.Message):
     __slots__ = ("audio_seconds", "language")
