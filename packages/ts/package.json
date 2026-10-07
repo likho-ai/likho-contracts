@@ -1,6 +1,6 @@
 {
   "name": "@likho-ai/contracts",
-  "version": "0.13.0",
+  "version": "0.14.0-rc.1",
   "description": "Likho gRPC messages and service descriptors for TypeScript, generated from the protos in likho-contracts",
   "type": "module",
   "sideEffects": false,

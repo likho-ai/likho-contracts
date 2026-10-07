@@ -75,6 +75,7 @@ release by CI) and `packages/go/vX.Y.Z` (the Go module).
 | `likho.insights.v1.InsightsService` | likho-insights | `GetInsights`, `Analyse`, `GetStatus` (what a model says about a call: summary, products, sentiment, the auditor's checks) |
 | `likho.analytics.v1.AnalyticsService` | likho-analytics | `GetOverview`, `GetTimeseries`, `GetBreakdown` (the numbers behind the calls in a window: calls, minutes, speed, languages, by agent and campaign, what the model made of them) |
 | `likho.dialer.v1.DialerService` | likho-connector-ameyo | `ListCampaigns`, `ListAgents`, `ListCalls`, `GetCall` (what the dialer knows about its calls, from its reporting database), `GetStatus` (the connector's schedule and budget) |
+| `likho.ml.v1.MlService` | likho-ml | `ListModels`, `GetModel`, `GetDefault`, `RegisterModel`, `SetDefault`, `RetireModel` (the speech models and which one transcribes); `AddToGoldSet`, `RemoveFromGoldSet`, `ListGoldSet`; `StartEvaluation`, `GetEvaluation`, `ListEvaluations` (word and character error rates on the gold set, both layers); `GetTrainingStats`, `ExportDataset`, `StartTrainingRun`, `ListTrainingRuns` (corrections as training data, fine-tuning) |
 
 Shared messages are in `likho.common.v1`: `Segment` (one transcript line with both text
 layers), `LanguageDetection`, `DialerCall`, `Script`.
@@ -91,7 +92,7 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | `likho.transcription.completed.v1` | `likho.transcription.completed` | LIKHO | likho-transcription | likho-api, likho-search, likho-insights, likho-connector-ameyo (write-back), likho-analytics |
 | `likho.transcription.failed.v1` | `likho.transcription.failed` | LIKHO | likho-transcription | likho-api, likho-analytics |
 | `likho.vocabulary.updated.v1` | `likho.vocabulary.updated` | LIKHO | likho-language | likho-transcription, likho-analytics |
-| `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-api | likho-search, likho-analytics |
+| `likho.transcript.corrected.v1` | `likho.transcript.corrected` | LIKHO_KEEP | likho-transcription | likho-search, likho-analytics, likho-ml (training examples) |
 | `likho.import.requested.v1` | `likho.import.requested` | LIKHO | likho-api | likho-connector-ameyo (fetch this call from the dialer), likho-analytics |
 | `likho.import.completed.v1` | `likho.import.completed` | LIKHO | likho-connector-ameyo | likho-api, likho-analytics |
 | `likho.import.failed.v1` | `likho.import.failed` | LIKHO | likho-connector-ameyo | likho-api, likho-analytics |
@@ -100,6 +101,10 @@ layers), `LanguageDetection`, `DialerCall`, `Script`.
 | `likho.insights.completed.v1` | `likho.insights.completed` | LIKHO | likho-insights | likho-api, likho-analytics |
 | `likho.insights.failed.v1` | `likho.insights.failed` | LIKHO | likho-insights | likho-api, likho-analytics |
 | `likho.settings.changed.v1` | `likho.settings.changed` | LIKHO | likho-api | likho-connector-ameyo, likho-insights, likho-analytics (the keys only; the values are read from likho-api) |
+| `likho.model.registered.v1` | `likho.model.registered` | LIKHO | likho-ml | likho-analytics |
+| `likho.model.chosen.v1` | `likho.model.chosen` | LIKHO | likho-ml | likho-transcription (the default for the next job), likho-api, likho-analytics |
+| `likho.evaluation.completed.v1` | `likho.evaluation.completed` | LIKHO | likho-ml | likho-api, likho-analytics |
+| `likho.evaluation.failed.v1` | `likho.evaluation.failed` | LIKHO | likho-ml | likho-api |
 
 ## Rules
 

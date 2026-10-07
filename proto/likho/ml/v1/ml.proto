@@ -1,0 +1,347 @@
+syntax = "proto3";
+
+package likho.ml.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Owned by likho-ml: which speech models exist and which one transcribes by default, how well
+// each does on a workspace's gold set (calls a person has corrected with care), the training
+// examples people's corrections make, and fine-tuning runs.
+//
+// A model is named by its registry id, "<engine>/<name>" (faster-whisper/turbo, or a fine-tuned
+// faster-whisper/likho-2026-10); the transcription service loads models by that id.
+service MlService {
+  // The registered models, the default first.
+  rpc ListModels(ListModelsRequest) returns (ListModelsResponse);
+  rpc GetModel(GetModelRequest) returns (GetModelResponse);
+  // The model new transcriptions use. Never empty once likho-ml has started.
+  rpc GetDefault(GetDefaultRequest) returns (GetDefaultResponse);
+  // Adds a model (a fine-tuned one, or another size of an engine). Its registry id must be new.
+  rpc RegisterModel(RegisterModelRequest) returns (RegisterModelResponse);
+  // Makes a model the default; publishes likho.model.chosen.
+  rpc SetDefault(SetDefaultRequest) returns (SetDefaultResponse);
+  // A retired model is kept (its evaluations and transcripts name it) but cannot be the default.
+  rpc RetireModel(RetireModelRequest) returns (RetireModelResponse);
+
+  // The gold set: recordings whose latest transcript a person has checked line by line. The
+  // reference text of an evaluation is that transcript as it was when the recording was added.
+  rpc AddToGoldSet(AddToGoldSetRequest) returns (AddToGoldSetResponse);
+  rpc RemoveFromGoldSet(RemoveFromGoldSetRequest) returns (RemoveFromGoldSetResponse);
+  rpc ListGoldSet(ListGoldSetRequest) returns (ListGoldSetResponse);
+
+  // Transcribes every recording of the gold set with a model and scores it against the
+  // references. Answers at once (status queued); likho.evaluation.completed follows.
+  rpc StartEvaluation(StartEvaluationRequest) returns (StartEvaluationResponse);
+  rpc GetEvaluation(GetEvaluationRequest) returns (GetEvaluationResponse);
+  rpc ListEvaluations(ListEvaluationsRequest) returns (ListEvaluationsResponse);
+
+  // What people's corrections have given so far: lines, audio, by layer.
+  rpc GetTrainingStats(GetTrainingStatsRequest) returns (GetTrainingStatsResponse);
+  // Writes the training examples (audio spans and corrected text) to the models bucket as a
+  // dataset a fine-tuning job reads.
+  rpc ExportDataset(ExportDatasetRequest) returns (ExportDatasetResponse);
+  // Records a fine-tuning run of a dataset on a base model and hands it to the configured
+  // launcher (a GPU machine or a cloud job); without one the run waits as "pending".
+  rpc StartTrainingRun(StartTrainingRunRequest) returns (StartTrainingRunResponse);
+  rpc ListTrainingRuns(ListTrainingRunsRequest) returns (ListTrainingRunsResponse);
+}
+
+// ------------------------------------------------------------------------------------ models
+
+enum ModelStatus {
+  MODEL_STATUS_UNSPECIFIED = 0;
+  MODEL_STATUS_AVAILABLE = 1;
+  MODEL_STATUS_RETIRED = 2;
+}
+
+// Error rates, 0 = perfect (they can exceed 1 when the hypothesis is much longer).
+message Scores {
+  // Word and character error rate of the script layer (Devanagari, Arabic script, ...).
+  double wer_script = 1;
+  double cer_script = 2;
+  // The same for the roman layer (Hinglish in Latin letters), spelling variants forgiven.
+  double wer_roman = 3;
+  double cer_roman = 4;
+}
+
+message Model {
+  string id = 1;
+  // "<engine>/<name>", e.g. faster-whisper/turbo.
+  string registry_id = 2;
+  string engine = 3;
+  string name = 4;
+  string description = 5;
+  // ISO 639-1 codes the model is meant for; empty = any.
+  repeated string languages = 6;
+  // Where the weights are: empty for an engine's own published sizes (downloaded by name),
+  // s3://likho-models/... for a fine-tuned one.
+  string artifact_uri = 7;
+  // The model this one was fine-tuned from, if any.
+  string base_model_id = 8;
+  ModelStatus status = 9;
+  bool is_default = 10;
+  // The newest completed evaluation, if any.
+  string latest_evaluation_id = 11;
+  Scores latest_scores = 12;
+  string created_by = 13;
+  google.protobuf.Timestamp created_at = 14;
+}
+
+message ListModelsRequest {
+  bool include_retired = 1;
+}
+
+message ListModelsResponse {
+  repeated Model models = 1;
+}
+
+message GetModelRequest {
+  // One of the two.
+  string model_id = 1;
+  string registry_id = 2;
+}
+
+message GetModelResponse {
+  Model model = 1;
+}
+
+message GetDefaultRequest {}
+
+message GetDefaultResponse {
+  Model model = 1;
+}
+
+message RegisterModelRequest {
+  string registry_id = 1;
+  string description = 2;
+  repeated string languages = 3;
+  string artifact_uri = 4;
+  string base_model_id = 5;
+  string user_id = 6;
+}
+
+message RegisterModelResponse {
+  Model model = 1;
+}
+
+message SetDefaultRequest {
+  string model_id = 1;
+  string user_id = 2;
+}
+
+message SetDefaultResponse {
+  Model model = 1;
+}
+
+message RetireModelRequest {
+  string model_id = 1;
+  string user_id = 2;
+}
+
+message RetireModelResponse {
+  Model model = 1;
+}
+
+// ---------------------------------------------------------------------------------- gold set
+
+message GoldItem {
+  string id = 1;
+  string workspace_id = 2;
+  string recording_id = 3;
+  // The corrected transcript version that is the reference.
+  string transcript_id = 4;
+  uint32 transcript_version = 5;
+  // The reference's language as transcribed (hi, mr, ...), and its audio length.
+  string language = 6;
+  double audio_seconds = 7;
+  uint32 lines = 8;
+  string added_by = 9;
+  google.protobuf.Timestamp added_at = 10;
+}
+
+message AddToGoldSetRequest {
+  string workspace_id = 1;
+  string recording_id = 2;
+  // Empty = the recording's latest transcript.
+  string transcript_id = 3;
+  string user_id = 4;
+}
+
+message AddToGoldSetResponse {
+  GoldItem item = 1;
+}
+
+message RemoveFromGoldSetRequest {
+  string workspace_id = 1;
+  string recording_id = 2;
+  string user_id = 3;
+}
+
+message RemoveFromGoldSetResponse {}
+
+message ListGoldSetRequest {
+  string workspace_id = 1;
+}
+
+message ListGoldSetResponse {
+  repeated GoldItem items = 1;
+  double audio_seconds = 2;
+}
+
+// ------------------------------------------------------------------------------- evaluations
+
+enum EvaluationStatus {
+  EVALUATION_STATUS_UNSPECIFIED = 0;
+  EVALUATION_STATUS_QUEUED = 1;
+  EVALUATION_STATUS_RUNNING = 2;
+  EVALUATION_STATUS_COMPLETED = 3;
+  EVALUATION_STATUS_FAILED = 4;
+}
+
+// One gold recording, transcribed by the model and scored.
+message EvaluationItem {
+  string recording_id = 1;
+  string reference_transcript_id = 2;
+  Scores scores = 3;
+  // Reference words (script layer), for weighting.
+  uint32 words = 4;
+  double audio_seconds = 5;
+  double elapsed_seconds = 6;
+  // Set when this recording could not be transcribed; it then counts in no score.
+  string error = 7;
+}
+
+message Evaluation {
+  string id = 1;
+  string workspace_id = 2;
+  string model_id = 3;
+  string registry_id = 4;
+  EvaluationStatus status = 5;
+  // Over all items, weighted by reference length (corpus error rates, not a mean of means).
+  Scores scores = 6;
+  uint32 items_total = 7;
+  uint32 items_done = 8;
+  double audio_seconds = 9;
+  // Audio seconds transcribed per second of wall-clock time.
+  double realtime_factor = 10;
+  repeated EvaluationItem items = 11;
+  string error = 12;
+  string started_by = 13;
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp finished_at = 15;
+}
+
+message StartEvaluationRequest {
+  string workspace_id = 1;
+  string model_id = 2;
+  string user_id = 3;
+}
+
+message StartEvaluationResponse {
+  Evaluation evaluation = 1;
+}
+
+message GetEvaluationRequest {
+  string evaluation_id = 1;
+}
+
+message GetEvaluationResponse {
+  Evaluation evaluation = 1;
+}
+
+message ListEvaluationsRequest {
+  string workspace_id = 1;
+  // Empty = every model.
+  string model_id = 2;
+  uint32 limit = 3;
+}
+
+message ListEvaluationsResponse {
+  // Newest first, without their items.
+  repeated Evaluation evaluations = 1;
+}
+
+// ---------------------------------------------------------------------------------- training
+
+message GetTrainingStatsRequest {
+  string workspace_id = 1;
+}
+
+message GetTrainingStatsResponse {
+  // Corrected lines kept as training examples (the latest correction of each line counts).
+  uint32 examples = 1;
+  uint32 script_examples = 2;
+  uint32 roman_examples = 3;
+  uint32 recordings = 4;
+  // Audio the corrected lines cover.
+  double audio_seconds = 5;
+  google.protobuf.Timestamp last_example_at = 6;
+}
+
+message Dataset {
+  string id = 1;
+  string workspace_id = 2;
+  // s3://likho-models/datasets/<id>/ - manifest.jsonl, one line per example.
+  string uri = 3;
+  uint32 examples = 4;
+  double audio_seconds = 5;
+  // The gold set's recordings are left out, so evaluations stay honest.
+  uint32 held_out_recordings = 6;
+  string created_by = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+message ExportDatasetRequest {
+  string workspace_id = 1;
+  string user_id = 2;
+}
+
+message ExportDatasetResponse {
+  Dataset dataset = 1;
+}
+
+enum TrainingRunStatus {
+  TRAINING_RUN_STATUS_UNSPECIFIED = 0;
+  // Recorded; no launcher is configured, or it has not picked the run up yet.
+  TRAINING_RUN_STATUS_PENDING = 1;
+  TRAINING_RUN_STATUS_RUNNING = 2;
+  // Finished; its model is registered (model_id).
+  TRAINING_RUN_STATUS_COMPLETED = 3;
+  TRAINING_RUN_STATUS_FAILED = 4;
+}
+
+message TrainingRun {
+  string id = 1;
+  string workspace_id = 2;
+  string dataset_id = 3;
+  string base_model_id = 4;
+  TrainingRunStatus status = 5;
+  // Where it runs (the launcher's name), and its own id there.
+  string launcher = 6;
+  string external_id = 7;
+  // The registered result, once completed.
+  string model_id = 8;
+  string error = 9;
+  string started_by = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp finished_at = 12;
+}
+
+message StartTrainingRunRequest {
+  string workspace_id = 1;
+  string dataset_id = 2;
+  string base_model_id = 3;
+  string user_id = 4;
+}
+
+message StartTrainingRunResponse {
+  TrainingRun run = 1;
+}
+
+message ListTrainingRunsRequest {
+  string workspace_id = 1;
+}
+
+message ListTrainingRunsResponse {
+  repeated TrainingRun runs = 1;
+}
