@@ -2647,6 +2647,138 @@ func (x *ListTrainingRunsResponse) GetRuns() []*TrainingRun {
 	return nil
 }
 
+type ReportTrainingRunRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	RunId string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	// RUNNING, COMPLETED or FAILED.
+	Status TrainingRunStatus `protobuf:"varint,2,opt,name=status,proto3,enum=likho.ml.v1.TrainingRunStatus" json:"status,omitempty"`
+	// The run's own id where it runs (a job name), when it has one.
+	ExternalId string `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3" json:"external_id,omitempty"`
+	// COMPLETED: the new model's registry id (faster-whisper/likho-2026-10) and where its weights are.
+	RegistryId  string `protobuf:"bytes,4,opt,name=registry_id,json=registryId,proto3" json:"registry_id,omitempty"`
+	ArtifactUri string `protobuf:"bytes,5,opt,name=artifact_uri,json=artifactUri,proto3" json:"artifact_uri,omitempty"`
+	// FAILED: why.
+	Error         string `protobuf:"bytes,6,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportTrainingRunRequest) Reset() {
+	*x = ReportTrainingRunRequest{}
+	mi := &file_likho_ml_v1_ml_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportTrainingRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportTrainingRunRequest) ProtoMessage() {}
+
+func (x *ReportTrainingRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_ml_v1_ml_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportTrainingRunRequest.ProtoReflect.Descriptor instead.
+func (*ReportTrainingRunRequest) Descriptor() ([]byte, []int) {
+	return file_likho_ml_v1_ml_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *ReportTrainingRunRequest) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *ReportTrainingRunRequest) GetStatus() TrainingRunStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TrainingRunStatus_TRAINING_RUN_STATUS_UNSPECIFIED
+}
+
+func (x *ReportTrainingRunRequest) GetExternalId() string {
+	if x != nil {
+		return x.ExternalId
+	}
+	return ""
+}
+
+func (x *ReportTrainingRunRequest) GetRegistryId() string {
+	if x != nil {
+		return x.RegistryId
+	}
+	return ""
+}
+
+func (x *ReportTrainingRunRequest) GetArtifactUri() string {
+	if x != nil {
+		return x.ArtifactUri
+	}
+	return ""
+}
+
+func (x *ReportTrainingRunRequest) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+type ReportTrainingRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Run           *TrainingRun           `protobuf:"bytes,1,opt,name=run,proto3" json:"run,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReportTrainingRunResponse) Reset() {
+	*x = ReportTrainingRunResponse{}
+	mi := &file_likho_ml_v1_ml_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReportTrainingRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportTrainingRunResponse) ProtoMessage() {}
+
+func (x *ReportTrainingRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_likho_ml_v1_ml_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportTrainingRunResponse.ProtoReflect.Descriptor instead.
+func (*ReportTrainingRunResponse) Descriptor() ([]byte, []int) {
+	return file_likho_ml_v1_ml_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *ReportTrainingRunResponse) GetRun() *TrainingRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
 var File_likho_ml_v1_ml_proto protoreflect.FileDescriptor
 
 const file_likho_ml_v1_ml_proto_rawDesc = "" +
@@ -2852,7 +2984,18 @@ const file_likho_ml_v1_ml_proto_rawDesc = "" +
 	"\x17ListTrainingRunsRequest\x12!\n" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\"H\n" +
 	"\x18ListTrainingRunsResponse\x12,\n" +
-	"\x04runs\x18\x01 \x03(\v2\x18.likho.ml.v1.TrainingRunR\x04runs*a\n" +
+	"\x04runs\x18\x01 \x03(\v2\x18.likho.ml.v1.TrainingRunR\x04runs\"\xe4\x01\n" +
+	"\x18ReportTrainingRunRequest\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x126\n" +
+	"\x06status\x18\x02 \x01(\x0e2\x1e.likho.ml.v1.TrainingRunStatusR\x06status\x12\x1f\n" +
+	"\vexternal_id\x18\x03 \x01(\tR\n" +
+	"externalId\x12\x1f\n" +
+	"\vregistry_id\x18\x04 \x01(\tR\n" +
+	"registryId\x12!\n" +
+	"\fartifact_uri\x18\x05 \x01(\tR\vartifactUri\x12\x14\n" +
+	"\x05error\x18\x06 \x01(\tR\x05error\"G\n" +
+	"\x19ReportTrainingRunResponse\x12*\n" +
+	"\x03run\x18\x01 \x01(\v2\x18.likho.ml.v1.TrainingRunR\x03run*a\n" +
 	"\vModelStatus\x12\x1c\n" +
 	"\x18MODEL_STATUS_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16MODEL_STATUS_AVAILABLE\x10\x01\x12\x18\n" +
@@ -2868,7 +3011,7 @@ const file_likho_ml_v1_ml_proto_rawDesc = "" +
 	"\x1bTRAINING_RUN_STATUS_PENDING\x10\x01\x12\x1f\n" +
 	"\x1bTRAINING_RUN_STATUS_RUNNING\x10\x02\x12!\n" +
 	"\x1dTRAINING_RUN_STATUS_COMPLETED\x10\x03\x12\x1e\n" +
-	"\x1aTRAINING_RUN_STATUS_FAILED\x10\x042\x85\v\n" +
+	"\x1aTRAINING_RUN_STATUS_FAILED\x10\x042\xe9\v\n" +
 	"\tMlService\x12M\n" +
 	"\n" +
 	"ListModels\x12\x1e.likho.ml.v1.ListModelsRequest\x1a\x1f.likho.ml.v1.ListModelsResponse\x12G\n" +
@@ -2888,7 +3031,8 @@ const file_likho_ml_v1_ml_proto_rawDesc = "" +
 	"\x10GetTrainingStats\x12$.likho.ml.v1.GetTrainingStatsRequest\x1a%.likho.ml.v1.GetTrainingStatsResponse\x12V\n" +
 	"\rExportDataset\x12!.likho.ml.v1.ExportDatasetRequest\x1a\".likho.ml.v1.ExportDatasetResponse\x12_\n" +
 	"\x10StartTrainingRun\x12$.likho.ml.v1.StartTrainingRunRequest\x1a%.likho.ml.v1.StartTrainingRunResponse\x12_\n" +
-	"\x10ListTrainingRuns\x12$.likho.ml.v1.ListTrainingRunsRequest\x1a%.likho.ml.v1.ListTrainingRunsResponseB\xae\x01\n" +
+	"\x10ListTrainingRuns\x12$.likho.ml.v1.ListTrainingRunsRequest\x1a%.likho.ml.v1.ListTrainingRunsResponse\x12b\n" +
+	"\x11ReportTrainingRun\x12%.likho.ml.v1.ReportTrainingRunRequest\x1a&.likho.ml.v1.ReportTrainingRunResponseB\xae\x01\n" +
 	"\x0fcom.likho.ml.v1B\aMlProtoP\x01ZDgithub.com/likho-ai/likho-contracts/packages/go/gen/likho/ml/v1;mlv1\xa2\x02\x03LMX\xaa\x02\vLikho.Ml.V1\xca\x02\vLikho\\Ml\\V1\xe2\x02\x17Likho\\Ml\\V1\\GPBMetadata\xea\x02\rLikho::Ml::V1b\x06proto3"
 
 var (
@@ -2904,7 +3048,7 @@ func file_likho_ml_v1_ml_proto_rawDescGZIP() []byte {
 }
 
 var file_likho_ml_v1_ml_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_likho_ml_v1_ml_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
+var file_likho_ml_v1_ml_proto_msgTypes = make([]protoimpl.MessageInfo, 41)
 var file_likho_ml_v1_ml_proto_goTypes = []any{
 	(ModelStatus)(0),                  // 0: likho.ml.v1.ModelStatus
 	(EvaluationStatus)(0),             // 1: likho.ml.v1.EvaluationStatus
@@ -2948,75 +3092,81 @@ var file_likho_ml_v1_ml_proto_goTypes = []any{
 	(*StartTrainingRunResponse)(nil),  // 39: likho.ml.v1.StartTrainingRunResponse
 	(*ListTrainingRunsRequest)(nil),   // 40: likho.ml.v1.ListTrainingRunsRequest
 	(*ListTrainingRunsResponse)(nil),  // 41: likho.ml.v1.ListTrainingRunsResponse
-	(*timestamppb.Timestamp)(nil),     // 42: google.protobuf.Timestamp
+	(*ReportTrainingRunRequest)(nil),  // 42: likho.ml.v1.ReportTrainingRunRequest
+	(*ReportTrainingRunResponse)(nil), // 43: likho.ml.v1.ReportTrainingRunResponse
+	(*timestamppb.Timestamp)(nil),     // 44: google.protobuf.Timestamp
 }
 var file_likho_ml_v1_ml_proto_depIdxs = []int32{
 	0,  // 0: likho.ml.v1.Model.status:type_name -> likho.ml.v1.ModelStatus
 	3,  // 1: likho.ml.v1.Model.latest_scores:type_name -> likho.ml.v1.Scores
-	42, // 2: likho.ml.v1.Model.created_at:type_name -> google.protobuf.Timestamp
+	44, // 2: likho.ml.v1.Model.created_at:type_name -> google.protobuf.Timestamp
 	4,  // 3: likho.ml.v1.ListModelsResponse.models:type_name -> likho.ml.v1.Model
 	4,  // 4: likho.ml.v1.GetModelResponse.model:type_name -> likho.ml.v1.Model
 	4,  // 5: likho.ml.v1.GetDefaultResponse.model:type_name -> likho.ml.v1.Model
 	4,  // 6: likho.ml.v1.RegisterModelResponse.model:type_name -> likho.ml.v1.Model
 	4,  // 7: likho.ml.v1.SetDefaultResponse.model:type_name -> likho.ml.v1.Model
 	4,  // 8: likho.ml.v1.RetireModelResponse.model:type_name -> likho.ml.v1.Model
-	42, // 9: likho.ml.v1.GoldItem.added_at:type_name -> google.protobuf.Timestamp
+	44, // 9: likho.ml.v1.GoldItem.added_at:type_name -> google.protobuf.Timestamp
 	17, // 10: likho.ml.v1.AddToGoldSetResponse.item:type_name -> likho.ml.v1.GoldItem
 	17, // 11: likho.ml.v1.ListGoldSetResponse.items:type_name -> likho.ml.v1.GoldItem
 	3,  // 12: likho.ml.v1.EvaluationItem.scores:type_name -> likho.ml.v1.Scores
 	1,  // 13: likho.ml.v1.Evaluation.status:type_name -> likho.ml.v1.EvaluationStatus
 	3,  // 14: likho.ml.v1.Evaluation.scores:type_name -> likho.ml.v1.Scores
 	24, // 15: likho.ml.v1.Evaluation.items:type_name -> likho.ml.v1.EvaluationItem
-	42, // 16: likho.ml.v1.Evaluation.created_at:type_name -> google.protobuf.Timestamp
-	42, // 17: likho.ml.v1.Evaluation.finished_at:type_name -> google.protobuf.Timestamp
+	44, // 16: likho.ml.v1.Evaluation.created_at:type_name -> google.protobuf.Timestamp
+	44, // 17: likho.ml.v1.Evaluation.finished_at:type_name -> google.protobuf.Timestamp
 	25, // 18: likho.ml.v1.StartEvaluationResponse.evaluation:type_name -> likho.ml.v1.Evaluation
 	25, // 19: likho.ml.v1.GetEvaluationResponse.evaluation:type_name -> likho.ml.v1.Evaluation
 	25, // 20: likho.ml.v1.ListEvaluationsResponse.evaluations:type_name -> likho.ml.v1.Evaluation
-	42, // 21: likho.ml.v1.GetTrainingStatsResponse.last_example_at:type_name -> google.protobuf.Timestamp
-	42, // 22: likho.ml.v1.Dataset.created_at:type_name -> google.protobuf.Timestamp
+	44, // 21: likho.ml.v1.GetTrainingStatsResponse.last_example_at:type_name -> google.protobuf.Timestamp
+	44, // 22: likho.ml.v1.Dataset.created_at:type_name -> google.protobuf.Timestamp
 	34, // 23: likho.ml.v1.ExportDatasetResponse.dataset:type_name -> likho.ml.v1.Dataset
 	2,  // 24: likho.ml.v1.TrainingRun.status:type_name -> likho.ml.v1.TrainingRunStatus
-	42, // 25: likho.ml.v1.TrainingRun.created_at:type_name -> google.protobuf.Timestamp
-	42, // 26: likho.ml.v1.TrainingRun.finished_at:type_name -> google.protobuf.Timestamp
+	44, // 25: likho.ml.v1.TrainingRun.created_at:type_name -> google.protobuf.Timestamp
+	44, // 26: likho.ml.v1.TrainingRun.finished_at:type_name -> google.protobuf.Timestamp
 	37, // 27: likho.ml.v1.StartTrainingRunResponse.run:type_name -> likho.ml.v1.TrainingRun
 	37, // 28: likho.ml.v1.ListTrainingRunsResponse.runs:type_name -> likho.ml.v1.TrainingRun
-	5,  // 29: likho.ml.v1.MlService.ListModels:input_type -> likho.ml.v1.ListModelsRequest
-	7,  // 30: likho.ml.v1.MlService.GetModel:input_type -> likho.ml.v1.GetModelRequest
-	9,  // 31: likho.ml.v1.MlService.GetDefault:input_type -> likho.ml.v1.GetDefaultRequest
-	11, // 32: likho.ml.v1.MlService.RegisterModel:input_type -> likho.ml.v1.RegisterModelRequest
-	13, // 33: likho.ml.v1.MlService.SetDefault:input_type -> likho.ml.v1.SetDefaultRequest
-	15, // 34: likho.ml.v1.MlService.RetireModel:input_type -> likho.ml.v1.RetireModelRequest
-	18, // 35: likho.ml.v1.MlService.AddToGoldSet:input_type -> likho.ml.v1.AddToGoldSetRequest
-	20, // 36: likho.ml.v1.MlService.RemoveFromGoldSet:input_type -> likho.ml.v1.RemoveFromGoldSetRequest
-	22, // 37: likho.ml.v1.MlService.ListGoldSet:input_type -> likho.ml.v1.ListGoldSetRequest
-	26, // 38: likho.ml.v1.MlService.StartEvaluation:input_type -> likho.ml.v1.StartEvaluationRequest
-	28, // 39: likho.ml.v1.MlService.GetEvaluation:input_type -> likho.ml.v1.GetEvaluationRequest
-	30, // 40: likho.ml.v1.MlService.ListEvaluations:input_type -> likho.ml.v1.ListEvaluationsRequest
-	32, // 41: likho.ml.v1.MlService.GetTrainingStats:input_type -> likho.ml.v1.GetTrainingStatsRequest
-	35, // 42: likho.ml.v1.MlService.ExportDataset:input_type -> likho.ml.v1.ExportDatasetRequest
-	38, // 43: likho.ml.v1.MlService.StartTrainingRun:input_type -> likho.ml.v1.StartTrainingRunRequest
-	40, // 44: likho.ml.v1.MlService.ListTrainingRuns:input_type -> likho.ml.v1.ListTrainingRunsRequest
-	6,  // 45: likho.ml.v1.MlService.ListModels:output_type -> likho.ml.v1.ListModelsResponse
-	8,  // 46: likho.ml.v1.MlService.GetModel:output_type -> likho.ml.v1.GetModelResponse
-	10, // 47: likho.ml.v1.MlService.GetDefault:output_type -> likho.ml.v1.GetDefaultResponse
-	12, // 48: likho.ml.v1.MlService.RegisterModel:output_type -> likho.ml.v1.RegisterModelResponse
-	14, // 49: likho.ml.v1.MlService.SetDefault:output_type -> likho.ml.v1.SetDefaultResponse
-	16, // 50: likho.ml.v1.MlService.RetireModel:output_type -> likho.ml.v1.RetireModelResponse
-	19, // 51: likho.ml.v1.MlService.AddToGoldSet:output_type -> likho.ml.v1.AddToGoldSetResponse
-	21, // 52: likho.ml.v1.MlService.RemoveFromGoldSet:output_type -> likho.ml.v1.RemoveFromGoldSetResponse
-	23, // 53: likho.ml.v1.MlService.ListGoldSet:output_type -> likho.ml.v1.ListGoldSetResponse
-	27, // 54: likho.ml.v1.MlService.StartEvaluation:output_type -> likho.ml.v1.StartEvaluationResponse
-	29, // 55: likho.ml.v1.MlService.GetEvaluation:output_type -> likho.ml.v1.GetEvaluationResponse
-	31, // 56: likho.ml.v1.MlService.ListEvaluations:output_type -> likho.ml.v1.ListEvaluationsResponse
-	33, // 57: likho.ml.v1.MlService.GetTrainingStats:output_type -> likho.ml.v1.GetTrainingStatsResponse
-	36, // 58: likho.ml.v1.MlService.ExportDataset:output_type -> likho.ml.v1.ExportDatasetResponse
-	39, // 59: likho.ml.v1.MlService.StartTrainingRun:output_type -> likho.ml.v1.StartTrainingRunResponse
-	41, // 60: likho.ml.v1.MlService.ListTrainingRuns:output_type -> likho.ml.v1.ListTrainingRunsResponse
-	45, // [45:61] is the sub-list for method output_type
-	29, // [29:45] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	2,  // 29: likho.ml.v1.ReportTrainingRunRequest.status:type_name -> likho.ml.v1.TrainingRunStatus
+	37, // 30: likho.ml.v1.ReportTrainingRunResponse.run:type_name -> likho.ml.v1.TrainingRun
+	5,  // 31: likho.ml.v1.MlService.ListModels:input_type -> likho.ml.v1.ListModelsRequest
+	7,  // 32: likho.ml.v1.MlService.GetModel:input_type -> likho.ml.v1.GetModelRequest
+	9,  // 33: likho.ml.v1.MlService.GetDefault:input_type -> likho.ml.v1.GetDefaultRequest
+	11, // 34: likho.ml.v1.MlService.RegisterModel:input_type -> likho.ml.v1.RegisterModelRequest
+	13, // 35: likho.ml.v1.MlService.SetDefault:input_type -> likho.ml.v1.SetDefaultRequest
+	15, // 36: likho.ml.v1.MlService.RetireModel:input_type -> likho.ml.v1.RetireModelRequest
+	18, // 37: likho.ml.v1.MlService.AddToGoldSet:input_type -> likho.ml.v1.AddToGoldSetRequest
+	20, // 38: likho.ml.v1.MlService.RemoveFromGoldSet:input_type -> likho.ml.v1.RemoveFromGoldSetRequest
+	22, // 39: likho.ml.v1.MlService.ListGoldSet:input_type -> likho.ml.v1.ListGoldSetRequest
+	26, // 40: likho.ml.v1.MlService.StartEvaluation:input_type -> likho.ml.v1.StartEvaluationRequest
+	28, // 41: likho.ml.v1.MlService.GetEvaluation:input_type -> likho.ml.v1.GetEvaluationRequest
+	30, // 42: likho.ml.v1.MlService.ListEvaluations:input_type -> likho.ml.v1.ListEvaluationsRequest
+	32, // 43: likho.ml.v1.MlService.GetTrainingStats:input_type -> likho.ml.v1.GetTrainingStatsRequest
+	35, // 44: likho.ml.v1.MlService.ExportDataset:input_type -> likho.ml.v1.ExportDatasetRequest
+	38, // 45: likho.ml.v1.MlService.StartTrainingRun:input_type -> likho.ml.v1.StartTrainingRunRequest
+	40, // 46: likho.ml.v1.MlService.ListTrainingRuns:input_type -> likho.ml.v1.ListTrainingRunsRequest
+	42, // 47: likho.ml.v1.MlService.ReportTrainingRun:input_type -> likho.ml.v1.ReportTrainingRunRequest
+	6,  // 48: likho.ml.v1.MlService.ListModels:output_type -> likho.ml.v1.ListModelsResponse
+	8,  // 49: likho.ml.v1.MlService.GetModel:output_type -> likho.ml.v1.GetModelResponse
+	10, // 50: likho.ml.v1.MlService.GetDefault:output_type -> likho.ml.v1.GetDefaultResponse
+	12, // 51: likho.ml.v1.MlService.RegisterModel:output_type -> likho.ml.v1.RegisterModelResponse
+	14, // 52: likho.ml.v1.MlService.SetDefault:output_type -> likho.ml.v1.SetDefaultResponse
+	16, // 53: likho.ml.v1.MlService.RetireModel:output_type -> likho.ml.v1.RetireModelResponse
+	19, // 54: likho.ml.v1.MlService.AddToGoldSet:output_type -> likho.ml.v1.AddToGoldSetResponse
+	21, // 55: likho.ml.v1.MlService.RemoveFromGoldSet:output_type -> likho.ml.v1.RemoveFromGoldSetResponse
+	23, // 56: likho.ml.v1.MlService.ListGoldSet:output_type -> likho.ml.v1.ListGoldSetResponse
+	27, // 57: likho.ml.v1.MlService.StartEvaluation:output_type -> likho.ml.v1.StartEvaluationResponse
+	29, // 58: likho.ml.v1.MlService.GetEvaluation:output_type -> likho.ml.v1.GetEvaluationResponse
+	31, // 59: likho.ml.v1.MlService.ListEvaluations:output_type -> likho.ml.v1.ListEvaluationsResponse
+	33, // 60: likho.ml.v1.MlService.GetTrainingStats:output_type -> likho.ml.v1.GetTrainingStatsResponse
+	36, // 61: likho.ml.v1.MlService.ExportDataset:output_type -> likho.ml.v1.ExportDatasetResponse
+	39, // 62: likho.ml.v1.MlService.StartTrainingRun:output_type -> likho.ml.v1.StartTrainingRunResponse
+	41, // 63: likho.ml.v1.MlService.ListTrainingRuns:output_type -> likho.ml.v1.ListTrainingRunsResponse
+	43, // 64: likho.ml.v1.MlService.ReportTrainingRun:output_type -> likho.ml.v1.ReportTrainingRunResponse
+	48, // [48:65] is the sub-list for method output_type
+	31, // [31:48] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_likho_ml_v1_ml_proto_init() }
@@ -3030,7 +3180,7 @@ func file_likho_ml_v1_ml_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_likho_ml_v1_ml_proto_rawDesc), len(file_likho_ml_v1_ml_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   39,
+			NumMessages:   41,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

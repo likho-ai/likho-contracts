@@ -71,6 +71,9 @@ const (
 	// MlServiceListTrainingRunsProcedure is the fully-qualified name of the MlService's
 	// ListTrainingRuns RPC.
 	MlServiceListTrainingRunsProcedure = "/likho.ml.v1.MlService/ListTrainingRuns"
+	// MlServiceReportTrainingRunProcedure is the fully-qualified name of the MlService's
+	// ReportTrainingRun RPC.
+	MlServiceReportTrainingRunProcedure = "/likho.ml.v1.MlService/ReportTrainingRun"
 )
 
 // MlServiceClient is a client for the likho.ml.v1.MlService service.
@@ -105,6 +108,9 @@ type MlServiceClient interface {
 	// launcher (a GPU machine or a cloud job); without one the run waits as "pending".
 	StartTrainingRun(context.Context, *connect.Request[v1.StartTrainingRunRequest]) (*connect.Response[v1.StartTrainingRunResponse], error)
 	ListTrainingRuns(context.Context, *connect.Request[v1.ListTrainingRunsRequest]) (*connect.Response[v1.ListTrainingRunsResponse], error)
+	// What the fine-tuning job tells about its run: running, failed, or completed with the
+	// weights it wrote - which registers the new model (fine-tuned from the run's base model).
+	ReportTrainingRun(context.Context, *connect.Request[v1.ReportTrainingRunRequest]) (*connect.Response[v1.ReportTrainingRunResponse], error)
 }
 
 // NewMlServiceClient constructs a client for the likho.ml.v1.MlService service. By default, it uses
@@ -214,6 +220,12 @@ func NewMlServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...c
 			connect.WithSchema(mlServiceMethods.ByName("ListTrainingRuns")),
 			connect.WithClientOptions(opts...),
 		),
+		reportTrainingRun: connect.NewClient[v1.ReportTrainingRunRequest, v1.ReportTrainingRunResponse](
+			httpClient,
+			baseURL+MlServiceReportTrainingRunProcedure,
+			connect.WithSchema(mlServiceMethods.ByName("ReportTrainingRun")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -235,6 +247,7 @@ type mlServiceClient struct {
 	exportDataset     *connect.Client[v1.ExportDatasetRequest, v1.ExportDatasetResponse]
 	startTrainingRun  *connect.Client[v1.StartTrainingRunRequest, v1.StartTrainingRunResponse]
 	listTrainingRuns  *connect.Client[v1.ListTrainingRunsRequest, v1.ListTrainingRunsResponse]
+	reportTrainingRun *connect.Client[v1.ReportTrainingRunRequest, v1.ReportTrainingRunResponse]
 }
 
 // ListModels calls likho.ml.v1.MlService.ListModels.
@@ -317,6 +330,11 @@ func (c *mlServiceClient) ListTrainingRuns(ctx context.Context, req *connect.Req
 	return c.listTrainingRuns.CallUnary(ctx, req)
 }
 
+// ReportTrainingRun calls likho.ml.v1.MlService.ReportTrainingRun.
+func (c *mlServiceClient) ReportTrainingRun(ctx context.Context, req *connect.Request[v1.ReportTrainingRunRequest]) (*connect.Response[v1.ReportTrainingRunResponse], error) {
+	return c.reportTrainingRun.CallUnary(ctx, req)
+}
+
 // MlServiceHandler is an implementation of the likho.ml.v1.MlService service.
 type MlServiceHandler interface {
 	// The registered models, the default first.
@@ -349,6 +367,9 @@ type MlServiceHandler interface {
 	// launcher (a GPU machine or a cloud job); without one the run waits as "pending".
 	StartTrainingRun(context.Context, *connect.Request[v1.StartTrainingRunRequest]) (*connect.Response[v1.StartTrainingRunResponse], error)
 	ListTrainingRuns(context.Context, *connect.Request[v1.ListTrainingRunsRequest]) (*connect.Response[v1.ListTrainingRunsResponse], error)
+	// What the fine-tuning job tells about its run: running, failed, or completed with the
+	// weights it wrote - which registers the new model (fine-tuned from the run's base model).
+	ReportTrainingRun(context.Context, *connect.Request[v1.ReportTrainingRunRequest]) (*connect.Response[v1.ReportTrainingRunResponse], error)
 }
 
 // NewMlServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -454,6 +475,12 @@ func NewMlServiceHandler(svc MlServiceHandler, opts ...connect.HandlerOption) (s
 		connect.WithSchema(mlServiceMethods.ByName("ListTrainingRuns")),
 		connect.WithHandlerOptions(opts...),
 	)
+	mlServiceReportTrainingRunHandler := connect.NewUnaryHandler(
+		MlServiceReportTrainingRunProcedure,
+		svc.ReportTrainingRun,
+		connect.WithSchema(mlServiceMethods.ByName("ReportTrainingRun")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/likho.ml.v1.MlService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MlServiceListModelsProcedure:
@@ -488,6 +515,8 @@ func NewMlServiceHandler(svc MlServiceHandler, opts ...connect.HandlerOption) (s
 			mlServiceStartTrainingRunHandler.ServeHTTP(w, r)
 		case MlServiceListTrainingRunsProcedure:
 			mlServiceListTrainingRunsHandler.ServeHTTP(w, r)
+		case MlServiceReportTrainingRunProcedure:
+			mlServiceReportTrainingRunHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -559,4 +588,8 @@ func (UnimplementedMlServiceHandler) StartTrainingRun(context.Context, *connect.
 
 func (UnimplementedMlServiceHandler) ListTrainingRuns(context.Context, *connect.Request[v1.ListTrainingRunsRequest]) (*connect.Response[v1.ListTrainingRunsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.ml.v1.MlService.ListTrainingRuns is not implemented"))
+}
+
+func (UnimplementedMlServiceHandler) ReportTrainingRun(context.Context, *connect.Request[v1.ReportTrainingRunRequest]) (*connect.Response[v1.ReportTrainingRunResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("likho.ml.v1.MlService.ReportTrainingRun is not implemented"))
 }

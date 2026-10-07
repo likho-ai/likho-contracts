@@ -44,6 +44,9 @@ service MlService {
   // launcher (a GPU machine or a cloud job); without one the run waits as "pending".
   rpc StartTrainingRun(StartTrainingRunRequest) returns (StartTrainingRunResponse);
   rpc ListTrainingRuns(ListTrainingRunsRequest) returns (ListTrainingRunsResponse);
+  // What the fine-tuning job tells about its run: running, failed, or completed with the
+  // weights it wrote - which registers the new model (fine-tuned from the run's base model).
+  rpc ReportTrainingRun(ReportTrainingRunRequest) returns (ReportTrainingRunResponse);
 }
 
 // ------------------------------------------------------------------------------------ models
@@ -348,4 +351,21 @@ message ListTrainingRunsRequest {
 
 message ListTrainingRunsResponse {
   repeated TrainingRun runs = 1;
+}
+
+message ReportTrainingRunRequest {
+  string run_id = 1;
+  // RUNNING, COMPLETED or FAILED.
+  TrainingRunStatus status = 2;
+  // The run's own id where it runs (a job name), when it has one.
+  string external_id = 3;
+  // COMPLETED: the new model's registry id (faster-whisper/likho-2026-10) and where its weights are.
+  string registry_id = 4;
+  string artifact_uri = 5;
+  // FAILED: why.
+  string error = 6;
+}
+
+message ReportTrainingRunResponse {
+  TrainingRun run = 1;
 }
