@@ -1,0 +1,15 @@
+{
+  "specversion": "1.0",
+  "id": "evt_01JB7Z5K3M9Q2W4X6Y8A0C1E20",
+  "source": "likho-ml",
+  "type": "likho.model.chosen.v1",
+  "time": "2026-10-07T07:00:00Z",
+  "subject": "mdl_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+  "datacontenttype": "application/json",
+  "data": {
+    "model_id": "mdl_01JB7Z5K3M9Q2W4X6Y8A0C1E3G",
+    "registry_id": "faster-whisper/likho-2026-10",
+    "previous_registry_id": "faster-whisper/turbo",
+    "user_id": "usr_01JB7Z5K3M9Q2W4X6Y8A0C1E3G"
+  }
+}
